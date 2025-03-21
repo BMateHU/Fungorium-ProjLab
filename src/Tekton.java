@@ -2,10 +2,17 @@ import java.util.List;
 public class Tekton {
     private List<Tekton> neighbors;
     private Spore spore;
+    private MushroomThread mushroomThread;
     public boolean addThread(MushroomThread mt){
         System.out.println(">Tekton.addThread(): Boolean");
         System.out.println("<");
-        return true;
+        for(Tekton t : neighbors){
+            if(t.addThread(mt))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
    public void tektonBreak(){
@@ -32,7 +39,13 @@ public class Tekton {
     public boolean growMushroomBody(MushroomSpecies ms){
         System.out.println(">Tekton.growMushroomBody(): boolean");
         System.out.println("<result:boolean");
-        return true;
+        for(Tekton t : neighbors){
+            if(t.growMushroomBody(ms))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<Tekton> getNeighborWithThread(){
