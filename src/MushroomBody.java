@@ -7,7 +7,7 @@ public class MushroomBody {
         sporeNumber = 5;
     }
     public boolean spreadSpore(Tekton tekton) {
-        System.out.println("spreadSpore(Tekton tekton):boolean)");
+        System.out.println("MushroomBody.spreadSpore(Tekton tekton):boolean)");
         if(sporeNumber > 0) {
             return  true;
         }else {
@@ -16,11 +16,11 @@ public class MushroomBody {
     }
     //?
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
-        System.out.println("growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
+        System.out.println("MushroomBody.growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
         return false;
     }
     public void popSpore(){
-        System.out.println("popSpore():void");
+        System.out.println("MushroomBody.popSpore():void");
     }
 
 }
