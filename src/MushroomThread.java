@@ -3,22 +3,22 @@ public class MushroomThread {
     private MushroomThread nexrtGrowed;
 
     public void speedUpGrowing(){
-        System.out.println("\t>MushroomThread.speedUpGrowing():void");
+        System.out.println(">MushroomThread.speedUpGrowing():void");
         System.out.println("<");
     }
     public void addThread(MushroomThread thread){
-        System.out.println("\t>MushroomThread.addThread(MushroomThread thread):void");
+        System.out.println(">MushroomThread.addThread(MushroomThread thread):void");
         System.out.println("<");
 
 
     }
     public void removeThreadAfter(){
-        System.out.println("\t>MushroomThread.removeThreadAfter():void");
+        System.out.println(">MushroomThread.removeThreadAfter():void");
         System.out.println("<");
 
     }
     public MushroomBody checkOwner(){
-        System.out.println("\t>MushroomThread.checkOwner():MushroomBody");
+        System.out.println(">MushroomThread.checkOwner():MushroomBody");
         System.out.println("<mushroom: MushroomBody");
 
         if(preGrowed == null){
