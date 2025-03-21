@@ -1,7 +1,8 @@
-public class MushroomlessTekton {
-    @Override
-    public boolean growMushroomBody(MushroomBody ms){
-        System.out.println(">MushroomlessTekton.tektonEffect(): void");
-        System.out.println("<");   
+public class MushroomlessTekton extends Tekton{
+    @Override 
+    public boolean growMushroomBody(MushroomSpecies ms){
+        System.out.println(">Tekton.growMushroomBody(): boolean");
+        System.out.println("<result:boolean");
+        return true;
     }
 }

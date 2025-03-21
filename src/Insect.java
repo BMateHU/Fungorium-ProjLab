@@ -8,8 +8,8 @@ public class Insect {
     private Tekton tekton;
 
     public boolean insectMove(Tekton L){
-        System.out.println("\t>Insect.insectMove(): boolean");
-        System.out.println("<");
+        System.out.println("\t>Insect.insectMove(Tekton L): boolean");
+        System.out.println("<result: boolean");
         return true;
     }
 
@@ -21,7 +21,7 @@ public class Insect {
     public List<Tekton> getReachableTekton(){
         System.out.println("\t>Insect.getReachableTekton(): void");
         System.out.println("<");
-        return tekton.;
+        return tekton.getNeighborWithThread();
     }
 
     public void hasteEffect(){

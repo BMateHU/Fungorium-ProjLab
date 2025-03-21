@@ -1,4 +1,4 @@
-public class MultiThreadTekton {
+public class MultiThreadTekton extends Tekton{
     @Override
     public boolean addThread(MushroomBody mb){
         System.out.println(">MultiThreadTekton.tektonEffect(): void");
