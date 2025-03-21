@@ -1,10 +1,11 @@
 import java.util.List;
 
 public class Insect {
-    private int InsectSpeed;
+    private int insectSpeed;
     private Boolean cutThread;
     private Boolean eatSpore;
     private int currentNutrient;
+    private Tekton tekton;
 
     public boolean insectMove(Tekton L){
         System.out.println("\t>Insect.insectMove(): boolean");
@@ -20,7 +21,7 @@ public class Insect {
     public List<Tekton> getReachableTekton(){
         System.out.println("\t>Insect.getReachableTekton(): void");
         System.out.println("<");
-        return;
+        return tekton.;
     }
 
     public void hasteEffect(){

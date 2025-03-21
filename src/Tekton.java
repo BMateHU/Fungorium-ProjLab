@@ -1,4 +1,6 @@
 public class Tekton {
+    private List<Tekton> neighbors;
+
     public boolean addThread(MushroomThread mt){
         System.out.println(">Tekton.addThread(): Boolean");
         System.out.println("<");
@@ -31,9 +33,10 @@ public class Tekton {
         return ms;
     }
 
-    public List<Tekton> getNeighbor(){
+    public List<Tekton> getNeighborWithThread(){
         System.out.println(">Tekton.getNeighbor(): List<Tekton>");
         System.out.println("<");
+        return 
     }
 
     public boolean checkNeighbor(Tekton t){
