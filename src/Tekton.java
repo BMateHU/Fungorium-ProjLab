@@ -1,2 +1,73 @@
+import java.util.List;
 public class Tekton {
+    private List<Tekton> neighbors;
+    private Spore spore;
+    private MushroomThread mushroomThread;
+    public boolean addThread(MushroomThread mt){
+        System.out.println(">Tekton.addThread(): Boolean");
+        System.out.println("<");
+        for(Tekton t : neighbors){
+            if(t.addThread(mt))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+   public void tektonBreak(){
+    System.out.println(">Tekton.tektonBreak(): void");
+    System.out.println("<");
+   }
+
+    public void tektonEffect(){
+        System.out.println(">Tekton.tektonEffect(): void");
+        System.out.println("<");
+    }
+
+    public Spore PopSpore(){
+        System.out.println(">Tekton.PopSpore(): Spore");
+        System.out.println("<Spore:spore");
+        return spore;
+    }
+
+    public void clearSpore(){
+        System.out.println(">Tekton.clearSpore(): void");
+        System.out.println("<");
+    }
+
+    public boolean growMushroomBody(MushroomSpecies ms){
+        System.out.println(">Tekton.growMushroomBody(): boolean");
+        System.out.println("<result:boolean");
+        for(Tekton t : neighbors){
+            if(t.growMushroomBody(ms))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Tekton> getNeighborWithThread(){
+        System.out.println(">Tekton.getNeighbor(): List<Tekton>");
+        System.out.println("<");
+        return neighbors;
+    }
+
+    public boolean checkNeighbor(Tekton t){
+        System.out.println(">Tekton.checkNeighbor(): boolean");
+        System.out.println("<");
+        return true;
+    }
+
+    public void addSpore(Spore s){
+        System.out.println(">Tekton.addSpore(): void");
+        System.out.println("<");
+    }
+
+    public void updateNeighbor(){
+        System.out.println(">Tekton.updateNeighbor(): void");
+        System.out.println("<");
+    }
+    
 }
