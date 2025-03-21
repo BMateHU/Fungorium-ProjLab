@@ -10,6 +10,7 @@ public class MushroomThread {
         System.out.println("\t>MushroomThread.addThread(MushroomThread thread):void");
         System.out.println("<");
 
+
     }
     public void removeThreadAfter(){
         System.out.println("\t>MushroomThread.removeThreadAfter():void");
