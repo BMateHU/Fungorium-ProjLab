@@ -4,7 +4,7 @@ public class MushroomSpecies {
     private List<MushroomBody> mushroomBodies;
     public List<MushroomBody> checkMushroomBody(){
         System.out.println("\t>MushroomSpecies.checkMushroomBody():List<MushroomBody>");
-        System.out.println("<");
+        System.out.println("<mushruooms:List<MushroomBody>");
 
         return mushroomBodies;
     }

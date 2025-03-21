@@ -18,7 +18,7 @@ public class MushroomThread {
     }
     public MushroomBody checkOwner(){
         System.out.println("\t>MushroomThread.checkOwner():MushroomBody");
-        System.out.println("<");
+        System.out.println("<mushroom: MushroomBody");
 
         if(preGrowed == null){
             return null;
