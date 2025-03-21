@@ -1,2 +1,11 @@
-public class HasteSpore {
+class HasteSpore extends Spore {
+    public HasteSpore(int sporeNutrient) {
+        super(sporeNutrient);
+    }
+
+    @Override
+    public void sporeEffect(Insect r) {
+        System.out.println(">HasteSpore.sporeEffect()");
+        System.out.println("<");
+    }
 }
