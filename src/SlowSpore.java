@@ -5,6 +5,8 @@ class SlowSpore extends Spore {
 
     @Override
     public void sporeEffect(Insect r) {
-        System.out.println("Slow Spore effect.");
+        System.out.println(">SlowSpore.sporeEffect()");
+        System.out.println("<");
+
     }
 }

@@ -4,9 +4,12 @@ public class Spore {
         this.sporeNutrient = sporeNutrient;
     }
     public void sporeEffect(Insect r) {
-        System.out.println("Spore effect");
+        System.out.println(">Spore.sporeEffect()");
+        System.out.println("<");
     }
     public int getSporeNutrient() {
+        System.out.println(">Spore.getSporeNutrient()");
+        System.out.println("<");
         return sporeNutrient;
     }
 }

@@ -5,6 +5,7 @@ class MuteSpore extends Spore {
 
     @Override
     public void sporeEffect(Insect r) {
-        System.out.println("Mute Spore effect.");
+        System.out.println(">MuteSpore.sporeEffect()");
+        System.out.println("<");
     }
 }

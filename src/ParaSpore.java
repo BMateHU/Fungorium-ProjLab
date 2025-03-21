@@ -5,6 +5,7 @@ class ParaSpore extends Spore {
 
     @Override
     public void sporeEffect(Insect r) {
-        System.out.println("Para Spore effect.");
+        System.out.println(">ParaSpore.sporeEffect()");
+        System.out.println("<");
     }
 }
