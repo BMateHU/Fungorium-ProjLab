@@ -5,8 +5,8 @@ import static java.lang.System.exit;
 public class Main {
     public static void main(String[] args) {
         Szkeleton s = new Szkeleton();
+        Scanner scanner = new Scanner(System.in);
         do {
-            System.out.println("Please enter the use case number you wanna test:");
             System.out.println("1. Rovar mozgás effektus nélkül");
             System.out.println("2. Rovar mozgás lassító effektussal");
             System.out.println("3. Rovar mozgás gyorsító effektussal");
@@ -29,7 +29,8 @@ public class Main {
             System.out.println("20. Rovar Eszik (némító Spóra)");
             System.out.println("21. Rovar Eszik");
             System.out.println("0. Exit");
-            Scanner scanner = new Scanner(System.in);
+            System.out.println("Please enter the use case number you wanna test:");
+
             int useCase = scanner.nextInt();
             switch (useCase) {
                 case 1:

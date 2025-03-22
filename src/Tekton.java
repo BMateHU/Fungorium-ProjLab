@@ -74,19 +74,29 @@ public class Tekton {
     }
 
     public List<Tekton> getNeighborWithThread(){
-        System.out.println(">Tekton.getNeighbor(): List<Tekton>");
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
+        System.out.println(">Tekton.getNeighborWithThread(): List<Tekton>");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
         return neighbors;
     }
 
     public boolean checkNeighbor(Tekton t){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.checkNeighbor(): boolean");
         if(neighbors.contains(t))
         {
+            Szkeleton.printIndentation();
             System.out.println("<result:true");
+            Szkeleton.indentation--;
             return true;
         }
+        Szkeleton.printIndentation();
         System.out.println("<false");
+        Szkeleton.indentation--;
         return false;
     }
 
@@ -114,14 +124,23 @@ public class Tekton {
         System.out.println("<");
     }
     public void addInsect(Insect i) {
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.addInsect(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
     public void removeInsect() {
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.removeInsect(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
     public void useSporeToGrow(){
+
         System.out.println(">Tekton.useSporeToGrow(): void");
         System.out.println("<");
     }

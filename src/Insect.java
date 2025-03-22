@@ -14,26 +14,31 @@ public class Insect {
         currentNutrient = 0;
     }
     public boolean insectMove(Tekton tek){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.insectMove(Tekton L): boolean");
-
-
         if (insectSpeed > 0){
             List<Tekton> LT = getReachableTekton(insectSpeed);
             if(LT.contains(tek)) {
                 tek.addInsect(this);
                 location.removeInsect();
                 location = tek;
+                Szkeleton.printIndentation();
                 System.out.println("<result: true");
+                Szkeleton.indentation--;
                 return true;
             }
             else {
+                Szkeleton.printIndentation();
                 System.out.println("<result: false");
+                Szkeleton.indentation--;
                 return false;
             }
         }
-        else
+        else {
+            Szkeleton.indentation--;
             return false;
-
+        }
     }
 
     public void insectEat(){
@@ -54,8 +59,12 @@ public class Insect {
     }
 
     public List<Tekton> getReachableTekton(int speed){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.getReachableTekton(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
         return location.getNeighborWithThread();
     }
 
