@@ -1,6 +1,7 @@
 public class MushroomThread {
-    private MushroomThread preGrowed;
-    private MushroomThread nexrtGrowed;
+    public MushroomThread preGrowed;
+    public MushroomThread nexrtGrowed;
+    public Tekton location;
 
     public void speedUpGrowing(){
         System.out.println(">MushroomThread.speedUpGrowing():void");

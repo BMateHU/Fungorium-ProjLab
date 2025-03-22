@@ -1,33 +1,62 @@
 import java.util.List;
 
 public class Insect {
-    private int insectSpeed;
-    private Boolean cutThread;
-    private Boolean eatSpore;
-    private int currentNutrient;
-    private Tekton tekton;
+    public int insectSpeed;
+    public boolean cutThread;
+    public boolean eatSpore;
+    public int currentNutrient;
+    public Tekton location;
 
+    public Insect() {
+        insectSpeed = 2;
+        cutThread = true;
+        eatSpore = true;
+        currentNutrient = 0;
+    }
     public boolean insectMove(Tekton tek){
-        List<Tekton> fonolasTekton = tek.getNeighborWithThread();
         System.out.println(">Insect.insectMove(Tekton L): boolean");
-        System.out.println("<result: boolean");
-        for(Tekton t : fonolasTekton){
-            if(tekton.checkNeighbor(t)){
+
+
+        if (insectSpeed > 0){
+            List<Tekton> LT = getReachableTekton(insectSpeed);
+            if(LT.contains(tek)) {
+                tek.addInsect(this);
+                location.removeInsect();
+                location = tek;
+                System.out.println("<result: true");
                 return true;
             }
+            else {
+                System.out.println("<result: false");
+                return false;
+            }
         }
-        return false;
+        else
+            return false;
+
     }
 
     public void insectEat(){
         System.out.println(">Insect.insectEat(): void");
+        Spore ss = location.popSpore();
+        ss.sporeEffect(this);
         System.out.println("<");
     }
 
-    public List<Tekton> getReachableTekton(){
+    public boolean insectCut(MushroomThread mt){
+        System.out.println(">Insect.insectCut(): void");
+        if(cutThread){
+            mt.removeThreadAfter();
+            System.out.println("<result: true");
+            return true;
+        }
+        return false;
+    }
+
+    public List<Tekton> getReachableTekton(int speed){
         System.out.println(">Insect.getReachableTekton(): void");
         System.out.println("<");
-        return tekton.getNeighborWithThread();
+        return location.getNeighborWithThread();
     }
 
     public void hasteEffect(){
