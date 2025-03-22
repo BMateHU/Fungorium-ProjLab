@@ -237,6 +237,7 @@ public class Szkeleton {
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
+        T1.mushroomThread = MT;
 
         T1.tektonBreak();
     }
@@ -246,6 +247,7 @@ public class Szkeleton {
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
+        T1.insect = I;
 
         T1.tektonBreak();
     }
