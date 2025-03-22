@@ -1,8 +1,15 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class MushroomThread {
     public MushroomThread preGrowed;
-    public MushroomThread nexrtGrowed;
+    public List<MushroomThread> nextGrowed;
     public Tekton location;
 
+    public MushroomThread() {
+        preGrowed = null;
+        nextGrowed = new ArrayList<MushroomThread>();
+    }
     public void speedUpGrowing(){
         System.out.println(">MushroomThread.speedUpGrowing():void");
         System.out.println("<");

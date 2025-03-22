@@ -6,6 +6,12 @@ public class Tekton {
     public MushroomThread mushroomThread;
     public Insect insect;
 
+    public Tekton(){
+        neighbors = new LinkedList<>();
+        spore = new LinkedList<>();
+        mushroomThread = null;
+        insect = null;
+    }
     public boolean addThread(MushroomThread mt){
         System.out.println(">Tekton.addThread(): Boolean");
         if(mushroomThread != null){
