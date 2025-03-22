@@ -7,19 +7,27 @@ public class MushroomBody {
         sporeNumber = 5;
     }
     public boolean spreadSpore(Tekton tekton) {
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">MushroomBody.spreadSpore(Tekton tekton):boolean)");
         if(tekton.checkNeighbor(location) && bodyAge >= 2 && sporeNumber > 0) {
             popSpore();
             Spore S = new Spore(1);
             tekton.addSpore(S);
+            Szkeleton.printIndentation();
             System.out.println("<result:true");
+            Szkeleton.indentation--;
             return true;
         }
+        Szkeleton.printIndentation();
         System.out.println("<result:false");
+        Szkeleton.indentation--;
         return false;
     }
 
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">MushroomBody.growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
         if(tekton.checkNeighbor(location) && mushroomThread == null) {
             MushroomThread MT2 = new MushroomThread();
@@ -33,20 +41,38 @@ public class MushroomBody {
                         }
                     }
                 }
+                Szkeleton.printIndentation();
+
                 System.out.println("<result:true");
+                Szkeleton.indentation--;
+
                 return true;
             }
             else{
+                Szkeleton.printIndentation();
+
                 System.out.println("<result:false");
+                Szkeleton.indentation--;
+
                 return false;
             }
         }
+        Szkeleton.printIndentation();
+
         System.out.println("<result:false");
+        Szkeleton.indentation--;
+
         return false;
     }
     public void popSpore(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">MushroomBody.popSpore():void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
 
     }
 

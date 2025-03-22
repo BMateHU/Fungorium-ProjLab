@@ -36,25 +36,43 @@ public class Insect {
             }
         }
         else {
+            Szkeleton.printIndentation();
+            System.out.println("<result: false");
+
             Szkeleton.indentation--;
             return false;
         }
     }
 
     public void insectEat(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.insectEat(): void");
         Spore ss = location.popSpore();
         ss.sporeEffect(this);
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
     }
 
     public boolean insectCut(MushroomThread mt){
-        System.out.println(">Insect.insectCut(): void");
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
+        System.out.println(">Insect.insectCut(): boolean");
         if(cutThread){
             mt.removeThreadAfter();
+            Szkeleton.printIndentation();
+
             System.out.println("<result: true");
+            Szkeleton.indentation--;
+
             return true;
         }
+        Szkeleton.indentation--;
+        System.out.println("<result: false");
+
         return false;
     }
 
@@ -69,27 +87,51 @@ public class Insect {
     }
 
     public void hasteEffect(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.hasteEffect(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
     }
 
     public void slowEffect(){
+        Szkeleton.indentation++;
+
+        Szkeleton.printIndentation();
+
         System.out.println(">Insect.slowEffect(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
 
     public void paraEffect(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.paraEffect(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
 
     public void muteEffect(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.muteEffect(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
     }
 
     public void endEffect(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Insect.endEffect(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
 }

@@ -7,25 +7,40 @@ public class Tekton {
     public Insect insect;
 
     public Tekton(){
+
         neighbors = new LinkedList<>();
         spore = new LinkedList<>();
         mushroomThread = null;
         insect = null;
     }
     public boolean addThread(MushroomThread mt){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.addThread(): Boolean");
         if(mushroomThread != null){
+            Szkeleton.printIndentation();
             System.out.println("<false");
+            Szkeleton.indentation--;
+
             return false;
         }
+        Szkeleton.printIndentation();
+
         System.out.println("<true");
+        Szkeleton.indentation--;
+
         return true;
     }
 
    public void tektonBreak(){
+       Szkeleton.indentation++;
+       Szkeleton.printIndentation();
         System.out.println(">Tekton.tektonBreak(): void");
         if(insect != null){
+            Szkeleton.printIndentation();
+
             System.out.println("<");
+            Szkeleton.indentation--;
             return;
         }
 
@@ -39,36 +54,68 @@ public class Tekton {
         List<Tekton> L = new LinkedList<Tekton>();
         L.add(T2);
         updateNeighbor(L,null);
-        System.out.println("<");
+       Szkeleton.printIndentation();
+
+       System.out.println("<");
+       Szkeleton.indentation--;
+
    }
 
     public void tektonEffect(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.tektonEffect(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
     }
 
     public Spore popSpore(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.PopSpore(): Spore");
+        Szkeleton.printIndentation();
+
         System.out.println("<Spore:spore");
+        Szkeleton.indentation--;
+
         return new Spore(1);
     }
 
     public void clearSpore(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.clearSpore(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
     }
 
     public boolean growMushroomBody(MushroomSpecies ms){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.growMushroomBody(): boolean");
         if(spore.size()>=3 && mushroomThread!=null) {
             useSporeToGrow();
             MushroomBody M = new MushroomBody();
             M.location = this;
             ms.addMushroomBody(M);
+            Szkeleton.printIndentation();
+
             System.out.println("<result:true");
+            Szkeleton.indentation--;
+
             return true;
         }
+        Szkeleton.printIndentation();
+
         System.out.println("<result:false");
+        Szkeleton.indentation--;
+
         return true;
 
     }
@@ -101,13 +148,25 @@ public class Tekton {
     }
 
     public void addSpore(Spore s){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.addSpore(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
     }
 
     public void updateNeighbor(List<Tekton> newAdd, List<Tekton> delete){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.updateNeighbor(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
     }
 
     public List<Tekton> getNeighbors() {
@@ -115,13 +174,22 @@ public class Tekton {
     }
 
     public void deleteNeighbor(Tekton t){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.deleteNeighbor(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
     
     public void addNeighbor(Tekton t) {
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
+
         System.out.println(">Tekton.addNeighbor(): void");
+        Szkeleton.printIndentation();
         System.out.println("<");
+        Szkeleton.indentation--;
     }
     public void addInsect(Insect i) {
         Szkeleton.indentation++;
@@ -140,9 +208,14 @@ public class Tekton {
         Szkeleton.indentation--;
     }
     public void useSporeToGrow(){
-
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.useSporeToGrow(): void");
+        Szkeleton.printIndentation();
+
         System.out.println("<");
+        Szkeleton.indentation--;
+
     }
 
 }
