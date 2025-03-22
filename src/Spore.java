@@ -1,5 +1,6 @@
 public class Spore {
-    private int sporeNutrient;
+    public int sporeNutrient;
+
     public Spore(int sporeNutrient) {
         this.sporeNutrient = sporeNutrient;
     }
