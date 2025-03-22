@@ -1,7 +1,16 @@
 public class Szkeleton {
 
+    public int indentation = 0;
+
+    public void printIndentation() {
+        for(int i = 0; i < indentation; i++) {
+            System.out.print("\t");
+        }
+    }
+
     //Rovar mozgás effektus nélkül
     public void useCase1(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
@@ -20,10 +29,12 @@ public class Szkeleton {
         I.insectSpeed = 2;
 
         I.insectMove(T1);
+        indentation = 0;
     }
 
     //Rovar mozgás lassító effektussal
     public void useCase2(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
@@ -42,10 +53,12 @@ public class Szkeleton {
         I.insectSpeed = 1;
 
         I.insectMove(T1);
+        indentation = 0;
     }
 
     //Rovar mozgás gyorsító effektussal
     public void useCase3(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
@@ -64,10 +77,12 @@ public class Szkeleton {
         I.insectSpeed = 3;
 
         I.insectMove(T1);
+        indentation = 0;
     }
 
     //Rovar mozgás bénító effektussal
-    public void useCase4(){
+    public void useCase4() {
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
@@ -86,10 +101,12 @@ public class Szkeleton {
         I.insectSpeed = 0;
 
         I.insectMove(T1);
+        indentation = 0;
     }
 
     //Rovar mozgás sikertelen
     public void useCase5(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
@@ -104,10 +121,12 @@ public class Szkeleton {
         MT1.location = T1;
 
         I.insectMove(T1);
+        indentation = 0;
     }
 
     //Rovar vágás sikertelen
     public void useCase6(){
+        indentation++;
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
@@ -115,20 +134,24 @@ public class Szkeleton {
         I.cutThread = false;
 
         I.insectCut(MT);
+        indentation = 0;
     }
 
     //Rovar vágás
     public void useCase7(){
+        indentation++;
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
         Insect I = new Insect();
 
         I.insectCut(MT);
+        indentation = 0;
     }
 
     //Gombatest növesztés
     public void useCase8(){
+        indentation++;
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
@@ -136,22 +159,30 @@ public class Szkeleton {
             T1.spore.add(new Spore(1));
 
         T1.growMushroomBody(new MushroomSpecies());
+        indentation = 0;
     }
     //Gombatest növesztése sikertelen
     public void useCase9ab(){
+        System.out.println("Gombatest növesztés sikertelen a)b)");
+        indentation++;
         Tekton T1 = new Tekton();
         T1.spore.add(new Spore(1));
         T1.growMushroomBody(new MushroomSpecies());
+        indentation = 0;
     }
 
     //Gombatest növesztése sikertelen
     public void useCase9c(){
+        System.out.println("Gombatest növesztés sikertelen c)");
+        indentation++;
         MushroomlessTekton T1 = new MushroomlessTekton();
         T1.growMushroomBody(new MushroomSpecies());
+        indentation = 0;
     }
 
     //Spóraszórás
     public void useCase10(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
         T1.neighbors.add(T2);
@@ -163,10 +194,12 @@ public class Szkeleton {
         MB.bodyAge = 2;
 
         MB.spreadSpore(T2);
+        indentation = 0;
     }
 
     //Spóraszórás sikertelen
     public void useCase11(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
         T1.neighbors.add(T2);
@@ -178,10 +211,12 @@ public class Szkeleton {
         MB.bodyAge = 0;
 
         MB.spreadSpore(T2);
+        indentation = 0;
     }
 
     //Gombafonal növesztése
     public void useCase12(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
         T1.neighbors.add(T2);
@@ -193,10 +228,12 @@ public class Szkeleton {
         MT1.location = T1;
 
         MB.growThread(MT1,T2);
+        indentation = 0;
     }
 
     //Gombafonal növesztés sikertelen
     public void useCase13(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
         T1.neighbors.add(T2);
@@ -210,10 +247,12 @@ public class Szkeleton {
         MT2.location = T2;
 
         MB.growThread(MT1,T2);
+        indentation = 0;
     }
 
     //Gombafonal gyorsítás
     public void useCase14(){
+        indentation++;
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
         T1.neighbors.add(T2);
@@ -230,30 +269,36 @@ public class Szkeleton {
         MT1.location = T1;
 
         MB.growThread(MT1,T2);
+        indentation = 0;
     }
 
     //Tekton kettétörése
     public void useCase15(){
+        indentation++;
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
         T1.mushroomThread = MT;
 
         T1.tektonBreak();
+        indentation = 0;
     }
 
     //Tekton kettétörése sikertelen
     public void useCase16(){
+        indentation++;
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
         T1.insect = I;
 
         T1.tektonBreak();
+        indentation = 0;
     }
 
     //Rovar Eszik (gyorsító Spóra)
     public void useCase17(){
+        indentation++;
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
@@ -261,10 +306,12 @@ public class Szkeleton {
         T1.spore.add(S);
 
         I.insectEat();
+        indentation = 0;
     }
 
     //Rovar Eszik(lassító Spóra)
     public void useCase18(){
+        indentation++;
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
@@ -272,10 +319,12 @@ public class Szkeleton {
         T1.spore.add(S);
 
         I.insectEat();
+        indentation = 0;
     }
 
     //Rovar Eszik(bénító Spóra)
     public void useCase19(){
+        indentation++;
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
@@ -283,10 +332,12 @@ public class Szkeleton {
         T1.spore.add(S);
 
         I.insectEat();
+        indentation = 0;
     }
 
     //Rovar Eszik(némító Spóra)
     public void useCase20(){
+        indentation++;
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
@@ -294,10 +345,12 @@ public class Szkeleton {
         T1.spore.add(S);
 
         I.insectEat();
+        indentation = 0;
     }
 
     //Rovar Eszik
     public void useCase21(){
+        indentation++;
         Tekton T1 = new Tekton();
         Insect I = new Insect();
         I.location = T1;
@@ -305,5 +358,6 @@ public class Szkeleton {
         T1.spore.add(S);
 
         I.insectEat();
+        indentation = 0;
     }
 }
