@@ -3,7 +3,7 @@ public class Szkeleton {
     public static int indentation = 0;
 
     public static void printIndentation() {
-        for(int i = 0; i < indentation; i++) {
+        for(int i = 0; i < indentation-1; i++) {
             System.out.print("\t");
         }
     }

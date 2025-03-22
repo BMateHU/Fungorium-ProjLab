@@ -81,7 +81,7 @@ public class Tekton {
         System.out.println("<Spore:spore");
         Szkeleton.indentation--;
 
-        return new Spore(1);
+        return spore.removeFirst();
     }
 
     public void clearSpore(){
