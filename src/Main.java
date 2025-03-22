@@ -37,6 +37,7 @@ public class Main {
                     break;
                 case 9:
                     s.useCase9ab();
+                    System.out.println(" ");
                     s.useCase9c();
                     break;
                 case 10:

@@ -8,8 +8,8 @@ class SlowSpore extends Spore {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">SlowSpore.sporeEffect()");
-        Szkeleton.printIndentation();
         r.slowEffect();
+        Szkeleton.printIndentation();
         System.out.println("<");
         Szkeleton.indentation--;
 
