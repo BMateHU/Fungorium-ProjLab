@@ -1,10 +1,29 @@
 import java.util.List;
 
+/**
+ * Ez egy Rovar osztaly, ami tárolja rovarnak a sebbességét, vágásabilitását, spóraevésnek a sikeressége,
+ * és jelenlegi evett tápanyagnak a mennyisége, illetve még egy Tektont, ami rajta mozog.
+ */
 public class Insect {
+    /**
+     * rovarnak a sebbessége
+     */
     public int insectSpeed;
+    /**
+     * rovar képes-e elvágni a gombaFonalat
+     */
     public boolean cutThread;
+    /**
+     * rovar képes-e megenni a spórát
+     */
     public boolean eatSpore;
+    /**
+     * rovar megtáplákozott tápanyag mennyisége
+     */
     public int currentNutrient;
+    /**
+     * Tekton, ahol a rovar rajta elhelyezkedett
+     */
     public Tekton location;
 
     //Konstruktor
@@ -15,11 +34,16 @@ public class Insect {
         currentNutrient = 0;
     }
 
-    //A függvény megmondja, hogy a paraméterként kapott Tektonra lehet a rovar átmenni.
-    //Vissza ad egy boolean értéket, True ad vissza, ha tekton távolsága a rovar sebbességével elérhető
-    //akkor a paraméterként kapott tektonra helyezzük át a rovart,
-    // és a jelenlegi tektonról pedig eltávolítjuk.
-    //Egyébként pedig False értéket ad vissza.
+    /**
+     * függvény megmondja, hogy a paraméterként kapott Tektonra lehet a rovar átmenni.
+     * Vissza ad egy boolean értéket, True ad vissza, ha tekton távolsága a rovar sebbességével elérhető
+     * akkor a paraméterként kapott tektonra helyezzük át a rovart,
+     * és a jelenlegi tektonról pedig eltávolítjuk.
+     * Egyébként pedig False értéket ad vissza.
+     * @param tek, hogy erre a tektonra tud-e a rovar átmenni
+     * @return true, ha áttud menni. False, nem tud átmenni
+     */
+    
     public boolean insectMove(Tekton tek){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -51,7 +75,9 @@ public class Insect {
         }
     }
 
-    //A rovar megeszik a tektonon elhelyezett spórát.
+    /**
+     * A rovar megeszik a tektonon elhelyezett spórát.
+     */
     public void insectEat(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -65,8 +91,12 @@ public class Insect {
 
     }
 
-    //A függvény megmondja a paraméterként kapott gombaFonalat elvágja-e vagy nem. Ha igen, akkor true
-    //értéket ad vissza, ha nem akkor pedig False-t.
+    /**
+     * A függvény megmondja a rovar elvágja-e a gombaFonalat. 
+     * @param mt, gombaFonal, amit a rovar elvágna.
+     * @return Ha igen, akkor true értéket ad vissza, ha nem akkor pedig False-t.
+     */
+    
     public boolean insectCut(MushroomThread mt){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -86,7 +116,11 @@ public class Insect {
         return false;
     }
 
-    //A függvény olyan távolsági List<Tekton> értéket ad vissza, ami a rovar sebbességgel elérhető.
+    /**
+     * A függvény visszadja az elérhető tektonokat, amiket a rovar elér a sebbességével
+     * @param speed, a rovarnak a mozgási sebbessége.
+     * @return List<Tekton> értéket ad vissza, ami a rovar sebbességgel elérhető.
+     */
     public List<Tekton> getReachableTekton(int speed){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -97,7 +131,9 @@ public class Insect {
         return location.getNeighborWithThread();
     }
 
-    //A függvény beállítja a rovart gyorsított mode-ba.
+    /**
+     * A függvény beállítja a rovart gyorsított mode-ba.
+     */
     public void hasteEffect(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -108,7 +144,9 @@ public class Insect {
         Szkeleton.indentation--;
     }
 
-     //A függvény beállítja a rovart lassított mode-ba.
+     /**
+     * A függvény beállítja a rovart lassított mode-ba.
+     */
     public void slowEffect(){
         Szkeleton.indentation++;
 
@@ -120,7 +158,9 @@ public class Insect {
         Szkeleton.indentation--;
     }
 
-     //A függvény beállítja a rovart bénított mode-ba.
+    /**
+     * A függvény beállítja a rovart bénított mode-ba.
+     */
     public void paraEffect(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -130,7 +170,9 @@ public class Insect {
         Szkeleton.indentation--;
     }
 
-     //A függvény beállítja a rovart némított mode-ba.
+    /**
+     * A függvény beállítja a rovart némított mode-ba.
+     */
     public void muteEffect(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -141,7 +183,9 @@ public class Insect {
         Szkeleton.indentation--;
     }
 
-     //A függvény megszütetti a hatásokat ami a rovaron van.
+    /**
+     * A függvény megszütetti a hatásokat ami a rovaron van.
+     */
     public void endEffect(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();

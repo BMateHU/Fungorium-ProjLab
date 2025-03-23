@@ -1,9 +1,27 @@
 import java.util.LinkedList;
 import java.util.List;
+
+/**
+ * Ez egy Tekton osztaly, ami tárolja a Tektonnak a szomszédjait egy Listában
+ * , Spórákat, szintén egy Listában, ami rajta van a Tektonon és MushroomThreadet,
+ *  illetve egyetlen egy darab Insectet is tárol.
+ */
 public class Tekton {
+    /**
+     * A Tekton osztálynak a szomszédjai, ami Listában tároljuk.
+     */
     public List<Tekton> neighbors;
+    /**
+     * A Tektonon lévő spórák.
+     */
     public List<Spore> spore;
+    /**
+     * A Tektonon lévő MushroomThread, azaz gombaFonal.
+     */
     public MushroomThread mushroomThread;
+    /**
+     * A Tektonon lévő rovar, ami csak egy darab lehet a tektonon.
+     */
     public Insect insect;
 
     //Konstruktor
@@ -13,8 +31,11 @@ public class Tekton {
         mushroomThread = null;
         insect = null;
     }
-
-    //A GombaFonal növeszthető-e a Tektonon. Ha igen True értéket ad vissza, ha nem akkor pedig False.
+    /**
+     * A GombaFonal növeszthető-e a Tektonon. 
+     * @param mt, kapott paraméterként gombaFonal lehet-e tektonra növeszteni.
+     * @return Sikeresség 
+     */
     public boolean addThread(MushroomThread mt){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -32,10 +53,12 @@ public class Tekton {
 
         return true;
     }
-
-    //Tekton kettétörese, ha a Tektonon van Gombafonal és Spóra akkor azokat eltávolítjuk a Tektonról
-    //Létre hozzuk egy új Tektont és ezt az új létre hozott tekton hozzáadjuk a jelenlegi Tekton neighborhoz
-    //És az új létre hozott Tektonnak is hozzáadjuk a jelenlegi Tektont mint neighborként.
+    /**
+     * Tekton kettétörese, ha a Tektonon van Gombafonal és Spóra akkor azokat eltávolítjuk a Tektonról
+     * Létre hozzuk egy új Tektont és ezt az új létre hozott tekton hozzáadjuk a 
+     * jelenlegi Tekton neighborhozÉs az új létre hozott Tektonnak is hozzáadjuk a 
+     * jelenlegi Tektont mint neighborként
+     */
    public void tektonBreak(){
        Szkeleton.indentation++;
        Szkeleton.printIndentation();
@@ -64,9 +87,10 @@ public class Tekton {
        Szkeleton.indentation--;
 
    }
-
-   //Megmondja, hogy a jelenlegi Tekton milyen hatással rendelkezik. 
-   //PL: Gombatest nélküli vagy Gombafonal nélküli
+    /**
+     * Megmondja, hogy a jelenlegi Tekton milyen hatással rendelkezik. 
+     * PL: Gombatest nélküli vagy Gombafonal nélküli
+     */
     public void tektonEffect(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -77,8 +101,11 @@ public class Tekton {
         Szkeleton.indentation--;
 
     }
-
-    //A függvény megmondja a Tektonon lévő spóra 
+    /**
+     * A függvény megmondja a Tektonon lévő spóra
+     * PL: Gombatest nélküli vagy Gombafonal nélküli
+     * @return vissza adja a Sporát
+     */
     public Spore popSpore(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -90,8 +117,10 @@ public class Tekton {
 
         return spore.removeFirst();
     }
-
-    //A Tektonon lévő spórák eltávolítása illetve megsemmisitése 
+    
+    /**
+     * A Tektonon lévő spórák eltávolítása illetve megsemmisitése 
+     */
     public void clearSpore(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -103,10 +132,12 @@ public class Tekton {
 
     }
 
-    //A GombaTest növeszthető-e a Tektonon. A GombaTestet növesztéshez,
-    //Szükséges három darab spóra és rendelkezik gombaFonal a Tektonon.
-    //Az új létre hozott gombaTest hozzáadjuk az (MushroomSpecies)ms-be, 
-    //hogy megmondja ki az ownerja a gombaTestnek.
+    /**
+     * A GombaTest növeszthető-e a Tektonon. A GombaTestet növesztéshez,
+     * Szükséges három darab spóra és rendelkezik gombaFonal a Tektonon.
+     * @param ms tárolja a létre hozott gombaTestet
+     * @return gombaTestnek a növesztés sikerességét
+     */
     public boolean growMushroomBody(MushroomSpecies ms){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -132,8 +163,12 @@ public class Tekton {
 
     }
 
-    //A függvény visszaadja egy List<Tekton> típusú értéket, ami megmondja, 
-    //hogy milyen fonalasTektonnal van szomszédban.
+    /**
+     * A függvény visszaadja egy List<Tekton> típusú értéket, ami megmondja, 
+     * hogy milyen fonalasTektonnal van szomszédban.
+     * @return visszaadja szomszédos FonalasTektonokat 
+     */
+    
     public List<Tekton> getNeighborWithThread(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -144,7 +179,12 @@ public class Tekton {
         return neighbors;
     }
 
-    //A függvény eldönti, hogy a kapott paraméterként Tekton szomszédba van-e a jelenlegi Tektonnal
+    /**
+     * A függvény eldönti, hogy a kapott paraméterként Tekton szomszédba van-e a jelenlegi Tektonnal
+     * @param t, ami vizsgálja, hogy szomszédba van-e
+     * @return igen, ha szomszédba van, hamis, ha nincs szomszédban
+     */
+    
     public boolean checkNeighbor(Tekton t){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -162,7 +202,10 @@ public class Tekton {
         return false;
     }
 
-    //Spóra, ami paraméterként kapott a függvényen, hozzáadása a Tektonra
+    /**
+     * Spóra, ami paraméterként kapott a függvényen, hozzáadása a Tektonra
+     * @param s, a spórát ami hozzáadjuk a tektonhoz
+     */
     public void addSpore(Spore s){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -174,8 +217,12 @@ public class Tekton {
 
     }
 
-    //A Tektonnak a szomszéd tektonok frissítése, az első paraméterként kapott List<Tekton> tektonok
-    //azokat hozzáadjuk a szomszéd listához, a második paraméterként kapottakat pedig kitöröljük
+    /**
+     * A Tektonnak a szomszéd tektonok frissítése
+     * @param newAdd a tektonok amiket hozzáadjuk a szomszéd listához
+     * @param delete a tektonok amiket kitöröljük a szomszéd listából
+     */
+    
     public void updateNeighbor(List<Tekton> newAdd, List<Tekton> delete){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -187,7 +234,10 @@ public class Tekton {
 
     }
 
-    //A tektonnak a szomszédos Tektonok lekérdezése. Ami vissza ad egy List<Tekton> értéket.
+    /**
+     * A tektonnak a szomszédos Tektonok lekérdezése. Ami vissza ad egy List<Tekton> értéket.
+     * @return szomszédos Tekton Listában visszaadja
+     */
     public List<Tekton> getNeighbors() {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -198,7 +248,10 @@ public class Tekton {
         return neighbors;
     }
 
-    //A paraméterként kapott tekont kitörlése a szomszédos tektonok listából
+    /**
+     * Tekont kitörlése a szomszédos tektonok listából
+     * @param t, tektont amit kitöröljük a szomszéd listából
+     */
     public void deleteNeighbor(Tekton t){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -208,7 +261,10 @@ public class Tekton {
         Szkeleton.indentation--;
     }
 
-     //A paraméterként kapott tekont hozzáadás a szomszéd tektonok listából
+    /**
+     * Tekon hozzáadás a szomszéd tektonok listából
+     * @param t, tektont amit hozzáadjuk a szomszéd listára
+     */
     public void addNeighbor(Tekton t) {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -219,7 +275,10 @@ public class Tekton {
         Szkeleton.indentation--;
     }
 
-     //A paraméterként kapott insect hozzáadás a tektonra, ami csak egy lehetséges
+    /**
+     * insect hozzáadás a tektonra, ami csak egy lehetséges
+     * @param i, rovart amit hozzáadunk a tektonra
+     */
     public void addInsect(Insect i) {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -229,7 +288,9 @@ public class Tekton {
         Szkeleton.indentation--;
     }
 
-    //A paraméterként kapott insect eltávolítása a tektonról.
+    /**
+     * insect kitörlése a tektonból.
+     */
     public void removeInsect() {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -239,13 +300,14 @@ public class Tekton {
         Szkeleton.indentation--;
     }
 
-    //A spórákat felhasználva, létre hozza a tekton egy gombaTest
+    /**
+     * A spórákat felhasználva, létre hozza a tekton egy gombaTest
+     */
     public void useSporeToGrow(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">Tekton.useSporeToGrow(): void");
         Szkeleton.printIndentation();
-
         System.out.println("<");
         Szkeleton.indentation--;
 
