@@ -1,11 +1,29 @@
+/**
+ * Ez egy gombatest osztaly, ami tárolja a gombatest korát, sporaszamát, és melyik tektonon van
+ */
 public class MushroomBody {
+    /**
+     * A gomba osztálynak a korra, pontosabban, hogy hány kört telt el a gomba létrehozása után.
+     */
     public int bodyAge;
+    /**
+     * Hány spóra szám van a Gombában
+     */
     public int sporeNumber;
+    /**
+     * Gombatest melyik tektonon van
+     */
     public Tekton location;
     public MushroomBody() {
         bodyAge = 0;
         sporeNumber = 5;
     }
+
+    /**
+     * Spórát szór egy adott tektonra.
+     * @param tekton melyik tentonra akarunk spórát szórni.
+     * @return lehet vagy nem lehet
+     */
     public boolean spreadSpore(Tekton tekton) {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -25,6 +43,14 @@ public class MushroomBody {
         return false;
     }
 
+    /**
+     *  Egy adott tektonra növeszt gombafonalat egy gombatest, attól függően,
+     *  hogy van-e a tekton szomszédján ugyanannak a gombatestnek fonala.
+     *  Ha nem a gombafonal végét növeszti, akkor egy új ágat hoz létre arra a tektonra.
+     * @param mushroomThread a hosszabítani kívánt fonal
+     * @param tekton a Tekton ahová szeretnénk fonalat
+     * @return sikeresség
+     */
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
@@ -64,6 +90,10 @@ public class MushroomBody {
 
         return false;
     }
+
+    /**
+     *  Csökkenti a spórának számát eggyel.
+     */
     public void popSpore(){
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
