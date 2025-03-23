@@ -1,4 +1,6 @@
 public class MushroomlessTekton extends Tekton{
+    
+    //Felülírja a tekton growMushroomBody() metódusát, hogy a tektonon nem lehet gombaTestet növeszteni.
     @Override 
     public boolean growMushroomBody(MushroomSpecies ms){
         Szkeleton.indentation++;
