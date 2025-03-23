@@ -184,7 +184,7 @@ public class Insect {
     }
 
     /**
-     * A függvény megszütetti a hatásokat ami a rovaron van.
+     * A függvény megszünteti a hatásokat ami a rovaron van.
      */
     public void endEffect(){
         Szkeleton.indentation++;
