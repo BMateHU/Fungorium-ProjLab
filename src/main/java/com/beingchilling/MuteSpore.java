@@ -1,18 +1,20 @@
+package com.beingchilling;
+
 /**
- * Ez az osztály a lassító spóra megvalósítása.
+ * Ez az osztály a némító spóra megvalósítása.
  */
-class SlowSpore extends Spore {
+class MuteSpore extends Spore {
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát (Használva a Spore konstruktorát)..
      *
      * @param sporeNutrient A spóra által tartalmazott tápanyag mennyisége.
      */
-    public SlowSpore(int sporeNutrient) {
+    public MuteSpore(int sporeNutrient) {
         super(sporeNutrient);
     }
     /**
-     * A Lassító spóra által kifejtett hatás.
-     * Lelassítja a rovart, amely elfogyasztja.
+     * A Némító spóra által kifejtett hatás.
+     * Megnémítja a rovart, amely elfogyasztja.
      *
      * @param r A rovar, amelyre a spóra hatással lehet.
      */
@@ -20,9 +22,10 @@ class SlowSpore extends Spore {
     public void sporeEffect(Insect r) {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
-        System.out.println(">SlowSpore.sporeEffect()");
-        r.slowEffect();
+        System.out.println(">MuteSpore.sporeEffect()");
+        r.muteEffect();
         Szkeleton.printIndentation();
+
         System.out.println("<");
         Szkeleton.indentation--;
 

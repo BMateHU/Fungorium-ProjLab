@@ -1,3 +1,5 @@
+package com.beingchilling;
+
 public class Szkeleton {
 
     public static int indentation = 0;

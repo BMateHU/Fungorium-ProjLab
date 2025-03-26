@@ -1,3 +1,5 @@
+package com.beingchilling;
+
 /**
  * Ez egy gombatest osztaly, ami tárolja a gombatest korát, sporaszamát, és melyik tektonon van
  */

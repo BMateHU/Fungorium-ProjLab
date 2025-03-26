@@ -1,3 +1,5 @@
+package com.beingchilling;
+
 /**
  * Ez az osztály a bénító spóra megvalósítása.
  */
