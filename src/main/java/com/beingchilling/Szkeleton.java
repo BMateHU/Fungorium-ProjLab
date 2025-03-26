@@ -153,6 +153,7 @@ public class Szkeleton {
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
+        T1.mushroomThread = MT;
         for(int i = 0; i<3; i++)
             T1.spore.add(new Spore(1));
 
