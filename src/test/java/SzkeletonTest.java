@@ -28,7 +28,7 @@ public class SzkeletonTest {
         MT1.nextGrowed.add(MT2);
 
         I.insectSpeed = 2;
-
+        Assertions.fail();
         Assertions.assertTrue(I.insectMove(T2));
     }
 
