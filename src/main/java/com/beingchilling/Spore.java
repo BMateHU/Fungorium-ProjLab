@@ -1,3 +1,5 @@
+package com.beingchilling;
+
 /**
  * Az osztály a normál spóra megvalósítása.
  */
@@ -11,7 +13,6 @@ public class Spore {
      *
      * @param sporeNutrient A spóra által tartalmazott tápanyag mennyisége.
      */
-    public int sporeNutrient;
 
     public Spore(int sporeNutrient) {
         this.sporeNutrient = sporeNutrient;

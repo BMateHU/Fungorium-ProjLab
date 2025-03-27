@@ -1,3 +1,5 @@
+package com.beingchilling;
+
 public class Szkeleton {
 
     public static int indentation = 0;
@@ -151,6 +153,7 @@ public class Szkeleton {
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
+        T1.mushroomThread.add(MT);
         for(int i = 0; i<3; i++)
             T1.spore.add(new Spore(1));
 
@@ -274,7 +277,7 @@ public class Szkeleton {
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
         MT.location = T1;
-        T1.mushroomThread = MT;
+        T1.mushroomThread.add(MT);
 
         T1.tektonBreak();
         indentation = 0;

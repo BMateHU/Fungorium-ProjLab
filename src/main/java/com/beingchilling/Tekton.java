@@ -1,3 +1,6 @@
+package com.beingchilling;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class Tekton {
     /**
      * A Tektonon lévő MushroomThread, azaz gombaFonal.
      */
-    public MushroomThread mushroomThread;
+    public List<MushroomThread> mushroomThread;
     /**
      * A Tektonon lévő rovar, ami csak egy darab lehet a tektonon.
      */
@@ -28,7 +31,7 @@ public class Tekton {
     public Tekton(){
         neighbors = new LinkedList<>();
         spore = new LinkedList<>();
-        mushroomThread = null;
+        mushroomThread = new ArrayList<>();
         insect = null;
     }
     /**
@@ -40,7 +43,7 @@ public class Tekton {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">Tekton.addThread(): Boolean");
-        if(mushroomThread != null){
+        if(!mushroomThread.isEmpty()){
             Szkeleton.printIndentation();
             System.out.println("<false");
             Szkeleton.indentation--;
@@ -59,19 +62,19 @@ public class Tekton {
      * jelenlegi Tekton neighborhozÉs az új létre hozott Tektonnak is hozzáadjuk a 
      * jelenlegi Tektont mint neighborként
      */
-   public void tektonBreak(){
-       Szkeleton.indentation++;
-       Szkeleton.printIndentation();
+   public boolean tektonBreak(){
+        Szkeleton.indentation++;
+        Szkeleton.printIndentation();
         System.out.println(">Tekton.tektonBreak(): void");
-        if(insect != null){
+        if(insect != null || mushroomThread.isEmpty()){
             Szkeleton.printIndentation();
 
             System.out.println("<");
             Szkeleton.indentation--;
-            return;
+            return false;
         }
 
-        mushroomThread.removeThreadAfter();
+        mushroomThread.getFirst().removeThreadAfter();
         clearSpore();
         Tekton T2 = new Tekton();
         T2.neighbors.add(this);
@@ -81,11 +84,11 @@ public class Tekton {
         List<Tekton> L = new LinkedList<Tekton>();
         L.add(T2);
         updateNeighbor(L,null);
-       Szkeleton.printIndentation();
+        Szkeleton.printIndentation();
 
-       System.out.println("<");
-       Szkeleton.indentation--;
-
+        System.out.println("<");
+        Szkeleton.indentation--;
+        return true;
    }
     /**
      * Megmondja, hogy a jelenlegi Tekton milyen hatással rendelkezik. 
@@ -176,7 +179,17 @@ public class Tekton {
         Szkeleton.printIndentation();
         System.out.println("<");
         Szkeleton.indentation--;
-        return neighbors;
+        List<Tekton> temp = new LinkedList<Tekton>();
+        for(Tekton t : neighbors){
+            for(MushroomThread mt : mushroomThread) {
+                for(MushroomThread mt2 : mt.nextGrowed) {
+                    if(mt2.location == t) {
+                        temp.add(t);
+                    }
+                }
+            }
+        }
+        return temp;
     }
 
     /**
