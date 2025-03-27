@@ -57,7 +57,7 @@ public class MushroomBody {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">MushroomBody.growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
-        if(tekton.checkNeighbor(location) && mushroomThread == null) {
+        if(tekton.checkNeighbor(mushroomThread.location) && mushroomThread != null) {
             MushroomThread MT2 = new MushroomThread();
             if (tekton.addThread(MT2)) {
                 if(!tekton.spore.isEmpty()){
@@ -82,6 +82,17 @@ public class MushroomBody {
                 System.out.println("<result:false");
                 Szkeleton.indentation--;
 
+                return false;
+            }
+        }
+        else if(tekton.checkNeighbor(location) && mushroomThread == null) {
+            MushroomThread MT2 = new MushroomThread();
+            mushroomThread.nextGrowed.add(MT2);
+            MT2.preGrowed = mushroomThread;
+            if(tekton.addThread(MT2)) {
+                return true;
+            }
+            else {
                 return false;
             }
         }

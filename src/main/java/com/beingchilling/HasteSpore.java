@@ -3,7 +3,7 @@ package com.beingchilling;
 /**
  * Ez az osztály a gyorsító spóra megvalósítása.
  */
-class HasteSpore extends Spore {
+public class HasteSpore extends Spore {
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát (Használva a Spore konstruktorát)..
      *

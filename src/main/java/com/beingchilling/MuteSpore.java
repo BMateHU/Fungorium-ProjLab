@@ -3,7 +3,7 @@ package com.beingchilling;
 /**
  * Ez az osztály a némító spóra megvalósítása.
  */
-class MuteSpore extends Spore {
+public class MuteSpore extends Spore {
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát (Használva a Spore konstruktorát)..
      *

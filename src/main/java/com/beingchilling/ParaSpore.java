@@ -3,7 +3,7 @@ package com.beingchilling;
 /**
  * Ez az osztály a bénító spóra megvalósítása.
  */
-class ParaSpore extends Spore {
+public class ParaSpore extends Spore {
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát (Használva a Spore konstruktorát)..
      *

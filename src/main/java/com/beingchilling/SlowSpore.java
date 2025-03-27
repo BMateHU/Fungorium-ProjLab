@@ -3,7 +3,7 @@ package com.beingchilling;
 /**
  * Ez az osztály a lassító spóra megvalósítása.
  */
-class SlowSpore extends Spore {
+public class SlowSpore extends Spore {
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát (Használva a Spore konstruktorát)..
      *
