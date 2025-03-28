@@ -19,15 +19,15 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T2;
+        I.setLocation(T2);
         T2.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
-        I.insectSpeed = 2;
+        I.setInsectSpeed(2);
 
         I.insectMove(T1);
         indentation = 0;
@@ -42,15 +42,15 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T2;
+        I.setLocation(T2);
         T2.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
-        I.insectSpeed = 1;
+        I.setInsectSpeed(1);
 
         I.insectMove(T1);
         indentation = 0;
@@ -65,15 +65,15 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T2;
+        I.setLocation(T2);
         T2.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
-        I.insectSpeed = 3;
+        I.setInsectSpeed(3);
 
         I.insectMove(T1);
         indentation = 0;
@@ -88,15 +88,15 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T2;
+        I.setLocation(T2);
         T2.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
-        I.insectSpeed = 0;
+        I.setInsectSpeed(0);
 
         I.insectMove(T1);
         indentation = 0;
@@ -112,11 +112,11 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T2;
+        I.setLocation(T2);
         T2.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
 
         I.insectMove(T1);
         indentation = 0;
@@ -127,9 +127,9 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         Insect I = new Insect();
-        I.cutThread = false;
+        I.setCutThread(false);
 
         I.insectCut(MT);
         indentation = 0;
@@ -140,7 +140,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         Insect I = new Insect();
 
         I.insectCut(MT);
@@ -152,7 +152,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         T1.mushroomThread.add(MT);
         for(int i = 0; i<3; i++)
             T1.spore.add(new Spore(1));
@@ -188,9 +188,9 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
-        MB.sporeNumber = 1;
-        MB.bodyAge = 2;
+        MB.setLocation(T1);
+        MB.setSporeNumber(1);
+        MB.setBodyAge(2);
 
         MB.spreadSpore(T2);
         indentation = 0;
@@ -205,9 +205,9 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
-        MB.sporeNumber = 0;
-        MB.bodyAge = 0;
+        MB.setLocation(T1);
+        MB.setSporeNumber(0);
+        MB.setBodyAge(0);
 
         MB.spreadSpore(T2);
         indentation = 0;
@@ -222,9 +222,9 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
+        MB.setLocation(T1);
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
 
         MB.growThread(MT1,T2);
         indentation = 0;
@@ -239,11 +239,11 @@ public class Szkeleton {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
+        MB.setLocation(T1);
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
         MB.growThread(MT1,T2);
         indentation = 0;
@@ -263,9 +263,9 @@ public class Szkeleton {
         T2.spore.add(new Spore(1));
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
+        MB.setLocation(T1);
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
 
         MB.growThread(MT1,T2);
         indentation = 0;
@@ -276,7 +276,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         T1.mushroomThread.add(MT);
 
         T1.tektonBreak();
@@ -288,7 +288,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         T1.tektonBreak();
@@ -300,7 +300,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         HasteSpore S = new HasteSpore(1);
         T1.spore.add(S);
 
@@ -313,7 +313,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         SlowSpore S = new SlowSpore(1);
         T1.spore.add(S);
 
@@ -326,7 +326,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         ParaSpore S = new ParaSpore(1);
         T1.spore.add(S);
 
@@ -339,7 +339,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         MuteSpore S = new MuteSpore(1);
         T1.spore.add(S);
 
@@ -352,7 +352,7 @@ public class Szkeleton {
          
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         Spore S = new Spore(1);
         T1.spore.add(S);
 
