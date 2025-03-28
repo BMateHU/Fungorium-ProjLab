@@ -9,7 +9,7 @@ public class MushroomSpecies {
     /**
      * Nyilvántartja, egy gombafaj összes létező egyedét.
      */
-    public List<MushroomBody> mushroomBodies;
+    private List<MushroomBody> mushroomBodies;
 
     /**
      * Lekéri a Gombatest listát
@@ -43,4 +43,11 @@ public class MushroomSpecies {
 
     }
 
+    public List<MushroomBody> getMushroomBodies() {
+        return mushroomBodies;
+    }
+
+    public void setMushroomBodies(List<MushroomBody> mushroomBodies) {
+        this.mushroomBodies = mushroomBodies;
+    }
 }

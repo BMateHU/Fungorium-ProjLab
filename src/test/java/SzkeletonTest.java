@@ -14,20 +14,20 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
         T1.mushroomThread.add(MT1);
         T2.mushroomThread.add(MT2);
 
-        MT1.nextGrowed.add(MT2);
+        MT1.addThread(MT2);
 
-        I.insectSpeed = 2;
+        I.setInsectSpeed(2);
         Assertions.assertTrue(I.insectMove(T2));
     }
 
@@ -41,20 +41,20 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
         T1.mushroomThread.add(MT1);
         T2.mushroomThread.add(MT2);
 
-        MT1.nextGrowed.add(MT2);
+        MT1.addThread(MT2);
 
-        I.insectSpeed = 1;
+        I.setInsectSpeed(1);
 
         Assertions.assertTrue(I.insectMove(T2));
     }
@@ -69,20 +69,20 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
         T1.mushroomThread.add(MT1);
         T2.mushroomThread.add(MT2);
 
-        MT1.nextGrowed.add(MT2);
+        MT1.addThread(MT2);
 
-        I.insectSpeed = 3;
+        I.setInsectSpeed(3);
 
         Assertions.assertTrue(I.insectMove(T2));
     }
@@ -97,15 +97,15 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         Insect I = new Insect();
-        I.location = T2;
+        I.setLocation(T2);
         T2.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
 
-        I.insectSpeed = 0;
+        I.setInsectSpeed(0);
 
         Assertions.assertFalse(I.insectMove(T1));
     }
@@ -116,7 +116,7 @@ public class SzkeletonTest {
         Tekton T1 = new Tekton();
 
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         Assertions.assertFalse(I.insectMove(T1));
@@ -131,7 +131,7 @@ public class SzkeletonTest {
         Tekton T4 = new Tekton();
 
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         MushroomThread MT1 = new MushroomThread();
@@ -139,10 +139,10 @@ public class SzkeletonTest {
         MushroomThread MT3 = new MushroomThread();
         MushroomThread MT4 = new MushroomThread();
 
-        MT1.location = T1;
-        MT2.location = T2;
-        MT3.location = T3;
-        MT4.location = T4;
+        MT1.setLocation(T1);
+        MT2.setLocation(T2);
+        MT3.setLocation(T3);
+        MT4.setLocation(T4);
 
         T1.mushroomThread.add(MT1);
         T2.mushroomThread.add(MT2);
@@ -164,9 +164,9 @@ public class SzkeletonTest {
     public void useCase6(){
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         Insect I = new Insect();
-        I.cutThread = false;
+        I.setCutThread(false);
 
         Assertions.assertFalse(I.insectCut(MT));
     }
@@ -176,7 +176,7 @@ public class SzkeletonTest {
     public void useCase7(){
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         Insect I = new Insect();
 
         Assertions.assertTrue(I.insectCut(MT));
@@ -187,7 +187,7 @@ public class SzkeletonTest {
     public void useCase8(){
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         T1.mushroomThread.add(MT);
         for(int i = 0; i<3; i++)
             T1.spore.add(new Spore(1));
@@ -223,9 +223,9 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
-        MB.sporeNumber = 1;
-        MB.bodyAge = 2;
+        MB.setLocation(T1);
+        MB.setSporeNumber(3);
+        MB.setBodyAge(2);
 
         Assertions.assertTrue(MB.spreadSpore(T2));
     }
@@ -239,9 +239,9 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
-        MB.sporeNumber = 0;
-        MB.bodyAge = 0;
+        MB.setLocation(T1);
+        MB.setSporeNumber(0);
+        MB.setBodyAge(0);
 
         Assertions.assertFalse(MB.spreadSpore(T2));
     }
@@ -255,9 +255,9 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
+        MB.setLocation(T1);
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         T1.mushroomThread.add(MT1);
 
         Assertions.assertTrue(MB.growThread(MT1,T2));
@@ -272,12 +272,12 @@ public class SzkeletonTest {
         T2.neighbors.add(T1);
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
+        MB.setLocation(T1);
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
         T1.mushroomThread.add(MT1);
         MushroomThread MT2 = new MushroomThread();
-        MT2.location = T2;
+        MT2.setLocation(T2);
         T2.mushroomThread.add(MT2);
 
         Assertions.assertFalse(MB.growThread(MT1,T2));
@@ -297,9 +297,9 @@ public class SzkeletonTest {
         T2.spore.add(new Spore(1));
 
         MushroomBody MB = new MushroomBody();
-        MB.location = T1;
+        MB.setLocation(T1);
         MushroomThread MT1 = new MushroomThread();
-        MT1.location = T1;
+        MT1.setLocation(T1);
 
         Assertions.assertTrue(MB.growThread(MT1,T2));
     }
@@ -309,7 +309,7 @@ public class SzkeletonTest {
     public void useCase15(){
         Tekton T1 = new Tekton();
         MushroomThread MT = new MushroomThread();
-        MT.location = T1;
+        MT.setLocation(T1);
         T1.mushroomThread.add(MT);
 
         Assertions.assertTrue(T1.tektonBreak());
@@ -320,7 +320,7 @@ public class SzkeletonTest {
     public void useCase16(){
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         T1.insect = I;
 
         Assertions.assertFalse(T1.tektonBreak());
@@ -331,7 +331,7 @@ public class SzkeletonTest {
     public void useCase17(){
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         HasteSpore S = new HasteSpore(1);
         T1.spore.add(S);
 
@@ -344,7 +344,7 @@ public class SzkeletonTest {
     public void useCase18(){
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         SlowSpore S = new SlowSpore(1);
         T1.spore.add(S);
 
@@ -357,7 +357,7 @@ public class SzkeletonTest {
     public void useCase19(){
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         ParaSpore S = new ParaSpore(1);
         T1.spore.add(S);
 
@@ -370,7 +370,7 @@ public class SzkeletonTest {
     public void useCase20(){
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         MuteSpore S = new MuteSpore(1);
         T1.spore.add(S);
 
@@ -383,7 +383,7 @@ public class SzkeletonTest {
     public void useCase21(){
         Tekton T1 = new Tekton();
         Insect I = new Insect();
-        I.location = T1;
+        I.setLocation(T1);
         Spore S = new Spore(1);
         T1.spore.add(S);
 

@@ -148,7 +148,7 @@ public class Tekton {
         if(spore.size()>=3 && mushroomThread!=null) {
             useSporeToGrow();
             MushroomBody M = new MushroomBody();
-            M.location = this;
+            M.setLocation(this);
             ms.addMushroomBody(M);
             Szkeleton.printIndentation();
 
@@ -182,8 +182,8 @@ public class Tekton {
         List<Tekton> temp = new LinkedList<Tekton>();
         for(Tekton t : neighbors){
             for(MushroomThread mt : mushroomThread) {
-                for(MushroomThread mt2 : mt.nextGrowed) {
-                    if(mt2.location == t) {
+                for(MushroomThread mt2 : mt.getNextGrowed()) {
+                    if(mt2.getLocation() == t) {
                         temp.add(t);
                     }
                 }

@@ -7,15 +7,15 @@ public class MushroomBody {
     /**
      * A gomba osztálynak a korra, pontosabban, hogy hány kört telt el a gomba létrehozása után.
      */
-    public int bodyAge;
+    private int bodyAge;
     /**
      * Hány spóra szám van a Gombában
      */
-    public int sporeNumber;
+    private int sporeNumber;
     /**
      * Gombatest melyik tektonon van
      */
-    public Tekton location;
+    private Tekton location;
     public MushroomBody() {
         bodyAge = 0;
         sporeNumber = 5;
@@ -57,7 +57,7 @@ public class MushroomBody {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">MushroomBody.growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
-        if(tekton.checkNeighbor(mushroomThread.location) && mushroomThread != null) {
+        if(tekton.checkNeighbor(mushroomThread.getLocation()) && mushroomThread != null) {
             MushroomThread MT2 = new MushroomThread();
             if (tekton.addThread(MT2)) {
                 if(!tekton.spore.isEmpty()){
@@ -87,8 +87,8 @@ public class MushroomBody {
         }
         else if(tekton.checkNeighbor(location) && mushroomThread == null) {
             MushroomThread MT2 = new MushroomThread();
-            mushroomThread.nextGrowed.add(MT2);
-            MT2.preGrowed = mushroomThread;
+            mushroomThread.addThread(MT2);
+            MT2.setPreGrowed(mushroomThread);
             if(tekton.addThread(MT2)) {
                 return true;
             }
@@ -119,4 +119,27 @@ public class MushroomBody {
 
     }
 
+    public int getBodyAge() {
+        return bodyAge;
+    }
+
+    public void setBodyAge(int bodyAge) {
+        this.bodyAge = bodyAge;
+    }
+
+    public int getSporeNumber() {
+        return sporeNumber;
+    }
+
+    public void setSporeNumber(int sporeNumber) {
+        this.sporeNumber = sporeNumber;
+    }
+
+    public Tekton getLocation() {
+        return location;
+    }
+
+    public void setLocation(Tekton location) {
+        this.location = location;
+    }
 }

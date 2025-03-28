@@ -10,23 +10,23 @@ public class Insect {
     /**
      * rovarnak a sebbessége
      */
-    public int insectSpeed;
+    private int insectSpeed;
     /**
      * rovar képes-e elvágni a gombaFonalat
      */
-    public boolean cutThread;
+    private boolean cutThread;
     /**
      * rovar képes-e megenni a spórát
      */
-    public boolean eatSpore;
+    private boolean eatSpore;
     /**
      * rovar megtáplákozott tápanyag mennyisége
      */
-    public int currentNutrient;
+    private int currentNutrient;
     /**
      * Tekton, ahol a rovar rajta elhelyezkedett
      */
-    public Tekton location;
+    private Tekton location;
 
     //Konstruktor
     public Insect() {
@@ -195,5 +195,45 @@ public class Insect {
         Szkeleton.printIndentation();
         System.out.println("<");
         Szkeleton.indentation--;
+    }
+
+    public int getInsectSpeed() {
+        return insectSpeed;
+    }
+
+    public boolean isCutThread() {
+        return cutThread;
+    }
+
+    public boolean isEatSpore() {
+        return eatSpore;
+    }
+
+    public int getCurrentNutrient() {
+        return currentNutrient;
+    }
+
+    public Tekton getLocation() {
+        return location;
+    }
+
+    public void setLocation(Tekton location) {
+        this.location = location;
+    }
+
+    public void setCurrentNutrient(int currentNutrient) {
+        this.currentNutrient = currentNutrient;
+    }
+
+    public void setEatSpore(boolean eatSpore) {
+        this.eatSpore = eatSpore;
+    }
+
+    public void setCutThread(boolean cutThread) {
+        this.cutThread = cutThread;
+    }
+
+    public void setInsectSpeed(int insectSpeed) {
+        this.insectSpeed = insectSpeed;
     }
 }

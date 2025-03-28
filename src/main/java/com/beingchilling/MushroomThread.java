@@ -10,15 +10,15 @@ public class MushroomThread {
     /**
      * Eltárolja az előtte lévő gombafonalat.
      */
-    public MushroomThread preGrowed;
+    private MushroomThread preGrowed;
     /**
      *  Eltárolja az utána lévő gombafonalakat.
      */
-    public List<MushroomThread> nextGrowed;
+    private List<MushroomThread> nextGrowed;
     /**
      * Eltárolja melyik tektonon van a gombafonal.
      */
-    public Tekton location;
+    private Tekton location;
 
     public MushroomThread() {
         preGrowed = null;
@@ -50,7 +50,7 @@ public class MushroomThread {
         Szkeleton.printIndentation();
         System.out.println("<");
         Szkeleton.indentation--;
-
+        nextGrowed.add(thread);
 
     }
 
@@ -83,4 +83,27 @@ public class MushroomThread {
         return new MushroomBody();
     }
 
+    public MushroomThread getPreGrowed() {
+        return preGrowed;
+    }
+
+    public void setPreGrowed(MushroomThread preGrowed) {
+        this.preGrowed = preGrowed;
+    }
+
+    public List<MushroomThread> getNextGrowed() {
+        return nextGrowed;
+    }
+
+    public void setNextGrowed(List<MushroomThread> nextGrowed) {
+        this.nextGrowed = nextGrowed;
+    }
+
+    public Tekton getLocation() {
+        return location;
+    }
+
+    public void setLocation(Tekton location) {
+        this.location = location;
+    }
 }
