@@ -74,7 +74,6 @@ public class Tekton {
             return false;
         }
 
-        mushroomThread.getFirst().removeThreadAfter();
         clearSpore();
         Tekton T2 = new Tekton();
         T2.neighbors.add(this);
@@ -324,6 +323,12 @@ public class Tekton {
         System.out.println("<");
         Szkeleton.indentation--;
 
+    }
+
+    public void absorb() {
+        for(MushroomThread mt : mushroomThread) {
+            mt.lifeReduce();
+        }
     }
 
 }

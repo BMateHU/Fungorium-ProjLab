@@ -104,7 +104,6 @@ public class Insect {
         Szkeleton.printIndentation();
         System.out.println(">Insect.insectCut(): boolean");
         if(cutThread){
-            mt.removeThreadAfter();
             Szkeleton.printIndentation();
 
             System.out.println("<result: true");
@@ -185,6 +184,10 @@ public class Insect {
         Szkeleton.indentation--;
     }
 
+    public void cloneEffect() {
+
+    }
+
     /**
      * A függvény megszünteti a hatásokat ami a rovaron van.
      */
@@ -195,6 +198,10 @@ public class Insect {
         Szkeleton.printIndentation();
         System.out.println("<");
         Szkeleton.indentation--;
+    }
+
+    public void destroy() {
+
     }
 
     public int getInsectSpeed() {

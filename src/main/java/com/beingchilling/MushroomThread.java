@@ -20,9 +20,33 @@ public class MushroomThread {
      */
     private Tekton location;
 
+    /// Stores mushroom thread's life
+    private int life;
+
+    /// True if the thread is on life support, otherwise false
+    private boolean lifeSupport;
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public boolean isLifeSupport() {
+        return lifeSupport;
+    }
+
+    public void setLifeSupport(boolean lifeSupport) {
+        this.lifeSupport = lifeSupport;
+    }
+
     public MushroomThread() {
         preGrowed = null;
         nextGrowed = new ArrayList<MushroomThread>();
+        life = 3;
+        lifeSupport = false;
     }
 
     /**
@@ -55,19 +79,6 @@ public class MushroomThread {
     }
 
     /**
-     * A fonal elvágása után, törli az utána lévő fonalakat.
-     */
-    public void removeThreadAfter(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
-        System.out.println(">MushroomThread.removeThreadAfter():void");
-        Szkeleton.printIndentation();
-        System.out.println("<");
-        Szkeleton.indentation--;
-
-    }
-
-    /**
      * Megnézi, hogy melyik gombatesthez tartozik a jelen lévő gombafonal.
      * @return A gombatest amihez a fonal tartozik
      */
@@ -81,6 +92,26 @@ public class MushroomThread {
         Szkeleton.indentation--;
 
         return new MushroomBody();
+    }
+
+    public void disconnectThread() {
+
+    }
+
+    public void lifeReduce() {
+        life--;
+    }
+
+    public void absorbInsect() {
+
+    }
+
+    public void destroy() {
+
+    }
+
+    public void remove(MushroomThread thread) {
+
     }
 
     public MushroomThread getPreGrowed() {
