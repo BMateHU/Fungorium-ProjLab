@@ -5,4 +5,10 @@ public class LifeSupportTekton extends Tekton {
 
     @Override
     public void absorb() {}
+
+    @Override
+    public boolean addThread(MushroomThread thread) {
+        thread.setLifeSupport(true);
+        return super.addThread(thread);
+    }
 }

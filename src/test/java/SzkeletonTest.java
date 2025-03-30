@@ -1,5 +1,6 @@
 import com.beingchilling.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AssertionsKt;
 import org.junit.jupiter.api.Test;
 
 public class SzkeletonTest {
@@ -389,5 +390,84 @@ public class SzkeletonTest {
 
         I.insectEat();
         Assertions.assertTrue(T1.spore.isEmpty());
+    }
+
+    //Rovar Eszik sikertelen
+    @Test
+    public void useCase22(){
+        Tekton T1 = new Tekton();
+        Insect I = new Insect();
+        I.setLocation(T1);
+        Spore S = new Spore(1);
+        T1.spore.add(S);
+        I.setEatSpore(false);
+
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, I::insectEat);
+        Assertions.assertFalse(T1.spore.isEmpty());
+    }
+
+    //Absorb siker
+    @Test
+    public void useCase23() {
+        Tekton T1 = new Tekton();
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+        for(int i = 0; i < 3; i++)
+            T1.absorb();
+        Assertions.assertTrue(T1.mushroomThread.isEmpty());
+    }
+
+    //Fonal hozzaad ellenorzes
+    @Test
+    public void useCase24() {
+        Tekton T1 = new Tekton();
+        T1.addThread(new MushroomThread());
+        Assertions.assertFalse(T1.addThread(new MushroomThread()));
+        Assertions.assertFalse(T1.addThread(new MushroomThread()));
+    }
+
+    //MultiThreadTekton success
+    @Test
+    public void useCase25() {
+        Tekton T1 = new MultiThreadTekton();
+        T1.addThread(new MushroomThread());
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+    }
+
+    //MultiThreadTekton absorb
+    @Test
+    public void useCase26() {
+        Tekton T1 = new MultiThreadTekton();
+        T1.addThread(new MushroomThread());
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+        for(int i = 0; i < 3; i++)
+            T1.absorb();
+        Assertions.assertTrue(T1.mushroomThread.isEmpty());
+    }
+
+    //MultiThreadTekton absorb, LifeThread and normal thread mix
+    @Test
+    public void useCase27() {
+        Tekton T1 = new MultiThreadTekton();
+        T1.addThread(new MushroomThread());
+        Assertions.assertTrue(T1.addThread(new LifeThread()));
+        Assertions.assertTrue(T1.addThread(new LifeThread()));
+        for(int i = 0; i < 3; i++)
+            T1.absorb();
+        Assertions.assertEquals(2, T1.mushroomThread.size());
+        for(int i = 0; i < 2; i++)
+            T1.absorb();
+        Assertions.assertTrue(T1.mushroomThread.isEmpty());
+    }
+
+    @Test
+    public void useCase28() {
+        Tekton T1 = new LifeSupportTekton();
+        T1.addThread(new LifeThread());
+        Assertions.assertFalse(T1.addThread(new LifeThread()));
+        for(int i = 0; i < 100; i++)
+            T1.absorb();
+        Assertions.assertFalse(T1.mushroomThread.isEmpty());
     }
 }

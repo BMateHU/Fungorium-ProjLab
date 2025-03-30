@@ -14,6 +14,8 @@ public class MultiThreadTekton extends Tekton{
         System.out.println(">Tekton.addThread(): Boolean");
         Szkeleton.printIndentation();
 
+        mushroomThread.add(mt);
+
         System.out.println("<true");
         Szkeleton.indentation--;
 

@@ -80,12 +80,17 @@ public class Insect {
     /**
      * A rovar megeszik a tektonon elhelyezett spórát.
      */
-    public void insectEat(){
+    public void insectEat() throws ArrayIndexOutOfBoundsException {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">Insect.insectEat(): void");
-        Spore ss = location.popSpore();
-        ss.sporeEffect(this);
+        if(eatSpore) {
+            Spore ss = location.popSpore();
+            ss.sporeEffect(this);
+        }
+        else {
+            throw new ArrayIndexOutOfBoundsException("Cant eat spore");
+        }
         Szkeleton.printIndentation();
 
         System.out.println("<");

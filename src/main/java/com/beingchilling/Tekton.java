@@ -51,6 +51,8 @@ public class Tekton {
         }
         Szkeleton.printIndentation();
 
+        mushroomThread.add(mt);
+
         System.out.println("<true");
         Szkeleton.indentation--;
 
@@ -326,8 +328,14 @@ public class Tekton {
     }
 
     public void absorb() {
+        List<MushroomThread> temp = new ArrayList<>();
         for(MushroomThread mt : mushroomThread) {
             mt.lifeReduce();
+            if(mt.getLife() <= 0)
+                temp.add(mt);
+        }
+        for(MushroomThread mt : temp) {
+            mushroomThread.remove(mt);
         }
     }
 
