@@ -73,9 +73,11 @@ public class MushroomThread {
         System.out.println(">MushroomThread.addThread(MushroomThread thread):void");
         Szkeleton.printIndentation();
         System.out.println("<");
-        Szkeleton.indentation--;
-        nextGrowed.add(thread);
 
+        nextGrowed.add(thread);
+        thread.preGrowed = this;
+
+        Szkeleton.indentation--;
     }
 
     /**
@@ -95,7 +97,8 @@ public class MushroomThread {
     }
 
     public void disconnectThread() {
-
+        preGrowed.nextGrowed.remove(this);
+        preGrowed = null;
     }
 
     public void lifeReduce() {
@@ -103,11 +106,14 @@ public class MushroomThread {
     }
 
     public void absorbInsect() {
-
+        for(int i=0; i<3; i++)
+            location.addSpore(new Spore(1));
+        location.growMushroomBody(new MushroomSpecies());
     }
 
     public void destroy() {
-
+        location.mushroomThread.remove(this);
+        location = null;
     }
 
     public void remove(MushroomThread thread) {

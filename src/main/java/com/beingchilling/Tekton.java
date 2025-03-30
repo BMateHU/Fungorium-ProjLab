@@ -18,6 +18,9 @@ public class Tekton {
      * A Tektonon lévő spórák.
      */
     public List<Spore> spore;
+
+    /// A Tektonon lévő gombatest.
+    public MushroomBody mushroomBody;
     /**
      * A Tektonon lévő MushroomThread, azaz gombaFonal.
      */
@@ -29,8 +32,8 @@ public class Tekton {
 
     //Konstruktor
     public Tekton(){
-        neighbors = new LinkedList<>();
-        spore = new LinkedList<>();
+        neighbors = new ArrayList<>();
+        spore = new ArrayList<>();
         mushroomThread = new ArrayList<>();
         insect = null;
     }
@@ -91,20 +94,7 @@ public class Tekton {
         Szkeleton.indentation--;
         return true;
    }
-    /**
-     * Megmondja, hogy a jelenlegi Tekton milyen hatással rendelkezik. 
-     * PL: Gombatest nélküli vagy Gombafonal nélküli
-     */
-    public void tektonEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
-        System.out.println(">Tekton.tektonEffect(): void");
-        Szkeleton.printIndentation();
 
-        System.out.println("<");
-        Szkeleton.indentation--;
-
-    }
     /**
      * A függvény megmondja a Tektonon lévő spóra
      * PL: Gombatest nélküli vagy Gombafonal nélküli
@@ -146,11 +136,12 @@ public class Tekton {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
         System.out.println(">Tekton.growMushroomBody(): boolean");
-        if(spore.size()>=3 && mushroomThread!=null) {
+        if(spore.size()>=3 && !mushroomThread.isEmpty()) {
             useSporeToGrow();
             MushroomBody M = new MushroomBody();
             M.setLocation(this);
             ms.addMushroomBody(M);
+            mushroomBody = M;
             Szkeleton.printIndentation();
 
             System.out.println("<result:true");
@@ -226,6 +217,8 @@ public class Tekton {
         System.out.println(">Tekton.addSpore(): void");
         Szkeleton.printIndentation();
 
+        spore.addFirst(s);
+
         System.out.println("<");
         Szkeleton.indentation--;
 
@@ -271,6 +264,9 @@ public class Tekton {
         Szkeleton.printIndentation();
         System.out.println(">Tekton.deleteNeighbor(): void");
         Szkeleton.printIndentation();
+
+        neighbors.remove(t);
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -282,9 +278,11 @@ public class Tekton {
     public void addNeighbor(Tekton t) {
         Szkeleton.indentation++;
         Szkeleton.printIndentation();
-
         System.out.println(">Tekton.addNeighbor(): void");
         Szkeleton.printIndentation();
+
+        neighbors.add(t);
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -298,6 +296,9 @@ public class Tekton {
         Szkeleton.printIndentation();
         System.out.println(">Tekton.addInsect(): void");
         Szkeleton.printIndentation();
+
+        insect = i;
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -324,15 +325,18 @@ public class Tekton {
         Szkeleton.printIndentation();
         System.out.println("<");
         Szkeleton.indentation--;
-
+        for(int i = 0; i < 3; i++)
+            popSpore();
     }
 
     public void absorb() {
         List<MushroomThread> temp = new ArrayList<>();
         for(MushroomThread mt : mushroomThread) {
-            mt.lifeReduce();
-            if(mt.getLife() <= 0)
-                temp.add(mt);
+            if(!mt.isLifeSupport()) {
+                mt.lifeReduce();
+                if(mt.getLife() <= 0)
+                    temp.add(mt);
+            }
         }
         for(MushroomThread mt : temp) {
             mushroomThread.remove(mt);

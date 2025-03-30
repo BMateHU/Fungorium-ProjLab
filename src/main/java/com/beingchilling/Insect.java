@@ -146,6 +146,8 @@ public class Insect {
         System.out.println(">Insect.hasteEffect(): void");
         Szkeleton.printIndentation();
 
+        insectSpeed = 3;
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -155,11 +157,12 @@ public class Insect {
      */
     public void slowEffect(){
         Szkeleton.indentation++;
-
         Szkeleton.printIndentation();
-
         System.out.println(">Insect.slowEffect(): void");
         Szkeleton.printIndentation();
+
+        insectSpeed = 1;
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -172,6 +175,11 @@ public class Insect {
         Szkeleton.printIndentation();
         System.out.println(">Insect.paraEffect(): void");
         Szkeleton.printIndentation();
+
+        insectSpeed = 0;
+        eatSpore = false;
+        cutThread = false;
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -185,12 +193,14 @@ public class Insect {
         System.out.println(">Insect.muteEffect(): void");
         Szkeleton.printIndentation();
 
+        cutThread = false;
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
 
     public void cloneEffect() {
-
+        location.getNeighbors().getFirst().addInsect(new Insect()); //only an insect, needs to be added to insectspecies
     }
 
     /**
@@ -201,6 +211,11 @@ public class Insect {
         Szkeleton.printIndentation();
         System.out.println(">Insect.endEffect(): void");
         Szkeleton.printIndentation();
+
+        cutThread = true;
+        eatSpore = true;
+        insectSpeed = 2;
+
         System.out.println("<");
         Szkeleton.indentation--;
     }
@@ -213,11 +228,11 @@ public class Insect {
         return insectSpeed;
     }
 
-    public boolean isCutThread() {
+    public boolean canCutThread() {
         return cutThread;
     }
 
-    public boolean isEatSpore() {
+    public boolean canEatSpore() {
         return eatSpore;
     }
 

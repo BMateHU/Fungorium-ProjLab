@@ -1,20 +1,20 @@
 package com.beingchilling;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ThreadAbsorbTekton extends Tekton {
 
-    /**
-     * Felülírja a tekton tektonEffect() metódusát, hogy a tektonon lévő gombaFonal egy idő után
-     * felszívódik, azaz eltűnik tektonról.
-     */
-    
     @Override
-    public void tektonEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
-        System.out.println(">ThreadAbsorbTekton.tektonEffect(): void");
-        Szkeleton.printIndentation();
-        System.out.println("<");
-        Szkeleton.indentation--;
-
+    public void absorb() {
+        List<MushroomThread> temp = new ArrayList<>();
+        for(MushroomThread mt : mushroomThread) {
+            mt.lifeReduce();
+            if(mt.getLife() <= 0)
+                temp.add(mt);
+        }
+        for(MushroomThread mt : temp) {
+            mushroomThread.remove(mt);
+        }
     }
 }

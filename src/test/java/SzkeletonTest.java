@@ -1,6 +1,5 @@
 import com.beingchilling.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.AssertionsKt;
 import org.junit.jupiter.api.Test;
 
 public class SzkeletonTest {
@@ -11,8 +10,8 @@ public class SzkeletonTest {
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         Insect I = new Insect();
         I.setLocation(T1);
@@ -30,6 +29,7 @@ public class SzkeletonTest {
 
         I.setInsectSpeed(2);
         Assertions.assertTrue(I.insectMove(T2));
+        Assertions.assertEquals(2, I.getInsectSpeed());
     }
 
     //Rovar mozgás lassító effektussal
@@ -38,8 +38,8 @@ public class SzkeletonTest {
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         Insect I = new Insect();
         I.setLocation(T1);
@@ -58,6 +58,7 @@ public class SzkeletonTest {
         I.setInsectSpeed(1);
 
         Assertions.assertTrue(I.insectMove(T2));
+        Assertions.assertEquals(1, I.getInsectSpeed());
     }
 
     //Rovar mozgás gyorsító effektussal
@@ -66,8 +67,8 @@ public class SzkeletonTest {
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         Insect I = new Insect();
         I.setLocation(T1);
@@ -86,6 +87,7 @@ public class SzkeletonTest {
         I.setInsectSpeed(3);
 
         Assertions.assertTrue(I.insectMove(T2));
+        Assertions.assertEquals(3, I.getInsectSpeed());
     }
 
     //Rovar mozgás bénító effektussal
@@ -94,21 +96,22 @@ public class SzkeletonTest {
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
 
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         Insect I = new Insect();
         I.setLocation(T2);
-        T2.insect = I;
+        T2.addInsect(I);
+        T2.addSpore(new ParaSpore(1));
+        I.insectEat();
 
         MushroomThread MT1 = new MushroomThread();
         MT1.setLocation(T1);
         MushroomThread MT2 = new MushroomThread();
         MT2.setLocation(T2);
 
-        I.setInsectSpeed(0);
-
         Assertions.assertFalse(I.insectMove(T1));
+        Assertions.assertEquals(0, I.getInsectSpeed());
     }
 
     //Rovar mozgás sikertelen
@@ -150,12 +153,12 @@ public class SzkeletonTest {
         T3.mushroomThread.add(MT3);
         T4.mushroomThread.add(MT4);
 
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
-        T2.neighbors.add(T3);
-        T3.neighbors.add(T2);
-        T3.neighbors.add(T4);
-        T4.neighbors.add(T3);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
+        T2.addNeighbor(T3);
+        T3.addNeighbor(T2);
+        T3.addNeighbor(T4);
+        T4.addNeighbor(T3);
 
         Assertions.assertFalse(I.insectMove(T1));
     }
@@ -220,8 +223,8 @@ public class SzkeletonTest {
     public void useCase10(){
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         MushroomBody MB = new MushroomBody();
         MB.setLocation(T1);
@@ -236,8 +239,8 @@ public class SzkeletonTest {
     public void useCase11(){
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         MushroomBody MB = new MushroomBody();
         MB.setLocation(T1);
@@ -252,8 +255,8 @@ public class SzkeletonTest {
     public void useCase12(){
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         MushroomBody MB = new MushroomBody();
         MB.setLocation(T1);
@@ -269,8 +272,8 @@ public class SzkeletonTest {
     public void useCase13() {
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         MushroomBody MB = new MushroomBody();
         MB.setLocation(T1);
@@ -289,12 +292,12 @@ public class SzkeletonTest {
     public void useCase14(){
         Tekton T1 = new Tekton();
         Tekton T2 = new Tekton();
-        T1.neighbors.add(T2);
-        T2.neighbors.add(T1);
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
 
         Tekton T3 = new Tekton();
-        T3.neighbors.add(T2);
-        T2.neighbors.add(T3);
+        T3.addNeighbor(T2);
+        T2.addNeighbor(T3);
         T2.spore.add(new Spore(1));
 
         MushroomBody MB = new MushroomBody();
@@ -461,6 +464,7 @@ public class SzkeletonTest {
         Assertions.assertTrue(T1.mushroomThread.isEmpty());
     }
 
+    //LifeSupportTekton test
     @Test
     public void useCase28() {
         Tekton T1 = new LifeSupportTekton();
@@ -469,5 +473,140 @@ public class SzkeletonTest {
         for(int i = 0; i < 100; i++)
             T1.absorb();
         Assertions.assertFalse(T1.mushroomThread.isEmpty());
+    }
+
+    //Check lifeSupport attr
+    @Test
+    public void useCase29() {
+        Tekton T1 = new Tekton();
+        T1.addThread(new LifeThread());
+        T1.mushroomThread.getFirst().setLifeSupport(true);
+        for(int i = 0; i < 100; i++)
+            T1.absorb();
+        Assertions.assertFalse(T1.mushroomThread.isEmpty());
+    }
+
+    //Check absorb is --
+    @Test
+    public void useCase30() {
+        Tekton T1 = new Tekton();
+        T1.addThread(new LifeThread());
+        T1.absorb();
+        Assertions.assertEquals(4, T1.mushroomThread.getFirst().getLife());
+    }
+
+    //Fonal absorb insect
+    @Test
+    public void useCase31() {
+        Tekton T1 = new Tekton();
+        T1.addThread(new MushroomThread());
+        T1.mushroomThread.getFirst().setLocation(T1);
+        T1.addInsect(new Insect());
+        T1.mushroomThread.getFirst().absorbInsect();
+        Assertions.assertNotNull(T1.mushroomBody);
+    }
+
+    //Clone effect test
+    @Test
+    public void useCase32() {
+        Tekton T1 = new Tekton();
+        Tekton T2 = new Tekton();
+
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
+
+        T1.addInsect(new Insect());
+        T1.addSpore(new CloneSpore(1));
+
+        T1.insect.setLocation(T1);
+        T1.insect.insectEat();
+
+        Assertions.assertNotNull(T1.insect);
+        Assertions.assertNotNull(T2.insect);
+        Assertions.assertTrue(T1.spore.isEmpty());
+    }
+
+    //Delete neighbor test
+    @Test
+    public void useCase33() {
+        Tekton T1 = new Tekton();
+        Tekton T2 = new Tekton();
+
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
+
+        Assertions.assertEquals(T2, T1.neighbors.getFirst());
+        Assertions.assertEquals(T1, T2.neighbors.getFirst());
+
+        T1.deleteNeighbor(T2);
+        T2.deleteNeighbor(T1);
+
+        Assertions.assertTrue(T1.neighbors.isEmpty());
+        Assertions.assertTrue(T2.neighbors.isEmpty());
+    }
+
+    //Test mushroomthread disconnect
+    @Test
+    public void useCase34() {
+        MushroomThread mt = new MushroomThread();
+        MushroomThread mt2 = new MushroomThread();
+        MushroomThread mt3 = new MushroomThread();
+        MushroomThread mt4 = new MushroomThread();
+
+        mt.addThread(mt2);
+        mt2.addThread(mt3);
+        mt3.addThread(mt4);
+
+        Assertions.assertNotNull(mt.getNextGrowed().getFirst());
+        Assertions.assertNotNull(mt2.getPreGrowed());
+        Assertions.assertNotNull(mt2.getNextGrowed().getFirst());
+        Assertions.assertNotNull(mt3.getPreGrowed());
+        Assertions.assertNotNull(mt3.getNextGrowed().getFirst());
+        Assertions.assertNotNull(mt4.getPreGrowed());
+
+        mt3.disconnectThread();
+
+        Assertions.assertTrue(mt2.getNextGrowed().isEmpty());
+        Assertions.assertNull(mt3.getPreGrowed());
+    }
+
+    //Test destroy() NOT FINISHED ONLY REMOVES FROM TEKTON
+    @Test
+    public void useCase35() {
+        Tekton T1 = new Tekton();
+        MushroomThread mt = new MushroomThread();
+        T1.addThread(mt);
+        mt.setLocation(T1);
+
+        mt.destroy();
+
+        Assertions.assertTrue(T1.mushroomThread.isEmpty());
+        Assertions.assertNull(mt.getLocation());
+    }
+
+    //Insect eat para spore -> restore (end effect)
+    @Test
+    public void useCase36() {
+        Tekton T1 = new Tekton();
+        Tekton T2 = new Tekton();
+
+        T1.addNeighbor(T2);
+        T2.addNeighbor(T1);
+
+        Insect I = new Insect();
+        I.setLocation(T2);
+        T2.addInsect(I);
+        T2.addSpore(new ParaSpore(1));
+        I.insectEat();
+
+        Assertions.assertEquals(0, I.getInsectSpeed());
+        Assertions.assertFalse(I.canEatSpore());
+        Assertions.assertFalse(I.canCutThread());
+
+        I.endEffect();
+
+        Assertions.assertEquals(2, I.getInsectSpeed());
+        Assertions.assertTrue(I.canEatSpore());
+        Assertions.assertTrue(I.canCutThread());
     }
 }
