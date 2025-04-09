@@ -1,4 +1,4 @@
-package com.beingchilling;
+package com.beingchilling.model;
 
 /**
  * Ez az osztály a némító spóra megvalósítása.
@@ -20,14 +20,10 @@ public class MuteSpore extends Spore {
      */
     @Override
     public void sporeEffect(Insect r) {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
         System.out.println(">MuteSpore.sporeEffect()");
         r.muteEffect();
-        Szkeleton.printIndentation();
 
         System.out.println("<");
-        Szkeleton.indentation--;
 
     }
 }

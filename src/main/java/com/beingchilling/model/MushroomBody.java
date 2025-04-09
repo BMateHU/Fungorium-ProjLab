@@ -1,9 +1,12 @@
-package com.beingchilling;
+package com.beingchilling.model;
+
+import com.beingchilling.controller.MushroomBodyController;
+import com.beingchilling.view.MushroomBodyView;
 
 /**
  * Ez egy gombatest osztaly, ami tárolja a gombatest korát, sporaszamát, és melyik tektonon van
  */
-public class MushroomBody {
+public class MushroomBody implements MushroomBodyController, MushroomBodyView {
     /**
      * A gomba osztálynak a korra, pontosabban, hogy hány kört telt el a gomba létrehozása után.
      */
@@ -16,9 +19,10 @@ public class MushroomBody {
      * Gombatest melyik tektonon van
      */
     private Tekton location;
-    public MushroomBody() {
+    public MushroomBody(Tekton location) {
         bodyAge = 0;
         sporeNumber = 5;
+        this.location = location;
     }
 
     /**
@@ -27,21 +31,20 @@ public class MushroomBody {
      * @return lehet vagy nem lehet
      */
     public boolean spreadSpore(Tekton tekton) {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">MushroomBody.spreadSpore(Tekton tekton):boolean)");
         if(tekton.checkNeighbor(location) && bodyAge >= 2 && sporeNumber > 0) {
             popSpore();
             Spore S = new Spore(1);
             tekton.addSpore(S);
-            Szkeleton.printIndentation();
+            
             System.out.println("<result:true");
-            Szkeleton.indentation--;
+            
             return true;
         }
-        Szkeleton.printIndentation();
+        
         System.out.println("<result:false");
-        Szkeleton.indentation--;
+        
         return false;
     }
 
@@ -54,8 +57,7 @@ public class MushroomBody {
      * @return sikeresség
      */
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">MushroomBody.growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
         if(tekton.checkNeighbor(mushroomThread.getLocation()) && mushroomThread != null) {
             MushroomThread MT2 = new MushroomThread();
@@ -69,18 +71,18 @@ public class MushroomBody {
                         }
                     }
                 }
-                Szkeleton.printIndentation();
+                
 
                 System.out.println("<result:true");
-                Szkeleton.indentation--;
+                
 
                 return true;
             }
             else{
-                Szkeleton.printIndentation();
+                
 
                 System.out.println("<result:false");
-                Szkeleton.indentation--;
+                
 
                 return false;
             }
@@ -88,18 +90,12 @@ public class MushroomBody {
         else if(tekton.checkNeighbor(location) && mushroomThread == null) {
             MushroomThread MT2 = new MushroomThread();
             mushroomThread.addThread(MT2);
-            MT2.setPreGrowed(mushroomThread);
-            if(tekton.addThread(MT2)) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return tekton.addThread(MT2);
         }
-        Szkeleton.printIndentation();
+        
 
         System.out.println("<result:false");
-        Szkeleton.indentation--;
+        
 
         return false;
     }
@@ -108,13 +104,12 @@ public class MushroomBody {
      *  Csökkenti a spórának számát eggyel.
      */
     public void popSpore(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">MushroomBody.popSpore():void");
-        Szkeleton.printIndentation();
+        
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
 
 
     }
@@ -131,15 +126,7 @@ public class MushroomBody {
         return sporeNumber;
     }
 
-    public void setSporeNumber(int sporeNumber) {
-        this.sporeNumber = sporeNumber;
-    }
-
     public Tekton getLocation() {
         return location;
-    }
-
-    public void setLocation(Tekton location) {
-        this.location = location;
     }
 }

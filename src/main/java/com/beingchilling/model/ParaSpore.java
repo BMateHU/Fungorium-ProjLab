@@ -1,4 +1,4 @@
-package com.beingchilling;
+package com.beingchilling.model;
 
 /**
  * Ez az osztály a bénító spóra megvalósítása.
@@ -20,13 +20,9 @@ public class ParaSpore extends Spore {
      */
     @Override
     public void sporeEffect(Insect r) {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
         System.out.println(">ParaSpore.sporeEffect()");
         r.paraEffect();
-        Szkeleton.printIndentation();
         System.out.println("<");
-        Szkeleton.indentation--;
 
     }
 }

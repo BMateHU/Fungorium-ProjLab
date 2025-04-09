@@ -1,4 +1,7 @@
-package com.beingchilling;
+package com.beingchilling.model;
+
+import com.beingchilling.controller.InsectController;
+import com.beingchilling.view.InsectView;
 
 import java.util.List;
 
@@ -6,7 +9,7 @@ import java.util.List;
  * Ez egy Rovar osztaly, ami tárolja rovarnak a sebbességét, vágásabilitását, spóraevésnek a sikeressége,
  * és jelenlegi evett tápanyagnak a mennyisége, illetve még egy Tektont, ami rajta mozog.
  */
-public class Insect {
+public class Insect implements InsectController, InsectView {
     /**
      * rovarnak a sebbessége
      */
@@ -47,8 +50,7 @@ public class Insect {
      */
     
     public boolean insectMove(Tekton tek){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.insectMove(Tekton L): boolean");
         if (insectSpeed > 0){
             List<Tekton> LT = getReachableTekton(insectSpeed);
@@ -56,23 +58,23 @@ public class Insect {
                 tek.addInsect(this);
                 location.removeInsect();
                 location = tek;
-                Szkeleton.printIndentation();
+                
                 System.out.println("<result: true");
-                Szkeleton.indentation--;
+                
                 return true;
             }
             else {
-                Szkeleton.printIndentation();
+                
                 System.out.println("<result: false");
-                Szkeleton.indentation--;
+                
                 return false;
             }
         }
         else {
-            Szkeleton.printIndentation();
+            
             System.out.println("<result: false");
 
-            Szkeleton.indentation--;
+            
             return false;
         }
     }
@@ -81,8 +83,7 @@ public class Insect {
      * A rovar megeszik a tektonon elhelyezett spórát.
      */
     public void insectEat() throws ArrayIndexOutOfBoundsException {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.insectEat(): void");
         if(eatSpore) {
             Spore ss = location.popSpore();
@@ -91,10 +92,10 @@ public class Insect {
         else {
             throw new ArrayIndexOutOfBoundsException("Cant eat spore");
         }
-        Szkeleton.printIndentation();
+        
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
 
     }
 
@@ -105,18 +106,17 @@ public class Insect {
      */
     
     public boolean insectCut(MushroomThread mt){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.insectCut(): boolean");
         if(cutThread){
-            Szkeleton.printIndentation();
+            
 
             System.out.println("<result: true");
-            Szkeleton.indentation--;
+            
 
             return true;
         }
-        Szkeleton.indentation--;
+        
         System.out.println("<result: false");
 
         return false;
@@ -128,12 +128,11 @@ public class Insect {
      * @return List<Tekton> értéket ad vissza, ami a rovar sebbességgel elérhető.
      */
     public List<Tekton> getReachableTekton(int speed){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.getReachableTekton(): void");
-        Szkeleton.printIndentation();
+        
         System.out.println("<");
-        Szkeleton.indentation--;
+        
         return location.getNeighborWithThread();
     }
 
@@ -141,87 +140,82 @@ public class Insect {
      * A függvény beállítja a rovart gyorsított mode-ba.
      */
     public void hasteEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.hasteEffect(): void");
-        Szkeleton.printIndentation();
+        
 
         insectSpeed = 3;
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
     }
 
      /**
      * A függvény beállítja a rovart lassított mode-ba.
      */
     public void slowEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.slowEffect(): void");
-        Szkeleton.printIndentation();
+        
 
         insectSpeed = 1;
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
     }
 
     /**
      * A függvény beállítja a rovart bénított mode-ba.
      */
     public void paraEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.paraEffect(): void");
-        Szkeleton.printIndentation();
+        
 
         insectSpeed = 0;
         eatSpore = false;
         cutThread = false;
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
     }
 
     /**
      * A függvény beállítja a rovart némított mode-ba.
      */
     public void muteEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.muteEffect(): void");
-        Szkeleton.printIndentation();
+        
 
         cutThread = false;
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
     }
 
     public void cloneEffect() {
-        location.getNeighbors().getFirst().addInsect(new Insect()); //only an insect, needs to be added to insectspecies
+        location.getNeighbors().getFirst().addInsect(new Insect()); //only an insect, needs to be added to insect species
     }
 
     /**
      * A függvény megszünteti a hatásokat ami a rovaron van.
      */
     public void endEffect(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">Insect.endEffect(): void");
-        Szkeleton.printIndentation();
+        
 
         cutThread = true;
         eatSpore = true;
         insectSpeed = 2;
 
         System.out.println("<");
-        Szkeleton.indentation--;
+        
     }
 
     public void destroy() {
-
+        location.insect = null;
     }
 
     public int getInsectSpeed() {
@@ -246,21 +240,5 @@ public class Insect {
 
     public void setLocation(Tekton location) {
         this.location = location;
-    }
-
-    public void setCurrentNutrient(int currentNutrient) {
-        this.currentNutrient = currentNutrient;
-    }
-
-    public void setEatSpore(boolean eatSpore) {
-        this.eatSpore = eatSpore;
-    }
-
-    public void setCutThread(boolean cutThread) {
-        this.cutThread = cutThread;
-    }
-
-    public void setInsectSpeed(int insectSpeed) {
-        this.insectSpeed = insectSpeed;
     }
 }

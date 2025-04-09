@@ -1,8 +1,11 @@
-package com.beingchilling;
+package com.beingchilling.model;
+
+import com.beingchilling.controller.InsectSpeciesController;
+import com.beingchilling.view.InsectSpeciesView;
 
 import java.util.List;
 
-public class InsectSpecies {
+public class InsectSpecies implements InsectSpeciesController, InsectSpeciesView {
 
     private List<Insect> insects;
 

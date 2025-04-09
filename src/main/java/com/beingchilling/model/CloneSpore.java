@@ -1,4 +1,4 @@
-package com.beingchilling;
+package com.beingchilling.model;
 
 public class CloneSpore extends Spore {
     /**

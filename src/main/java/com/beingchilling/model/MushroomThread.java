@@ -1,4 +1,7 @@
-package com.beingchilling;
+package com.beingchilling.model;
+
+import com.beingchilling.controller.MushroomThreadController;
+import com.beingchilling.view.MushroomThreadView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +9,7 @@ import java.util.List;
 /**
  * Az osztály a gombatestek által létrehozott gombafonalak funkciójait valósítja meg.
  */
-public class MushroomThread {
+public class MushroomThread implements MushroomThreadController, MushroomThreadView {
     /**
      * Eltárolja az előtte lévő gombafonalat.
      */
@@ -44,7 +47,7 @@ public class MushroomThread {
 
     public MushroomThread() {
         preGrowed = null;
-        nextGrowed = new ArrayList<MushroomThread>();
+        nextGrowed = new ArrayList<>();
         life = 3;
         lifeSupport = false;
     }
@@ -53,13 +56,6 @@ public class MushroomThread {
      * Ha fonal tektonjára spóra kerül, akkor egy ideig magától hosszabulni fog a fonal.
      */
     public void speedUpGrowing(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
-        System.out.println(">MushroomThread.speedUpGrowing():void");
-        Szkeleton.printIndentation();
-
-        System.out.println("<");
-        Szkeleton.indentation--;
 
     }
 
@@ -68,16 +64,15 @@ public class MushroomThread {
      * @param thread adott fonal
      */
     public void addThread(MushroomThread thread){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">MushroomThread.addThread(MushroomThread thread):void");
-        Szkeleton.printIndentation();
+        
         System.out.println("<");
 
         nextGrowed.add(thread);
         thread.preGrowed = this;
 
-        Szkeleton.indentation--;
+        
     }
 
     /**
@@ -85,15 +80,14 @@ public class MushroomThread {
      * @return A gombatest amihez a fonal tartozik
      */
     public MushroomBody checkOwner(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
+        
         System.out.println(">MushroomThread.checkOwner():MushroomBody");
-        Szkeleton.printIndentation();
+        
 
         System.out.println("<mushroom: MushroomBody");
-        Szkeleton.indentation--;
+        
 
-        return new MushroomBody();
+        return new MushroomBody(new Tekton());
     }
 
     public void disconnectThread() {
@@ -124,16 +118,8 @@ public class MushroomThread {
         return preGrowed;
     }
 
-    public void setPreGrowed(MushroomThread preGrowed) {
-        this.preGrowed = preGrowed;
-    }
-
     public List<MushroomThread> getNextGrowed() {
         return nextGrowed;
-    }
-
-    public void setNextGrowed(List<MushroomThread> nextGrowed) {
-        this.nextGrowed = nextGrowed;
     }
 
     public Tekton getLocation() {

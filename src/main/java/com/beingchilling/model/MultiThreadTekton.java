@@ -1,4 +1,4 @@
-package com.beingchilling;
+package com.beingchilling.model;
 
 public class MultiThreadTekton extends Tekton{
 
@@ -9,15 +9,11 @@ public class MultiThreadTekton extends Tekton{
      */
     @Override
     public boolean addThread(MushroomThread mt){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
         System.out.println(">Tekton.addThread(): Boolean");
-        Szkeleton.printIndentation();
 
         mushroomThread.add(mt);
 
         System.out.println("<true");
-        Szkeleton.indentation--;
 
         return true;
     }

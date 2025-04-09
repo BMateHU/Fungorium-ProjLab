@@ -1,13 +1,16 @@
-package com.beingchilling;
+package com.beingchilling.model;
+
+import com.beingchilling.controller.SporeController;
+import com.beingchilling.view.SporeView;
 
 /**
  * Az osztály a normál spóra megvalósítása.
  */
-public class Spore {
+public class Spore implements SporeController, SporeView {
     /**
      * Eltárolja, mennyi tápanyagot tartalmaz egy spóra
      */
-    private int sporeNutrient;
+    private final int sporeNutrient;
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát.
      *
@@ -23,11 +26,6 @@ public class Spore {
      * @param r A rovar, amelyre a spóra hatással lehet.
      */
     public void sporeEffect(Insect r) {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
-        System.out.println(">Spore.sporeEffect()");
-        System.out.println("<");
-        Szkeleton.indentation--;
 
     }
     /**
@@ -36,13 +34,6 @@ public class Spore {
      * @return A spóra által tartalmazott tápanyag mennyisége.
      */
     public int getSporeNutrient() {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
-        System.out.println(">Spore.getSporeNutrient()");
-        Szkeleton.printIndentation();
-        System.out.println("<");
-        Szkeleton.indentation--;
-
         return sporeNutrient;
 
     }

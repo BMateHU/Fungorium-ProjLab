@@ -1,4 +1,4 @@
-package com.beingchilling;
+package com.beingchilling.model;
 
 /**
  * Ez az osztály a lassító spóra megvalósítása.
@@ -20,13 +20,9 @@ public class SlowSpore extends Spore {
      */
     @Override
     public void sporeEffect(Insect r) {
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
         System.out.println(">SlowSpore.sporeEffect()");
         r.slowEffect();
-        Szkeleton.printIndentation();
         System.out.println("<");
-        Szkeleton.indentation--;
 
     }
 }

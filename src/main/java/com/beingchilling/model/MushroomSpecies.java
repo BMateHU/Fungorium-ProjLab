@@ -1,11 +1,14 @@
-package com.beingchilling;
+package com.beingchilling.model;
+
+import com.beingchilling.controller.MushroomSpeciesController;
+import com.beingchilling.view.MushroomSpeciesView;
 
 import java.util.List;
 
 /**
  * Az osztály egy gombafaj összes gombatest példányát tárolja el.
  */
-public class MushroomSpecies {
+public class MushroomSpecies implements MushroomSpeciesController, MushroomSpeciesView {
     /**
      * Nyilvántartja, egy gombafaj összes létező egyedét.
      */
@@ -16,12 +19,8 @@ public class MushroomSpecies {
      * @return Visszaadja az összes létező példányt.
      */
     public List<MushroomBody> checkMushroomBody(){
-        Szkeleton.indentation++;
-        Szkeleton.printIndentation();
         System.out.println(">MushroomSpecies.checkMushroomBody():List<MushroomBody>");
-        Szkeleton.printIndentation();
         System.out.println("<mushruooms:List<MushroomBody>");
-        Szkeleton.indentation--;
 
         return mushroomBodies;
     }
@@ -31,15 +30,10 @@ public class MushroomSpecies {
      * @param mushroomBody gombatest amit fel akarunk vanni
      */
     public void addMushroomBody(MushroomBody mushroomBody){
-        Szkeleton.indentation++;
-
-        Szkeleton.printIndentation();
 
         System.out.println(">MushroomSpecies.addMushroomBody(MushroomBody mushroomBody):void");
-        Szkeleton.printIndentation();
 
         System.out.println("<");
-        Szkeleton.indentation--;
 
     }
 

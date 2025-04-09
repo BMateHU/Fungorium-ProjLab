@@ -1,4 +1,4 @@
-package com.beingchilling;
+package com.beingchilling.model;
 
 import java.util.ArrayList;
 import java.util.List;

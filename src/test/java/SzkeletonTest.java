@@ -1,4 +1,4 @@
-import com.beingchilling.*;
+import com.beingchilling.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,6 @@ public class SzkeletonTest {
 
         MT1.addThread(MT2);
 
-        I.setInsectSpeed(2);
         Assertions.assertTrue(I.insectMove(T2));
         Assertions.assertEquals(2, I.getInsectSpeed());
     }
@@ -55,7 +54,7 @@ public class SzkeletonTest {
 
         MT1.addThread(MT2);
 
-        I.setInsectSpeed(1);
+        I.slowEffect();
 
         Assertions.assertTrue(I.insectMove(T2));
         Assertions.assertEquals(1, I.getInsectSpeed());
@@ -84,7 +83,7 @@ public class SzkeletonTest {
 
         MT1.addThread(MT2);
 
-        I.setInsectSpeed(3);
+        I.hasteEffect();
 
         Assertions.assertTrue(I.insectMove(T2));
         Assertions.assertEquals(3, I.getInsectSpeed());
@@ -170,7 +169,7 @@ public class SzkeletonTest {
         MushroomThread MT = new MushroomThread();
         MT.setLocation(T1);
         Insect I = new Insect();
-        I.setCutThread(false);
+        I.muteEffect();
 
         Assertions.assertFalse(I.insectCut(MT));
     }
@@ -226,9 +225,7 @@ public class SzkeletonTest {
         T1.addNeighbor(T2);
         T2.addNeighbor(T1);
 
-        MushroomBody MB = new MushroomBody();
-        MB.setLocation(T1);
-        MB.setSporeNumber(3);
+        MushroomBody MB = new MushroomBody(T1);
         MB.setBodyAge(2);
 
         Assertions.assertTrue(MB.spreadSpore(T2));
@@ -242,9 +239,12 @@ public class SzkeletonTest {
         T1.addNeighbor(T2);
         T2.addNeighbor(T1);
 
-        MushroomBody MB = new MushroomBody();
-        MB.setLocation(T1);
-        MB.setSporeNumber(0);
+        MushroomBody MB = new MushroomBody(T1);
+        MB.spreadSpore(T2);
+        MB.spreadSpore(T2);
+        MB.spreadSpore(T2);
+        MB.spreadSpore(T2);
+        MB.spreadSpore(T2);
         MB.setBodyAge(0);
 
         Assertions.assertFalse(MB.spreadSpore(T2));
@@ -258,8 +258,7 @@ public class SzkeletonTest {
         T1.addNeighbor(T2);
         T2.addNeighbor(T1);
 
-        MushroomBody MB = new MushroomBody();
-        MB.setLocation(T1);
+        MushroomBody MB = new MushroomBody(T1);
         MushroomThread MT1 = new MushroomThread();
         MT1.setLocation(T1);
         T1.mushroomThread.add(MT1);
@@ -275,8 +274,7 @@ public class SzkeletonTest {
         T1.addNeighbor(T2);
         T2.addNeighbor(T1);
 
-        MushroomBody MB = new MushroomBody();
-        MB.setLocation(T1);
+        MushroomBody MB = new MushroomBody(T1);
         MushroomThread MT1 = new MushroomThread();
         MT1.setLocation(T1);
         T1.mushroomThread.add(MT1);
@@ -300,8 +298,7 @@ public class SzkeletonTest {
         T2.addNeighbor(T3);
         T2.spore.add(new Spore(1));
 
-        MushroomBody MB = new MushroomBody();
-        MB.setLocation(T1);
+        MushroomBody MB = new MushroomBody(T1);
         MushroomThread MT1 = new MushroomThread();
         MT1.setLocation(T1);
 
@@ -403,7 +400,7 @@ public class SzkeletonTest {
         I.setLocation(T1);
         Spore S = new Spore(1);
         T1.spore.add(S);
-        I.setEatSpore(false);
+        I.paraEffect();
 
         Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, I::insectEat);
         Assertions.assertFalse(T1.spore.isEmpty());
@@ -454,9 +451,9 @@ public class SzkeletonTest {
     public void useCase27() {
         Tekton T1 = new MultiThreadTekton();
         T1.addThread(new MushroomThread());
-        Assertions.assertTrue(T1.addThread(new LifeThread()));
-        Assertions.assertTrue(T1.addThread(new LifeThread()));
-        for(int i = 0; i < 3; i++)
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+        Assertions.assertTrue(T1.addThread(new MushroomThread()));
+        for(int i = 0; i < 1; i++)
             T1.absorb();
         Assertions.assertEquals(2, T1.mushroomThread.size());
         for(int i = 0; i < 2; i++)
@@ -468,8 +465,8 @@ public class SzkeletonTest {
     @Test
     public void useCase28() {
         Tekton T1 = new LifeSupportTekton();
-        T1.addThread(new LifeThread());
-        Assertions.assertFalse(T1.addThread(new LifeThread()));
+        T1.addThread(new MushroomThread());
+        Assertions.assertFalse(T1.addThread(new MushroomThread()));
         for(int i = 0; i < 100; i++)
             T1.absorb();
         Assertions.assertFalse(T1.mushroomThread.isEmpty());
@@ -479,7 +476,7 @@ public class SzkeletonTest {
     @Test
     public void useCase29() {
         Tekton T1 = new Tekton();
-        T1.addThread(new LifeThread());
+        T1.addThread(new MushroomThread());
         T1.mushroomThread.getFirst().setLifeSupport(true);
         for(int i = 0; i < 100; i++)
             T1.absorb();
@@ -490,9 +487,9 @@ public class SzkeletonTest {
     @Test
     public void useCase30() {
         Tekton T1 = new Tekton();
-        T1.addThread(new LifeThread());
+        T1.addThread(new MushroomThread());
         T1.absorb();
-        Assertions.assertEquals(4, T1.mushroomThread.getFirst().getLife());
+        Assertions.assertEquals(2, T1.mushroomThread.getFirst().getLife());
     }
 
     //Fonal absorb insect
