@@ -215,7 +215,7 @@ public class Insect implements InsectController, InsectView {
     }
 
     public void destroy() {
-        location.insect = null;
+        location.addInsect(null);
     }
 
     public int getInsectSpeed() {
@@ -241,4 +241,13 @@ public class Insect implements InsectController, InsectView {
     public void setLocation(Tekton location) {
         this.location = location;
     }
+
+    public InsectView toView() {
+        return this;
+    }
+
+    public InsectController toController() {
+        return this;
+    }
+
 }

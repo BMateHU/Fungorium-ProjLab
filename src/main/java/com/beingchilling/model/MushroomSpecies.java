@@ -19,9 +19,6 @@ public class MushroomSpecies implements MushroomSpeciesController, MushroomSpeci
      * @return Visszaadja az összes létező példányt.
      */
     public List<MushroomBody> checkMushroomBody(){
-        System.out.println(">MushroomSpecies.checkMushroomBody():List<MushroomBody>");
-        System.out.println("<mushruooms:List<MushroomBody>");
-
         return mushroomBodies;
     }
 
@@ -35,10 +32,6 @@ public class MushroomSpecies implements MushroomSpeciesController, MushroomSpeci
 
         System.out.println("<");
 
-    }
-
-    public List<MushroomBody> getMushroomBodies() {
-        return mushroomBodies;
     }
 
     public void setMushroomBodies(List<MushroomBody> mushroomBodies) {

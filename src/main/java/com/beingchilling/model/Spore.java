@@ -37,4 +37,14 @@ public class Spore implements SporeController, SporeView {
         return sporeNutrient;
 
     }
+
+    @Override
+    public SporeView toView() {
+        return this;
+    }
+
+    @Override
+    public SporeController toController() {
+        return this;
+    }
 }

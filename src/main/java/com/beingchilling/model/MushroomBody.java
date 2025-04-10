@@ -31,15 +31,10 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      * @return lehet vagy nem lehet
      */
     public boolean spreadSpore(Tekton tekton) {
-        
-        System.out.println(">MushroomBody.spreadSpore(Tekton tekton):boolean)");
         if(tekton.checkNeighbor(location) && bodyAge >= 2 && sporeNumber > 0) {
             popSpore();
             Spore S = new Spore(1);
             tekton.addSpore(S);
-            
-            System.out.println("<result:true");
-            
             return true;
         }
         
@@ -57,33 +52,21 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      * @return sikeresség
      */
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
-        
-        System.out.println(">MushroomBody.growThread(MushroomThread mushroomThread, Tekton tekton):boolean");
         if(tekton.checkNeighbor(mushroomThread.getLocation()) && mushroomThread != null) {
             MushroomThread MT2 = new MushroomThread();
             if (tekton.addThread(MT2)) {
-                if(!tekton.spore.isEmpty()){
+                if(!tekton.getSpores().isEmpty()){
                     //nincs random meg
-                    for(Tekton t : tekton.neighbors) {
+                    for(Tekton t : tekton.getNeighbors()) {
                         if(t != location) {
                             MushroomThread MT3 = new MushroomThread();
                             t.addThread(MT3);
                         }
                     }
                 }
-                
-
-                System.out.println("<result:true");
-                
-
                 return true;
             }
             else{
-                
-
-                System.out.println("<result:false");
-                
-
                 return false;
             }
         }
@@ -92,26 +75,14 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
             mushroomThread.addThread(MT2);
             return tekton.addThread(MT2);
         }
-        
-
-        System.out.println("<result:false");
-        
-
         return false;
     }
 
     /**
      *  Csökkenti a spórának számát eggyel.
      */
-    public void popSpore(){
-        
-        System.out.println(">MushroomBody.popSpore():void");
-        
-
-        System.out.println("<");
-        
-
-
+    private void popSpore(){
+        sporeNumber--;
     }
 
     public int getBodyAge() {
@@ -128,5 +99,15 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
 
     public Tekton getLocation() {
         return location;
+    }
+
+    @Override
+    public MushroomBodyController toController() {
+        return this;
+    }
+
+    @Override
+    public MushroomBodyView toView() {
+        return this;
     }
 }

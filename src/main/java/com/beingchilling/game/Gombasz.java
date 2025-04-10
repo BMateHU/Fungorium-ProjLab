@@ -1,4 +1,12 @@
 package com.beingchilling.game;
 
-public class Gombasz {
+import com.beingchilling.model.MushroomSpecies;
+
+public class Gombasz extends Player {
+    public MushroomSpecies mushroomSpecies;
+
+    public Gombasz() {
+        mushroomSpecies = new MushroomSpecies();
+        //And add new mushroom - setup?
+    }
 }

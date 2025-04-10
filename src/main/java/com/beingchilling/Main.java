@@ -1,12 +1,54 @@
 package com.beingchilling;
 
+import com.beingchilling.game.Gombasz;
+import com.beingchilling.game.Player;
+import com.beingchilling.game.Rovarasz;
+import com.beingchilling.model.Insect;
+import com.beingchilling.model.MushroomBody;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
 
 public class Main {
-    public static void main(String[] args) {
 
+    static List<Gombasz> gombaszList = new ArrayList<>();
+    static List<Rovarasz> rovaraszList = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+    static final int maxRound = 20;
+    static boolean start = false;
+
+    public static void main(String[] args) {
+        printMenu();
+        while(!start) {
+            String command = sc.nextLine();
+            switch (command) {
+                case "start":
+                    start = true;
+                    break;
+                case "init":
+                    //loads map, gives them to Map.class and then gives it to view later at main game loop
+                    break;
+                case "exit":
+                    exit(0);
+                    break;
+            }
+        }
+
+        for(int i = 0; i < maxRound; i++) {
+            for(Gombasz gombasz : gombaszList) {
+                for(MushroomBody MB : gombasz.mushroomSpecies.checkMushroomBody()) {
+                    //maybe, no valszeg rosz, de idk hogy kene mashogy megoldani a game loopban
+                }
+            }
+            for(Rovarasz rovarasz : rovaraszList) {
+                for(Insect MB : rovarasz.insectSpecies.getInsects()) {
+                    //same as gombasz
+                }
+            }
+        }
     }
 
     public static void printMenu()

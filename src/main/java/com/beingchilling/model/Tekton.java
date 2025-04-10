@@ -8,30 +8,29 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Ez egy Tekton osztaly, ami tárolja a Tektonnak a szomszédjait egy Listában
- * , Spórákat, szintén egy Listában, ami rajta van a Tektonon és MushroomThreadet,
+ * Ez egy Tekton osztaly, ami tárolja a Tektonnak a szomszédjait egy Listában, Spórákat, szintén egy Listában, ami rajta van a Tektonon és MushroomThreadet,
  *  illetve egyetlen egy darab Insectet is tárol.
  */
 public class Tekton implements TektonController, TektonView {
     /**
      * A Tekton osztálynak a szomszédjai, ami Listában tároljuk.
      */
-    public List<Tekton> neighbors;
+    private final List<Tekton> neighbors;
     /**
      * A Tektonon lévő spórák.
      */
-    public List<Spore> spore;
+    private final List<Spore> spore;
 
     /// A Tektonon lévő gombatest.
-    public MushroomBody mushroomBody;
+    private MushroomBody mushroomBody;
     /**
      * A Tektonon lévő MushroomThread, azaz gombaFonal.
      */
-    public List<MushroomThread> mushroomThread;
+    private final List<MushroomThread> mushroomThread;
     /**
      * A Tektonon lévő rovar, ami csak egy darab lehet a tektonon.
      */
-    public Insect insect;
+    private Insect insect;
 
     //Konstruktor
     public Tekton(){
@@ -115,7 +114,7 @@ public class Tekton implements TektonController, TektonView {
     /**
      * A Tektonon lévő spórák eltávolítása illetve megsemmisitése 
      */
-    public void clearSpore(){
+    private void clearSpore(){
         
         System.out.println(">Tekton.clearSpore(): void");
         
@@ -153,6 +152,10 @@ public class Tekton implements TektonController, TektonView {
 
         return false;
 
+    }
+
+    public boolean growMushroomBody(MushroomBody MB) {
+        return true;
     }
 
     /**
@@ -247,6 +250,25 @@ public class Tekton implements TektonController, TektonView {
         return neighbors;
     }
 
+    @Override
+    public List<Spore> getSpores() {
+        return spore;
+    }
+
+    public Insect getInsect() {
+        return insect;
+    }
+
+    @Override
+    public List<MushroomThread> getThreads() {
+        return mushroomThread;
+    }
+
+    @Override
+    public MushroomBody getBody() {
+        return mushroomBody;
+    }
+
     /**
      * Tekont kitörlése a szomszédos tektonok listából
      * @param t, tektont amit kitöröljük a szomszéd listából
@@ -306,7 +328,7 @@ public class Tekton implements TektonController, TektonView {
     /**
      * A spórákat felhasználva, létrehoz a tektonon egy gombatestet
      */
-    public void useSporeToGrow(){
+    private void useSporeToGrow(){
         
         System.out.println(">Tekton.useSporeToGrow(): void");
         
@@ -330,4 +352,13 @@ public class Tekton implements TektonController, TektonView {
         }
     }
 
+    @Override
+    public TektonView toView() {
+        return this;
+    }
+
+    @Override
+    public TektonController toController() {
+        return this;
+    }
 }

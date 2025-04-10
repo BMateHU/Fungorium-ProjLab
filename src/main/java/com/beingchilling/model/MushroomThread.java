@@ -33,10 +33,6 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         return life;
     }
 
-    public void setLife(int life) {
-        this.life = life;
-    }
-
     public boolean isLifeSupport() {
         return lifeSupport;
     }
@@ -64,15 +60,12 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * @param thread adott fonal
      */
     public void addThread(MushroomThread thread){
-        
-        System.out.println(">MushroomThread.addThread(MushroomThread thread):void");
-        
-        System.out.println("<");
-
         nextGrowed.add(thread);
         thread.preGrowed = this;
+    }
 
-        
+    public void growThread(Tekton source, Tekton target) {
+
     }
 
     /**
@@ -80,13 +73,6 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * @return A gombatest amihez a fonal tartozik
      */
     public MushroomBody checkOwner(){
-        
-        System.out.println(">MushroomThread.checkOwner():MushroomBody");
-        
-
-        System.out.println("<mushroom: MushroomBody");
-        
-
         return new MushroomBody(new Tekton());
     }
 
@@ -106,7 +92,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     }
 
     public void destroy() {
-        location.mushroomThread.remove(this);
+        location.getThreads().remove(this);
         location = null;
     }
 
@@ -128,5 +114,15 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
     public void setLocation(Tekton location) {
         this.location = location;
+    }
+
+    @Override
+    public MushroomThreadView toView() {
+        return this;
+    }
+
+    @Override
+    public MushroomThreadController toController() {
+        return this;
     }
 }
