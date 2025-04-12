@@ -105,7 +105,7 @@ public class Insect implements InsectController, InsectView {
      * @return Ha igen, akkor true értéket ad vissza, ha nem akkor pedig False-t.
      */
     
-    public boolean insectCut(MushroomThread mt){
+    public boolean insectCut(MushroomThread mt) {
         
         System.out.println(">Insect.insectCut(): boolean");
         if(cutThread){

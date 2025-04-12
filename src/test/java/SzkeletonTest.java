@@ -313,7 +313,7 @@ public class SzkeletonTest {
         MT.setLocation(T1);
         T1.getThreads().add(MT);
 
-        Assertions.assertTrue(T1.tektonBreak());
+        Assertions.assertNotNull(T1.tektonBreak());
     }
 
     //Tekton kettétörése sikertelen
@@ -324,7 +324,7 @@ public class SzkeletonTest {
         I.setLocation(T1);
         T1.addInsect(I);
 
-        Assertions.assertFalse(T1.tektonBreak());
+        Assertions.assertNull(T1.tektonBreak());
     }
 
     //Rovar Eszik (gyorsító Spóra)

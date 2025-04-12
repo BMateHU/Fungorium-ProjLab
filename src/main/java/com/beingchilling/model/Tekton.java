@@ -68,31 +68,20 @@ public class Tekton implements TektonController, TektonView {
      * jelenlegi Tekton neighborhozÉs az új létre hozott Tektonnak is hozzáadjuk a 
      * jelenlegi Tektont mint neighborként
      */
-   public boolean tektonBreak(){
-        
-        System.out.println(">Tekton.tektonBreak(): void");
+   public Tekton tektonBreak() {
         if(insect != null || mushroomThread.isEmpty()){
-            
-
-            System.out.println("<");
-            
-            return false;
+            return null;
         }
-
         clearSpore();
         Tekton T2 = new Tekton();
         T2.neighbors.add(this);
         for(Tekton t : neighbors){
             t.updateNeighbor(null,null);
         }
-        List<Tekton> L = new LinkedList<Tekton>();
+        List<Tekton> L = new LinkedList<>();
         L.add(T2);
         updateNeighbor(L,null);
-        
-
-        System.out.println("<");
-        
-        return true;
+        return T2;
    }
 
     /**
@@ -154,8 +143,9 @@ public class Tekton implements TektonController, TektonView {
 
     }
 
-    public boolean growMushroomBody(MushroomBody MB) {
-        return true;
+    @Override
+    public void addMushroom(MushroomBody mushroomBody) {
+
     }
 
     /**
@@ -210,14 +200,6 @@ public class Tekton implements TektonController, TektonView {
      * @param s, a spórát ami hozzáadjuk a tektonhoz
      */
     public void addSpore(Spore s){
-        
-        System.out.println(">Tekton.addSpore(): void");
-        
-
-        spore.addFirst(s);
-
-        System.out.println("<");
-        
 
     }
 

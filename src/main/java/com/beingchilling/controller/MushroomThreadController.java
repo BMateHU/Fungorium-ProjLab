@@ -18,5 +18,6 @@ public interface MushroomThreadController {
     void setLocation(Tekton location);
     void growThread(Tekton source, Tekton target);
 
+
     MushroomThreadView toView();
 }

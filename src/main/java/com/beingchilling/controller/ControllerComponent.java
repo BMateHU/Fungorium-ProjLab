@@ -25,7 +25,7 @@ public class ControllerComponent {
 
     public void growMushroom(MushroomBodyController newMushroom, TektonController target) {
         //TO BE IMPLEMENTED
-        target.growMushroomBody((MushroomBody) newMushroom);
+        target.growMushroomBody(null);
     }
 
     public void spreadSpore(MushroomBodyController source, TektonController target) {

@@ -6,10 +6,12 @@ import com.beingchilling.view.TektonView;
 import java.util.List;
 
 public interface TektonController {
-    boolean tektonBreak();
+    Tekton tektonBreak();
     Spore popSpore();
     boolean growMushroomBody(MushroomSpecies ms);
-    boolean growMushroomBody(MushroomBody MB);
+    void addMushroom(MushroomBody mushroomBody);
+    void addSpore(Spore spore);
+    boolean addThread(MushroomThread mushroomThread);
     boolean checkNeighbor(Tekton t);
     void updateNeighbor(List<Tekton> newAdd, List<Tekton> delete);
     void addNeighbor(Tekton t);
