@@ -1,14 +1,11 @@
 package com.beingchilling.model;
 
-import com.beingchilling.controller.MushroomSpeciesController;
-import com.beingchilling.view.MushroomSpeciesView;
-
 import java.util.List;
 
 /**
  * Az osztály egy gombafaj összes gombatest példányát tárolja el.
  */
-public class MushroomSpecies implements MushroomSpeciesController, MushroomSpeciesView {
+public class MushroomSpecies {
     /**
      * Nyilvántartja, egy gombafaj összes létező egyedét.
      */
@@ -27,10 +24,6 @@ public class MushroomSpecies implements MushroomSpeciesController, MushroomSpeci
      * @param mushroomBody gombatest amit fel akarunk vanni
      */
     public void addMushroomBody(MushroomBody mushroomBody){
-
-        System.out.println(">MushroomSpecies.addMushroomBody(MushroomBody mushroomBody):void");
-
-        System.out.println("<");
 
     }
 

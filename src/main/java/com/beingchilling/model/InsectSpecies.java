@@ -1,16 +1,14 @@
 package com.beingchilling.model;
 
-import com.beingchilling.controller.InsectSpeciesController;
-import com.beingchilling.view.InsectSpeciesView;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsectSpecies implements InsectSpeciesController, InsectSpeciesView {
+public class InsectSpecies {
 
     private final List<Insect> insects;
 
-    public InsectSpecies() { insects = new ArrayList<>();
+    public InsectSpecies() {
+        insects = new ArrayList<>();
     }
 
     public void addInsect(Insect insect) {

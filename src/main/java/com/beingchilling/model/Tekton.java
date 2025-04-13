@@ -200,7 +200,7 @@ public class Tekton implements TektonController, TektonView {
      * @param s, a spórát ami hozzáadjuk a tektonhoz
      */
     public void addSpore(Spore s){
-
+        spore.add(s);
     }
 
     /**
