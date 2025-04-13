@@ -1,5 +1,5 @@
 package com.beingchilling.game;
 
-public class Player {
+public abstract class Player {
     int score;
 }

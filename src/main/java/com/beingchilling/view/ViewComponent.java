@@ -4,7 +4,7 @@ import com.beingchilling.controller.ControllerComponent;
 
 public class ViewComponent {
 
-    public ControllerComponent controllerComponent;
+    private ControllerComponent controllerComponent;
 
     public ViewComponent() {}
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ControllerComponent {
 
-    public ViewComponent viewComponent;
+    private final ViewComponent viewComponent;
 
     public ControllerComponent(ViewComponent viewComponent) {
         this.viewComponent = viewComponent;
