@@ -7,18 +7,14 @@ public class ThreadAbsorbTekton extends Tekton {
 
     @Override
     public void absorb() {
-        for(MushroomThread mt : getThreads()) {
+        List<MushroomThread> temp = new ArrayList<>();
+        for (MushroomThread mt : getThreads()) {
             mt.lifeReduce();
             if (mt.getLife() <= 0)
-                mt.destroy();
+                temp.add(mt);
         }
-//        List<MushroomThread> temp = new ArrayList<>();
-//        for(MushroomThread mt : getThreads()) {
-//            mt.lifeReduce();
-//            if(mt.getLife() <= 0)
-//                temp.add(mt);
-//        }
-//        for(MushroomThread mt : temp) {
-//            getThreads().remove(mt);
+        for (MushroomThread mt : temp) {
+            getThreads().remove(mt);
+        }
     }
 }

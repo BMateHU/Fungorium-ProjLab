@@ -78,6 +78,9 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     }
 
     public void disconnectThread() {
+        if(preGrowed == null){
+            return;//maybe need throw
+        }
         preGrowed.nextGrowed.remove(this);
         preGrowed = null;
         for(MushroomThread thread : nextGrowed){
@@ -101,12 +104,17 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     }
 
     public void destroy() {
+        if(preGrowed != null)
+            preGrowed.nextGrowed.remove(this);
+
+        if(!nextGrowed.isEmpty()) {
+            for (MushroomThread thread : nextGrowed) {
+                if(!thread.nextGrowed.isEmpty())
+                    thread.preGrowed = null;
+            }
+        }
         location.getThreads().remove(this);
         location = null;
-        preGrowed.nextGrowed.remove(this);
-        for(MushroomThread thread : nextGrowed){
-            thread.preGrowed = null;
-        }
     }
 
     public void remove(MushroomThread thread) {

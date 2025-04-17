@@ -181,7 +181,7 @@ public class SzkeletonTest {
         MushroomThread MT = new MushroomThread();
         MT.setLocation(T1);
         Insect I = new Insect();
-
+        I.setLocation(T1);
         Assertions.assertTrue(I.insectCut(MT));
     }
 
@@ -546,10 +546,25 @@ public class SzkeletonTest {
     //Test mushroomthread disconnect
     @Test
     public void useCase34() {
+        Tekton t1 = new Tekton();
+        Tekton t2 = new Tekton();
+        Tekton t3 = new Tekton();
+        Tekton t4 = new Tekton();
+        t1.addNeighbor(t2);
+        t2.addNeighbor(t1);
+        t2.addNeighbor(t3);
+        t3.addNeighbor(t2);
+        t3.addNeighbor(t4);
+        t4.addNeighbor(t3);
         MushroomThread mt = new MushroomThread();
         MushroomThread mt2 = new MushroomThread();
         MushroomThread mt3 = new MushroomThread();
         MushroomThread mt4 = new MushroomThread();
+
+        mt.setLocation(t1);
+        mt2.setLocation(t2);
+        mt3.setLocation(t3);
+        mt4.setLocation(t4);
 
         mt.addThread(mt2);
         mt2.addThread(mt3);

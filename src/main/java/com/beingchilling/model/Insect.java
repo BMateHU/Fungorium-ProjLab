@@ -90,7 +90,7 @@ public class Insect implements InsectController, InsectView {
      */
     
     public boolean insectCut(MushroomThread mt) {
-        if(cutThread && mt.getLocation().equals(location) && mt.getPreGrowed() != null) {
+        if(cutThread && mt.getLocation().equals(location)) {
             mt.disconnectThread();
             return true;
         }
@@ -117,6 +117,26 @@ public class Insect implements InsectController, InsectView {
                     a.add(t2);
                 }
             }
+            return a;
+        }
+        else if(speed == 3) {
+            List<Tekton> a = new ArrayList<Tekton>();
+            for(Tekton t : location.getNeighborWithThread()) {
+                if(a.contains(t))
+                    continue;
+                a.add(t);
+                for(Tekton t2 : t.getNeighborWithThread()) {
+                    if(a.contains(t2))
+                        continue;
+                    a.add(t2);
+                    for(Tekton t3 : t.getNeighborWithThread()) {
+                        if(a.contains(t3))
+                            continue;
+                        a.add(t3);
+                    }
+                }
+            }
+            return a;
         }
         return new ArrayList<Tekton>();
     }
@@ -158,6 +178,7 @@ public class Insect implements InsectController, InsectView {
             if(t.getInsect() != null)
                 continue;
             t.addInsect(new Insect(this));
+            return;
         }
         throw new ArrayIndexOutOfBoundsException("no place to clone, clone failed");
     }

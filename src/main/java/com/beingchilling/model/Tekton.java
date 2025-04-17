@@ -49,6 +49,7 @@ public class Tekton implements TektonController, TektonView {
             return false;
         }
         mushroomThread.add(mt);
+        mt.setLocation(this);
         return true;
     }
     /**
@@ -59,18 +60,15 @@ public class Tekton implements TektonController, TektonView {
      */
    public Tekton tektonBreak() {
        //not full implemented
-        if(insect != null || mushroomThread.isEmpty()){
+        if(insect != null || mushroomBody != null){
             return null;
         }
+
         clearSpore();
+        getThreads().clear();
         Tekton T2 = new Tekton();
         T2.neighbors.add(this);
-        for(Tekton t : neighbors){
-            t.updateNeighbor(null,null);
-        }
-        List<Tekton> L = new LinkedList<>();
-        L.add(T2);
-        updateNeighbor(L,null);
+        updateNeighbor(new ArrayList<Tekton>(),new ArrayList<Tekton>());
         return T2;
    }
 
@@ -161,12 +159,16 @@ public class Tekton implements TektonController, TektonView {
      */
     
     public void updateNeighbor(List<Tekton> newAdd, List<Tekton> delete){
-        neighbors.addAll(newAdd);
-        neighbors.removeAll(delete);
-        for(Tekton t : newAdd)
-            t.addNeighbor(this);
-        for(Tekton t : delete)
-            t.deleteNeighbor(this);
+        if(!newAdd.isEmpty()){
+            neighbors.addAll(newAdd);
+            for(Tekton t : newAdd)
+                t.addNeighbor(this);
+        }
+        if(!delete.isEmpty()) {
+            neighbors.removeAll(delete);
+            for (Tekton t : delete)
+                t.deleteNeighbor(this);
+        }
     }
 
     /**
@@ -236,24 +238,17 @@ public class Tekton implements TektonController, TektonView {
     }
 
     public void absorb() {
-        for(MushroomThread mt : getThreads()){
-            if(mt.isLifeSupport())
-                continue;
-            mt.lifeReduce();
-            if(mt.getLife() <= 0)
-                mt.destroy();
+        List<MushroomThread> temp = new ArrayList<>();
+        for(MushroomThread mt : mushroomThread) {
+            if(!mt.isLifeSupport()) {
+                mt.lifeReduce();
+                if(mt.getLife() <= 0)
+                    temp.add(mt);
+            }
         }
-//        List<MushroomThread> temp = new ArrayList<>();
-//        for(MushroomThread mt : mushroomThread) {
-//            if(!mt.isLifeSupport()) {
-//                mt.lifeReduce();
-//                if(mt.getLife() <= 0)
-//                    temp.add(mt);
-//            }
-//        }
-//        for(MushroomThread mt : temp) {
-//            mushroomThread.remove(mt);
-//        }
+        for(MushroomThread mt : temp) {
+            mushroomThread.remove(mt);
+        }
     }
 
     @Override
