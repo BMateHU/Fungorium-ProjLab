@@ -45,21 +45,11 @@ public class Tekton implements TektonController, TektonView {
      * @return Sikeresség 
      */
     public boolean addThread(MushroomThread mt){
-        
-        System.out.println(">Tekton.addThread(): Boolean");
         if(!mushroomThread.isEmpty()){
-            
-            System.out.println("<false");
-            
             return false;
         }
-        
-
         mushroomThread.add(mt);
-
-        System.out.println("<true");
-        
-
+        mt.setLocation(this);
         return true;
     }
     /**
@@ -69,18 +59,16 @@ public class Tekton implements TektonController, TektonView {
      * jelenlegi Tektont mint neighborként
      */
    public Tekton tektonBreak() {
-        if(insect != null || mushroomThread.isEmpty()){
+       //not full implemented
+        if(insect != null || mushroomBody != null){
             return null;
         }
+
         clearSpore();
+        getThreads().clear();
         Tekton T2 = new Tekton();
         T2.neighbors.add(this);
-        for(Tekton t : neighbors){
-            t.updateNeighbor(null,null);
-        }
-        List<Tekton> L = new LinkedList<>();
-        L.add(T2);
-        updateNeighbor(L,null);
+        updateNeighbor(new ArrayList<Tekton>(),new ArrayList<Tekton>());
         return T2;
    }
 
@@ -90,13 +78,6 @@ public class Tekton implements TektonController, TektonView {
      * @return vissza adja a Sporát
      */
     public Spore popSpore(){
-        
-        System.out.println(">Tekton.PopSpore(): Spore");
-        
-
-        System.out.println("<Spore:spore");
-        
-
         return spore.removeFirst();
     }
     
@@ -104,13 +85,7 @@ public class Tekton implements TektonController, TektonView {
      * A Tektonon lévő spórák eltávolítása illetve megsemmisitése 
      */
     private void clearSpore(){
-        
-        System.out.println(">Tekton.clearSpore(): void");
-        
-
-        System.out.println("<");
-        
-
+        spore.clear();
     }
 
     /**
@@ -120,32 +95,19 @@ public class Tekton implements TektonController, TektonView {
      * @return gombaTestnek a növesztés sikerességét
      */
     public boolean growMushroomBody(MushroomSpecies ms){
-        
-        System.out.println(">Tekton.growMushroomBody(): boolean");
         if(spore.size()>=3 && !mushroomThread.isEmpty()) {
             useSporeToGrow();
             MushroomBody M = new MushroomBody(this);
             ms.addMushroomBody(M);
             mushroomBody = M;
-            
-
-            System.out.println("<result:true");
-            
-
             return true;
         }
-        
-
-        System.out.println("<result:false");
-        
-
         return false;
-
     }
 
     @Override
     public void addMushroom(MushroomBody mushroomBody) {
-
+        //wat is this
     }
 
     /**
@@ -155,12 +117,7 @@ public class Tekton implements TektonController, TektonView {
      */
     
     public List<Tekton> getNeighborWithThread(){
-        
-        System.out.println(">Tekton.getNeighborWithThread(): List<Tekton>");
-        
-        System.out.println("<");
-        
-        List<Tekton> temp = new LinkedList<Tekton>();
+        List<Tekton> temp = new ArrayList<>();
         for(Tekton t : neighbors){
             for(MushroomThread mt : mushroomThread) {
                 for(MushroomThread mt2 : mt.getNextGrowed()) {
@@ -180,18 +137,10 @@ public class Tekton implements TektonController, TektonView {
      */
     
     public boolean checkNeighbor(Tekton t){
-        
-        System.out.println(">Tekton.checkNeighbor(): boolean");
         if(neighbors.contains(t))
         {
-            
-            System.out.println("<result:true");
-            
             return true;
         }
-        
-        System.out.println("<false");
-        
         return false;
     }
 
@@ -210,13 +159,16 @@ public class Tekton implements TektonController, TektonView {
      */
     
     public void updateNeighbor(List<Tekton> newAdd, List<Tekton> delete){
-        
-        System.out.println(">Tekton.updateNeighbor(): void");
-        
-
-        System.out.println("<");
-        
-
+        if(!newAdd.isEmpty()){
+            neighbors.addAll(newAdd);
+            for(Tekton t : newAdd)
+                t.addNeighbor(this);
+        }
+        if(!delete.isEmpty()) {
+            neighbors.removeAll(delete);
+            for (Tekton t : delete)
+                t.deleteNeighbor(this);
+        }
     }
 
     /**
@@ -224,11 +176,6 @@ public class Tekton implements TektonController, TektonView {
      * @return szomszédos Tekton Listában visszaadja
      */
     public List<Tekton> getNeighbors() {
-        
-        System.out.println(">Tekton.getNeighbors(): List<Tekton>");
-        
-        System.out.println("<");
-        
         return neighbors;
     }
 
@@ -256,14 +203,7 @@ public class Tekton implements TektonController, TektonView {
      * @param t, tektont amit kitöröljük a szomszéd listából
      */
     public void deleteNeighbor(Tekton t){
-        
-        System.out.println(">Tekton.deleteNeighbor(): void");
-        
-
         neighbors.remove(t);
-
-        System.out.println("<");
-        
     }
 
     /**
@@ -271,14 +211,7 @@ public class Tekton implements TektonController, TektonView {
      * @param t, tektont amit hozzáadjuk a szomszéd listára
      */
     public void addNeighbor(Tekton t) {
-        
-        System.out.println(">Tekton.addNeighbor(): void");
-        
-
         neighbors.add(t);
-
-        System.out.println("<");
-        
     }
 
     /**
@@ -286,36 +219,20 @@ public class Tekton implements TektonController, TektonView {
      * @param i, rovart amit hozzáadunk a tektonra
      */
     public void addInsect(Insect i) {
-        
-        System.out.println(">Tekton.addInsect(): void");
-        
-
         insect = i;
-
-        System.out.println("<");
-        
     }
 
     /**
      * insect kitörlése a tektonból.
      */
     public void removeInsect() {
-        
-        System.out.println(">Tekton.removeInsect(): void");
-        
-        System.out.println("<");
-        
+        insect = null;
     }
 
     /**
      * A spórákat felhasználva, létrehoz a tektonon egy gombatestet
      */
     private void useSporeToGrow(){
-        
-        System.out.println(">Tekton.useSporeToGrow(): void");
-        
-        System.out.println("<");
-        
         for(int i = 0; i < 3; i++)
             popSpore();
     }

@@ -3,6 +3,7 @@ package com.beingchilling.model;
 import com.beingchilling.controller.InsectController;
 import com.beingchilling.view.InsectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,12 @@ public class Insect implements InsectController, InsectView {
         eatSpore = true;
         currentNutrient = 0;
     }
+    public Insect(Insect i) {
+        insectSpeed = i.insectSpeed;
+        cutThread = i.cutThread;
+        eatSpore = i.eatSpore;
+        currentNutrient = 0;
+    }
 
     /**
      * függvény megmondja, hogy a paraméterként kapott Tektonra lehet a rovar átmenni.
@@ -50,53 +57,30 @@ public class Insect implements InsectController, InsectView {
      */
     
     public boolean insectMove(Tekton tek){
-        
-        System.out.println(">Insect.insectMove(Tekton L): boolean");
-        if (insectSpeed > 0){
-            List<Tekton> LT = getReachableTekton(insectSpeed);
-            if(LT.contains(tek)) {
-                tek.addInsect(this);
-                location.removeInsect();
-                location = tek;
-                
-                System.out.println("<result: true");
-                
-                return true;
-            }
-            else {
-                
-                System.out.println("<result: false");
-                
-                return false;
-            }
-        }
-        else {
-            
-            System.out.println("<result: false");
-
-            
+        if(insectSpeed <= 0)
             return false;
+        List<Tekton> LT = getReachableTekton(insectSpeed);
+        if(LT.contains(tek)) {
+            tek.addInsect(this);
+            location.removeInsect();
+            location = tek;
+            return true;
         }
+        else
+            return false;
     }
 
     /**
      * A rovar megeszik a tektonon elhelyezett spórát.
      */
     public void insectEat() throws ArrayIndexOutOfBoundsException {
-        
-        System.out.println(">Insect.insectEat(): void");
-        if(eatSpore) {
+        if(eatSpore && !location.getSpores().isEmpty()) {
             Spore ss = location.popSpore();
             ss.sporeEffect(this);
         }
         else {
             throw new ArrayIndexOutOfBoundsException("Cant eat spore");
         }
-        
-
-        System.out.println("<");
-        
-
     }
 
     /**
@@ -106,19 +90,10 @@ public class Insect implements InsectController, InsectView {
      */
     
     public boolean insectCut(MushroomThread mt) {
-        
-        System.out.println(">Insect.insectCut(): boolean");
-        if(cutThread){
-            
-
-            System.out.println("<result: true");
-            
-
+        if(cutThread && mt.getLocation().equals(location)) {
+            mt.disconnectThread();
             return true;
         }
-        
-        System.out.println("<result: false");
-
         return false;
     }
 
@@ -128,93 +103,97 @@ public class Insect implements InsectController, InsectView {
      * @return List<Tekton> értéket ad vissza, ami a rovar sebbességgel elérhető.
      */
     public List<Tekton> getReachableTekton(int speed){
-        
-        System.out.println(">Insect.getReachableTekton(): void");
-        
-        System.out.println("<");
-        
-        return location.getNeighborWithThread();
+        if(speed == 1)
+            return location.getNeighborWithThread();
+        else if(speed == 2) {
+            List<Tekton> a = new ArrayList<Tekton>();
+            for(Tekton t : location.getNeighborWithThread()) {
+                if(a.contains(t))
+                    continue;
+                a.add(t);
+                for(Tekton t2 : t.getNeighborWithThread()) {
+                    if(a.contains(t2))
+                        continue;
+                    a.add(t2);
+                }
+            }
+            return a;
+        }
+        else if(speed == 3) {
+            List<Tekton> a = new ArrayList<Tekton>();
+            for(Tekton t : location.getNeighborWithThread()) {
+                if(a.contains(t))
+                    continue;
+                a.add(t);
+                for(Tekton t2 : t.getNeighborWithThread()) {
+                    if(a.contains(t2))
+                        continue;
+                    a.add(t2);
+                    for(Tekton t3 : t.getNeighborWithThread()) {
+                        if(a.contains(t3))
+                            continue;
+                        a.add(t3);
+                    }
+                }
+            }
+            return a;
+        }
+        return new ArrayList<Tekton>();
     }
 
     /**
      * A függvény beállítja a rovart gyorsított mode-ba.
      */
     public void hasteEffect(){
-        
-        System.out.println(">Insect.hasteEffect(): void");
-        
-
         insectSpeed = 3;
-
-        System.out.println("<");
-        
     }
 
      /**
      * A függvény beállítja a rovart lassított mode-ba.
      */
     public void slowEffect(){
-        
-        System.out.println(">Insect.slowEffect(): void");
-        
-
         insectSpeed = 1;
-
-        System.out.println("<");
-        
     }
 
     /**
      * A függvény beállítja a rovart bénított mode-ba.
      */
     public void paraEffect(){
-        
-        System.out.println(">Insect.paraEffect(): void");
-        
-
         insectSpeed = 0;
         eatSpore = false;
         cutThread = false;
-
-        System.out.println("<");
-        
     }
 
     /**
      * A függvény beállítja a rovart némított mode-ba.
      */
     public void muteEffect(){
-        
-        System.out.println(">Insect.muteEffect(): void");
-        
-
         cutThread = false;
-
-        System.out.println("<");
-        
     }
 
     public void cloneEffect() {
-        location.getNeighbors().getFirst().addInsect(new Insect()); //only an insect, needs to be added to insect species
+        //only an insect, needs to be added to insect species
+        for(Tekton t : location.getNeighbors())
+        {
+            if(t.getInsect() != null)
+                continue;
+            t.addInsect(new Insect(this));
+            return;
+        }
+        throw new ArrayIndexOutOfBoundsException("no place to clone, clone failed");
     }
 
     /**
      * A függvény megszünteti a hatásokat ami a rovaron van.
      */
     public void endEffect(){
-        
-        System.out.println(">Insect.endEffect(): void");
-        
-
         cutThread = true;
         eatSpore = true;
         insectSpeed = 2;
-
-        System.out.println("<");
-        
     }
 
     public void destroy() {
+        //need to delete it from insect species and when deleting dont forget to get the points out
         location.addInsect(null);
     }
 

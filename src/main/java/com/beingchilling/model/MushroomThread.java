@@ -52,7 +52,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * Ha fonal tektonjára spóra kerül, akkor egy ideig magától hosszabulni fog a fonal.
      */
     public void speedUpGrowing(){
-
+        //i think speed up growing is implemented in mushroombody.growthread()
     }
 
     /**
@@ -62,10 +62,11 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     public void addThread(MushroomThread thread){
         nextGrowed.add(thread);
         thread.preGrowed = this;
+        thread.lifeSupport = lifeSupport;
     }
 
     public void growThread(Tekton source, Tekton target) {
-
+        // i think this is too implemented in mushroombody.growthread()
     }
 
     /**
@@ -77,8 +78,18 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     }
 
     public void disconnectThread() {
+        if(preGrowed == null){
+            return;//maybe need throw
+        }
         preGrowed.nextGrowed.remove(this);
         preGrowed = null;
+        for(MushroomThread thread : nextGrowed){
+            if(thread.getLocation().getBody() != null)
+                return;
+        }
+        for(MushroomThread thread : nextGrowed){
+            thread.lifeSupport = false;
+        }
     }
 
     public void lifeReduce() {
@@ -86,18 +97,28 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     }
 
     public void absorbInsect() {
+        //not fully implemented
         for(int i=0; i<3; i++)
             location.addSpore(new Spore(1));
         location.growMushroomBody(new MushroomSpecies());
     }
 
     public void destroy() {
+        if(preGrowed != null)
+            preGrowed.nextGrowed.remove(this);
+
+        if(!nextGrowed.isEmpty()) {
+            for (MushroomThread thread : nextGrowed) {
+                if(!thread.nextGrowed.isEmpty())
+                    thread.preGrowed = null;
+            }
+        }
         location.getThreads().remove(this);
         location = null;
     }
 
     public void remove(MushroomThread thread) {
-
+        nextGrowed.remove(thread);
     }
 
     public MushroomThread getPreGrowed() {

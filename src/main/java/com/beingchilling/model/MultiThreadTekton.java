@@ -9,12 +9,7 @@ public class MultiThreadTekton extends Tekton{
      */
     @Override
     public boolean addThread(MushroomThread mt){
-        System.out.println(">Tekton.addThread(): Boolean");
-
         getThreads().add(mt);
-
-        System.out.println("<true");
-
         return true;
     }
 }

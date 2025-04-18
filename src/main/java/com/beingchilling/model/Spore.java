@@ -26,7 +26,6 @@ public class Spore implements SporeController, SporeView {
      * @param r A rovar, amelyre a spóra hatással lehet.
      */
     public void sporeEffect(Insect r) {
-
     }
     /**
      * Visszaadja a spóra tápanyagtartalmát.
@@ -35,7 +34,6 @@ public class Spore implements SporeController, SporeView {
      */
     public int getSporeNutrient() {
         return sporeNutrient;
-
     }
 
     @Override

@@ -20,10 +20,6 @@ public class HasteSpore extends Spore {
      */
     @Override
     public void sporeEffect(Insect r) {
-        System.out.println(">HasteSpore.sporeEffect()");
         r.hasteEffect();
-
-        System.out.println("<");
-
     }
 }

@@ -20,9 +20,6 @@ public class ParaSpore extends Spore {
      */
     @Override
     public void sporeEffect(Insect r) {
-        System.out.println(">ParaSpore.sporeEffect()");
         r.paraEffect();
-        System.out.println("<");
-
     }
 }
