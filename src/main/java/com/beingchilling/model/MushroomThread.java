@@ -53,6 +53,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      */
     public void speedUpGrowing(){
         //i think speed up growing is implemented in mushroombody.growthread()
+        //speedUpGrowing
     }
 
     /**
@@ -67,6 +68,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
     public void growThread(Tekton source, Tekton target) {
         // i think this is too implemented in mushroombody.growthread()
+        //no cause thats wrong, thread should use thread not mushroom use thread, that could be halalfejes hiba
     }
 
     /**

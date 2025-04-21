@@ -107,7 +107,7 @@ public class Tekton implements TektonController, TektonView {
 
     @Override
     public void addMushroom(MushroomBody mushroomBody) {
-        //wat is this
+        this.mushroomBody = mushroomBody;
     }
 
     /**
@@ -137,11 +137,7 @@ public class Tekton implements TektonController, TektonView {
      */
     
     public boolean checkNeighbor(Tekton t){
-        if(neighbors.contains(t))
-        {
-            return true;
-        }
-        return false;
+        return neighbors.contains(t);
     }
 
     /**

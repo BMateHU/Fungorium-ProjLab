@@ -53,7 +53,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
             MushroomThread MT2 = new MushroomThread();
             if (tekton.addThread(MT2)) {
                 if(!tekton.getSpores().isEmpty()){
-                    //nincs random meg
+                    //nincs random meg EZT MINDENKEPP
                     for(Tekton t : tekton.getNeighbors()) {
                         if(t != location) {
                             MushroomThread MT3 = new MushroomThread();

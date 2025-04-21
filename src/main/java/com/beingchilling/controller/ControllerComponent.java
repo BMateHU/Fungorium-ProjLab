@@ -6,6 +6,7 @@ import com.beingchilling.view.ViewComponent;
 import java.io.File;
 import java.util.List;
 
+//otherwise this is just command calls, easy to implement
 public class ControllerComponent {
 
     private final ViewComponent viewComponent;
