@@ -13,4 +13,9 @@ public class GameModel {
     public static HashMap<String, MushroomSpecies> gombasz = new HashMap<>();
     public static HashMap<String, InsectSpecies> rovarasz = new HashMap<>();
     public static HashMap<String, Object> gameObjects = new HashMap<>();
+
+    @Override
+    public String toString() {
+        return "{gombasz.getKey(t1)}";
+    }
 }
