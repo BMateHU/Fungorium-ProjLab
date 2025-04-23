@@ -11,7 +11,7 @@ public interface MushroomThreadView {
     int getLife();
     boolean isLifeSupport();
     MushroomBody checkOwner();
-    MushroomThread getPreGrowed();
+    MushroomThread getPrevGrowed();
     List<MushroomThread> getNextGrowed();
     Tekton getLocation();
 

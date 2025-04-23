@@ -1,6 +1,7 @@
 package com.beingchilling.model;
 
 import com.beingchilling.controller.InsectController;
+import com.beingchilling.game.GameModel;
 import com.beingchilling.view.InsectView;
 
 import java.util.ArrayList;
@@ -229,4 +230,9 @@ public class Insect implements InsectController, InsectView {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "speed="+insectSpeed+"; cancut="+cutThread+"; caneat="+eatSpore+"; " +
+                "tekton="+ GameModel.gameObjects.getK(location) +"; nutrient="+currentNutrient;
+    }
 }

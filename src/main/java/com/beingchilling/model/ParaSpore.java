@@ -22,4 +22,8 @@ public class ParaSpore extends Spore {
     public void sporeEffect(Insect r) {
         r.paraEffect();
     }
+
+    public String toString() {
+        return "Nutrient:"+ sporeNutrient +"; type:P";
+    }
 }

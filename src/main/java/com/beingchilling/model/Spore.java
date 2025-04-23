@@ -10,7 +10,7 @@ public class Spore implements SporeController, SporeView {
     /**
      * Eltárolja, mennyi tápanyagot tartalmaz egy spóra
      */
-    private final int sporeNutrient;
+    protected final int sporeNutrient;
     /**
      * Konstruktor, amely beállítja a spóra tápanyagtartalmát.
      *
@@ -44,5 +44,10 @@ public class Spore implements SporeController, SporeView {
     @Override
     public SporeController toController() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Nutrient:"+ sporeNutrient +"; type:N";
     }
 }

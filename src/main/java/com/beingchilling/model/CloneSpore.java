@@ -14,4 +14,9 @@ public class CloneSpore extends Spore {
     public void sporeEffect(Insect r) {
         r.cloneEffect();
     }
+
+    @Override
+    public String toString() {
+        return "Nutrient:"+ sporeNutrient +"; type:C";
+    }
 }

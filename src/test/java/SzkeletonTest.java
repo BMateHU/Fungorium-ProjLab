@@ -571,16 +571,16 @@ public class SzkeletonTest {
         mt3.addThread(mt4);
 
         Assertions.assertNotNull(mt.getNextGrowed().getFirst());
-        Assertions.assertNotNull(mt2.getPreGrowed());
+        Assertions.assertNotNull(mt2.getPrevGrowed());
         Assertions.assertNotNull(mt2.getNextGrowed().getFirst());
-        Assertions.assertNotNull(mt3.getPreGrowed());
+        Assertions.assertNotNull(mt3.getPrevGrowed());
         Assertions.assertNotNull(mt3.getNextGrowed().getFirst());
-        Assertions.assertNotNull(mt4.getPreGrowed());
+        Assertions.assertNotNull(mt4.getPrevGrowed());
 
         mt3.disconnectThread();
 
         Assertions.assertTrue(mt2.getNextGrowed().isEmpty());
-        Assertions.assertNull(mt3.getPreGrowed());
+        Assertions.assertNull(mt3.getPrevGrowed());
     }
 
     //Test destroy() NOT FINISHED ONLY REMOVES FROM TEKTON
