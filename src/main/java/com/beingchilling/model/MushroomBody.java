@@ -1,6 +1,7 @@
 package com.beingchilling.model;
 
 import com.beingchilling.controller.MushroomBodyController;
+import com.beingchilling.game.GameModel;
 import com.beingchilling.view.MushroomBodyView;
 
 /**
@@ -106,5 +107,10 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
     @Override
     public MushroomBodyView toView() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Age="+bodyAge+"; Spore="+sporeNumber+"; tekton="+ GameModel.gameObjects.getK(location);
     }
 }

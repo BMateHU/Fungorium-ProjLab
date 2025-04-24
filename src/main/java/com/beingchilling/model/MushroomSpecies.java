@@ -1,5 +1,7 @@
 package com.beingchilling.model;
 
+import com.beingchilling.game.GameModel;
+
 import java.util.List;
 
 /**
@@ -29,5 +31,18 @@ public class MushroomSpecies {
 
     public void setMushroomBodies(List<MushroomBody> mushroomBodies) {
         this.mushroomBodies = mushroomBodies;
+    }
+
+    @Override
+    public String toString() {
+        if(mushroomBodies.isEmpty())
+            return "Type=G";
+
+        StringBuilder own = new StringBuilder("Own=");
+        for(MushroomBody mushroomBody : mushroomBodies){
+            own.append(GameModel.gameObjects.getK(mushroomBody)).append(", ");
+        }
+        own.delete(own.length()-2, own.length());
+        return "Type=G; " + own;
     }
 }

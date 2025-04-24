@@ -22,4 +22,9 @@ public class MuteSpore extends Spore {
     public void sporeEffect(Insect r) {
         r.muteEffect();
     }
+
+    @Override
+    public String toString() {
+        return "Nutrient:"+ sporeNutrient +"; type:M";
+    }
 }

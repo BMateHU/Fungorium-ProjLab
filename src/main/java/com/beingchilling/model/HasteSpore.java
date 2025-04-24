@@ -22,4 +22,9 @@ public class HasteSpore extends Spore {
     public void sporeEffect(Insect r) {
         r.hasteEffect();
     }
+
+    @Override
+    public String toString() {
+        return "Nutrient:"+ sporeNutrient +"; type:H";
+    }
 }

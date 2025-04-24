@@ -1,6 +1,7 @@
 package com.beingchilling.model;
 
 import com.beingchilling.controller.TektonController;
+import com.beingchilling.game.GameModel;
 import com.beingchilling.view.TektonView;
 
 import java.util.ArrayList;
@@ -15,22 +16,22 @@ public class Tekton implements TektonController, TektonView {
     /**
      * A Tekton osztálynak a szomszédjai, ami Listában tároljuk.
      */
-    private final List<Tekton> neighbors;
+    protected final List<Tekton> neighbors;
     /**
      * A Tektonon lévő spórák.
      */
-    private final List<Spore> spore;
+    protected final List<Spore> spore;
 
     /// A Tektonon lévő gombatest.
-    private MushroomBody mushroomBody;
+    protected MushroomBody mushroomBody;
     /**
      * A Tektonon lévő MushroomThread, azaz gombaFonal.
      */
-    private final List<MushroomThread> mushroomThread;
+    protected final List<MushroomThread> mushroomThread;
     /**
      * A Tektonon lévő rovar, ami csak egy darab lehet a tektonon.
      */
-    private Insect insect;
+    protected Insect insect;
 
     //Konstruktor
     public Tekton(){
@@ -255,5 +256,44 @@ public class Tekton implements TektonController, TektonView {
     @Override
     public TektonController toController() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("type=N");
+
+        if (mushroomBody != null) {
+            sb.append("; mushroom=").append(GameModel.gameObjects.getK(mushroomBody));
+        }
+
+        if (insect != null) {
+            sb.append("; insect=").append(GameModel.gameObjects.getK(insect));
+        }
+
+        if (!this.mushroomThread.isEmpty()) {
+            sb.append("; threads=");
+            for (MushroomThread thread : this.mushroomThread) {
+                sb.append(GameModel.gameObjects.getK(thread)).append(", ");
+            }
+            sb.delete(sb.length()-2, sb.length());
+        }
+
+        if (!this.spore.isEmpty()) {
+            sb.append("; spores=");
+            for (Spore s : this.spore) {
+                sb.append(GameModel.gameObjects.getK(s)).append(", ");
+            }
+            sb.delete(sb.length()-2, sb.length());
+        }
+
+        if (!this.neighbors.isEmpty()) {
+            sb.append("; neighbours=");
+            for (Tekton neighbor : this.neighbors) {
+                sb.append(GameModel.gameObjects.getK(neighbor)).append(", ");
+            }
+            sb.delete(sb.length()-2, sb.length());
+        }
+
+        return sb.toString();
     }
 }
