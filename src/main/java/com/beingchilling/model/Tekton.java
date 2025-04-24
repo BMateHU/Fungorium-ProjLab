@@ -60,7 +60,7 @@ public class Tekton implements TektonController, TektonView {
      * jelenlegi Tektont mint neighborként
      */
    public Tekton tektonBreak() {
-       //not full implemented
+        //not full implemented
         if(insect != null || mushroomBody != null){
             return null;
         }
@@ -69,7 +69,7 @@ public class Tekton implements TektonController, TektonView {
         getThreads().clear();
         Tekton T2 = new Tekton();
         T2.neighbors.add(this);
-        updateNeighbor(new ArrayList<Tekton>(),new ArrayList<Tekton>());
+        updateNeighbor(new ArrayList<>(),new ArrayList<>());
         return T2;
    }
 
