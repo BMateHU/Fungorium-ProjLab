@@ -1,27 +1,24 @@
+import com.beingchilling.controller.ControllerComponent;
+import com.beingchilling.game.BiMap;
 import com.beingchilling.game.GameModel;
-import com.beingchilling.model.MushroomBody;
 import com.beingchilling.model.Tekton;
+import com.beingchilling.view.ViewComponent;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 public class TesztMain {
 
-    class Qu {
-        public Object mit;
-        public Object hova;
-        public Qu(Object mit, Object hova) {
-            this.mit = mit;
-            this.hova = hova;
-        }
-    }
-
-    private final String commandFile = "";
-    private final String expectedFile = "";
-    private final GameModel expectedModel = new GameModel();
-    private final GameModel actualModel = new GameModel();
+    private final String commandFile = "input.txt";
+    private final String expectedFile = "output.txt";
+    private final GameModel expectedModel = null;
+    private final GameModel actualModel = null;
+    private static ViewComponent vc = new ViewComponent();
+    private static ControllerComponent cc = new ControllerComponent(vc);
 
     private boolean parseModel(GameModel actual, GameModel expected) {
         return actual.toString().equals(expected.toString());
@@ -30,41 +27,46 @@ public class TesztMain {
     //bemeneti
     private void interpretCommands(String fileName, GameModel model) {
         File file = new File(fileName);
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            while(br.ready()) {
+                vc.validate(br.readLine());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //kimeneti
     private boolean translateExpectedTo(String fileName, GameModel model) {
         File file = new File(fileName);
-        Queue<Qu> queue = new LinkedList<>();
-        Tekton t1 = new Tekton();
-
-        queue.add(new Qu("mushroom=m1", t1));
-        queue.add(new Qu("neighbours=t2", t1));
-
-        for(int i = 0; i < queue.size(); i++) {
-
-        }
 
         return true;
     }
 
     @Test
     public void runTests() {
-        List<File> fileList = new ArrayList<>();
-        File asd = new File("root");
-        for(int i = 1; i <= 36; i++) {
-            fileList.add(new File("useCase" + i));
-        }
-        while(asd.isDirectory()) {
-            asd.listFiles();
-            beforeTests();
-            interpretCommands(commandFile, actualModel);
-            translateExpectedTo(expectedFile, expectedModel);
-            Assertions.assertTrue(parseModel(actualModel, expectedModel));
+        vc.setControllerComponent(cc);
+
+        URL asd = this.getClass().getResource("tests");
+        Assertions.assertNotNull(asd);
+        File test = new File(asd.getPath());
+        List<File> fileList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(test.listFiles())));
+        for(File dir : fileList) {
+            if(dir.isDirectory()) {
+                beforeTests();
+                interpretCommands(dir.getAbsolutePath() + "/" + commandFile, actualModel);
+                translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile, expectedModel);
+                Assertions.assertTrue(parseModel(actualModel, expectedModel));
+            }
         }
     }
 
     private void beforeTests() {
-
+        GameModel.gameObjects = new BiMap<>();
+        GameModel.gombasz = new HashMap<>();
+        GameModel.map = new com.beingchilling.game.Map();
+        GameModel.rovarasz = new HashMap<>();
     }
 }
