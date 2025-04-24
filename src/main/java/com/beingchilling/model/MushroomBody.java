@@ -64,6 +64,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
         if(tekton.checkNeighbor(mushroomThread.getLocation()) ) {
             MushroomThread MT2 = new MushroomThread();
            if (tekton.addThread(MT2)) {
+               mushroomThread.addThread(MT2);
                if (!tekton.getSpores().isEmpty() && GameModel.randomSwitch) {
                    // osszes neighbourt kikeresi
                    List<Tekton> possibleTargets = tekton.getNeighbors();
@@ -79,9 +80,9 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
                        while (!growsucsess) {
                            int randomIndex = random.nextInt(validTargets.size());
                            Tekton randomNeighbor = validTargets.get(randomIndex);
-                           if (randomNeighbor.checkNeighbor(location)) {
-                               MushroomThread randomThread = new MushroomThread();
-                               randomNeighbor.addThread(randomThread);
+                           MushroomThread randomThread = new MushroomThread();
+                           if (randomNeighbor.checkNeighbor(tekton) &&  randomNeighbor.addThread(randomThread)) {
+                                mushroomThread.addThread(randomThread);
                                growsucsess = true;
                            }
 
@@ -92,14 +93,16 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
                else if (!tekton.getSpores().isEmpty() && !GameModel.randomSwitch) {
                    if(!tekton.getSpores().isEmpty()){
                        for(Tekton t : tekton.getNeighbors()) {
+                           MushroomThread MT3 = new MushroomThread();
                            //listaban az elsore
-                           if(t != location) {
-                               MushroomThread MT3 = new MushroomThread();
-                               t.addThread(MT3);
+                           if(t != location && t.addThread(MT3)) {
+                               mushroomThread.addThread(MT3);
+                               break;
                            }
                        }
                    }
                }
+               return true;
            }
             else{
                 return false;
