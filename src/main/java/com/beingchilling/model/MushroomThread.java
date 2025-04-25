@@ -4,6 +4,7 @@ import com.beingchilling.controller.MushroomThreadController;
 import com.beingchilling.game.GameModel;
 import com.beingchilling.view.MushroomThreadView;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     /**
      * Eltárolja melyik tektonon van a gombafonal.
      */
-    private Tekton location;
+    private Tekton location = new Tekton();
 
     /// Stores mushroom thread's life
     private int life;
@@ -178,14 +179,14 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      */
     @Override
     public String toString() {
-        StringBuilder prev = new StringBuilder("; prev");
-        StringBuilder next = new StringBuilder("; next");
-        StringBuilder current = new StringBuilder("life="+life+";lifeSupport="+lifeSupport+"; tekton="+ GameModel.gameObjects.getK(location));
+        StringBuilder prev = new StringBuilder("; prev=");
+        StringBuilder next = new StringBuilder("; next=");
+        StringBuilder current = new StringBuilder("life="+life+"; lifesupport=" + lifeSupport + "; tekton=" + GameModel.gameObjects.getK(location));
         if(prevGrowed != null) {
-            prev.append(GameModel.gameObjects.getK(prev));
+            prev.append(GameModel.gameObjects.getK(prevGrowed));
             current.append(prev);
         }
-        if(!next.isEmpty())
+        if(!nextGrowed.isEmpty())
         {
             for(MushroomThread thread : nextGrowed)
             {
