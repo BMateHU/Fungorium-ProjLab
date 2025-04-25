@@ -61,57 +61,51 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      * @return sikeresség
      */
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
-        if(tekton.checkNeighbor(mushroomThread.getLocation()) ) {
-            MushroomThread MT2 = new MushroomThread();
-           if (tekton.addThread(MT2)) {
-               mushroomThread.addThread(MT2);
-               if (!tekton.getSpores().isEmpty() && GameModel.randomSwitch) {
-                   // osszes neighbourt kikeresi
-                   List<Tekton> possibleTargets = tekton.getNeighbors();
+        if (tekton.checkNeighbor(mushroomThread.getLocation())) {
+            //ennel beadja a threadet
+            if (mushroomThread.growThread(tekton)) {
 
-                   //a sajat tektont es a kijelolt tektont kizarja
-                   List<Tekton> validTargets = possibleTargets.stream()
-                           .filter(t -> (t != this.location || t != tekton))
-                           .collect(Collectors.toList());
+                if (!tekton.getSpores().isEmpty() && GameModel.randomSwitch) {
+                    // osszes neighbourt kikeresi
+                    List<Tekton> possibleTargets = tekton.getNeighbors();
 
-                   if (!validTargets.isEmpty()) {
-                       //while ciklus vizsgalas
-                       boolean growsucsess = false;
-                       while (!growsucsess) {
-                           int randomIndex = random.nextInt(validTargets.size());
-                           Tekton randomNeighbor = validTargets.get(randomIndex);
-                           MushroomThread randomThread = new MushroomThread();
-                           if (randomNeighbor.checkNeighbor(tekton) &&  randomNeighbor.addThread(randomThread)) {
-                                mushroomThread.addThread(randomThread);
-                               growsucsess = true;
-                           }
+                    //a sajat tektont es a kijelolt tektont kizarja
+                    List<Tekton> validTargets = possibleTargets.stream()
+                            .filter(t -> (t != this.location || t != tekton))
+                            .collect(Collectors.toList());
 
-                       }
-                   }
-               }
-               //ha ki van kapcsolva a random
-               else if (!tekton.getSpores().isEmpty() && !GameModel.randomSwitch) {
-                   if(!tekton.getSpores().isEmpty()){
-                       for(Tekton t : tekton.getNeighbors()) {
-                           MushroomThread MT3 = new MushroomThread();
-                           //listaban az elsore
-                           if(t != location && t.addThread(MT3)) {
-                               mushroomThread.addThread(MT3);
-                               break;
-                           }
-                       }
-                   }
-               }
-               return true;
-           }
-            else{
+                    if (!validTargets.isEmpty()) {
+                        //while ciklus vizsgalas
+                        boolean growsucsess = false;
+                        while (!growsucsess) {
+                            int randomIndex = random.nextInt(validTargets.size());
+                            Tekton randomNeighbor = validTargets.get(randomIndex);
+                            if (randomNeighbor.checkNeighbor(tekton)) {
+                                if (mushroomThread.growThread(randomNeighbor)) {
+                                    growsucsess = true;
+                                }
+                            }
+
+                        }
+                    }
+                }
+                //ha ki van kapcsolva a random
+                else if (!tekton.getSpores().isEmpty() && !GameModel.randomSwitch) {
+                    if (!tekton.getSpores().isEmpty()) {
+                        for (Tekton t : tekton.getNeighbors()) {
+                            //listaban az elsore
+                            if (t != location && mushroomThread.growThread(t)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                return true;
+            } else {
                 return false;
             }
-        }
-        else if(tekton.checkNeighbor(location)) {
-            MushroomThread MT2 = new MushroomThread();
-            mushroomThread.addThread(MT2);
-            return tekton.addThread(MT2);
+        } else if (tekton.checkNeighbor(location)) {
+            return mushroomThread.growThread(location);
         }
         return false;
     }
