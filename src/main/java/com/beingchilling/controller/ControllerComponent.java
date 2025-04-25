@@ -47,31 +47,38 @@ public class ControllerComponent {
                     }
                     break;
                 case "/addtekton":
+                    Tekton t;
                     if(words.length == 2) {
-                        GameModel.map.tektonList.put(words[1], new Tekton());
-                        GameModel.gameObjects.put(words[1], new Tekton());
+                        t = new Tekton();
+                        GameModel.map.tektonList.put(words[1], t);
+                        GameModel.gameObjects.put(words[1], t);
                     }
                     else {
                         switch(words[2]) {
                             case "N":
-                                GameModel.map.tektonList.put(words[1], new Tekton());
-                                GameModel.gameObjects.put(words[1], new Tekton());
+                                t = new Tekton();
+                                GameModel.map.tektonList.put(words[1], t);
+                                GameModel.gameObjects.put(words[1], t);
                                 break;
                             case "LS":
-                                GameModel.map.tektonList.put(words[1], new LifeSupportTekton());
-                                GameModel.gameObjects.put(words[1], new LifeSupportTekton());
+                                t = new LifeSupportTekton();
+                                GameModel.map.tektonList.put(words[1], t);
+                                GameModel.gameObjects.put(words[1], t);
                                 break;
                             case "TA":
-                                GameModel.map.tektonList.put(words[1], new ThreadAbsorbTekton());
-                                GameModel.gameObjects.put(words[1], new ThreadAbsorbTekton());
+                                t = new ThreadAbsorbTekton();
+                                GameModel.map.tektonList.put(words[1], t);
+                                GameModel.gameObjects.put(words[1], t);
                                 break;
                             case "MT":
-                                GameModel.map.tektonList.put(words[1], new MultiThreadTekton());
-                                GameModel.gameObjects.put(words[1], new MultiThreadTekton());
+                                t = new MultiThreadTekton();
+                                GameModel.map.tektonList.put(words[1], t);
+                                GameModel.gameObjects.put(words[1], t);
                                 break;
                             case "MS":
-                                GameModel.map.tektonList.put(words[1], new MushroomlessTekton());
-                                GameModel.gameObjects.put(words[1], new MushroomlessTekton());
+                                t = new MushroomlessTekton();
+                                GameModel.map.tektonList.put(words[1], t);
+                                GameModel.gameObjects.put(words[1], t);
                                 break;
                         }
                     }
@@ -103,6 +110,7 @@ public class ControllerComponent {
                     InsectSpecies s = (InsectSpecies)GameModel.gameObjects.getV(words[1]);
                     s.addInsect(newInsect);
                     ((Tekton)GameModel.gameObjects.getV(words[3])).addInsect(newInsect);
+                    newInsect.setLocation((Tekton)GameModel.gameObjects.getV(words[3]));
                     GameModel.rovarasz.put(newInsect,s);
                     break;
                 case "/addmush":
@@ -146,8 +154,11 @@ public class ControllerComponent {
                     break;
                 case "/addthread":
                     MushroomThread newThread2 = new MushroomThread();
-                    GameModel.gameObjects.put(words[2], newThread2);
                     GameModel.map.tektonList.get(words[1]).addThread(newThread2);
+                    GameModel.gameObjects.put(words[2], newThread2);
+                    newThread2.getLocation();
+
+                    ((MushroomThread)GameModel.gameObjects.getV(words[2])).getLocation();
                     break;
                 case "/setneighbour":
                     GameModel.map.tektonList.get(words[1]).addNeighbor(GameModel.map.tektonList.get(words[2]));
@@ -211,7 +222,7 @@ public class ControllerComponent {
                     eat((Insect)GameModel.gameObjects.getV(words[1]));
                     break;
                 case "/move":
-                    move((Insect)GameModel.gameObjects.getV(words[1]), GameModel.map.tektonList.get(words[2]));
+                    move((Insect) GameModel.gameObjects.getV(words[1]), GameModel.map.tektonList.get(words[2]));
                     break;
                 case "/random":
                     GameModel.randomSwitch = !GameModel.randomSwitch;

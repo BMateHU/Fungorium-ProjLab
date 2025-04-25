@@ -208,8 +208,6 @@ public class SzkeletonTest {
     //Gombatest növesztése sikertelen
     @Test
     public void useCase9ab(){
-        System.out.println("Gombatest növesztés sikertelen a)b)");
-
         Tekton T1 = new Tekton();
         T1.getSpores().add(new Spore(1));
         Assertions.assertFalse(T1.growMushroomBody(new MushroomSpecies()));
@@ -218,8 +216,6 @@ public class SzkeletonTest {
     //Gombatest növesztése sikertelen
     @Test
     public void useCase9c(){
-        System.out.println("Gombatest növesztés sikertelen c)");
-
         MushroomlessTekton T1 = new MushroomlessTekton();
         Assertions.assertFalse(T1.growMushroomBody(new MushroomSpecies()));
     }
