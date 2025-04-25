@@ -1,0 +1,11 @@
+/addplayer P1 R
+/addplayer P2 G
+/addtekton t1
+/addtekton t2
+/setneighbour t1 t2
+/addmush P2 m1 f0 t1
+/addthread t2 f1
+/connectthread f0 f1
+/addinsect P1 i1 t2 P
+/absorbinsect f2 m2
+/showMap

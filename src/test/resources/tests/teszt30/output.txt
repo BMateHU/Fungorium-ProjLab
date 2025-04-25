@@ -1,0 +1,2 @@
+t1(type=N; neighbours=tb2)
+tb2(type=N; neighbours=t1)

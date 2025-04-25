@@ -4,6 +4,6 @@
 /addtekton t3
 /setneighbour t1 t2
 /setneighbour t2 t3
-/addinsect test1 i1 t1
-/move i1 t3
+/addinsect test1 i1 t2
+/cut i1 f2
 /showMap

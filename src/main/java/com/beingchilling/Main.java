@@ -25,5 +25,21 @@ public class Main {
         assert url != null;
         cc.load(new File(url.getPath()));
         cc.gameLoop();
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+        while (running) {
+            System.out.print("> ");
+            String command = scanner.nextLine();
+            if ("quit".equalsIgnoreCase(command.trim())) {
+                running = false;
+            } else {
+                boolean isValid = vc.validate(command);
+                if (!isValid) {
+                    System.out.println("Invalid command. Please try again.");
+                }
+            }
+        }
+        scanner.close();
+        System.out.println("Exiting game.");
     }
 }

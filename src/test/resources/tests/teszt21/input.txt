@@ -1,0 +1,12 @@
+/addplayer test1 G
+/addtekton t1
+/addtekton t2
+/setneighbour t1 t2
+/addmush test1 m1 f0 t1 3 3
+/addthred t2 f1
+/connectthread f0 f1
+/addspore t2 s1
+/addspore t2 s2
+/addspore t2 s3
+/growmush test1 m2 t2
+/showMap
