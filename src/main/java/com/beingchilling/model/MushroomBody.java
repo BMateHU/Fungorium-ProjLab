@@ -33,11 +33,6 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
     }
 
     /**
-     * Randomszám generátor
-     */
-    private Random random = new Random();
-
-    /**
      * Spórát szór egy adott tektonra.
      * @param tekton melyik tentonra akarunk spórát szórni.
      * @return lehet vagy nem lehet
@@ -65,6 +60,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
             if (mushroomThread.growThread(tekton)) {
 
                 if (!tekton.getSpores().isEmpty() && GameModel.randomSwitch) {
+                    Random random = new Random();
                     // osszes neighbourt kikeresi
                     List<Tekton> possibleTargets = tekton.getNeighbors();
 
