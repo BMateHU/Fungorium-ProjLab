@@ -37,13 +37,13 @@ public class InsectSpecies {
     @Override
     public String toString() {
         if(insects.isEmpty())
-            return "Type=R";
+            return "type=R";
 
-        StringBuilder own = new StringBuilder("Own=");
+        StringBuilder own = new StringBuilder("own=");
         for(Insect insect : insects){
             own.append(GameModel.gameObjects.getK(insect)).append(", ");
         }
         own.delete(own.length()-2, own.length());
-        return "Type=R; " + own;
+        return "type=R; " + own;
     }
 }

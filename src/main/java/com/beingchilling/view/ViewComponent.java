@@ -42,7 +42,7 @@ public class ViewComponent {
                 return false;
             case "/addinsect":
                 if(words.length == 5) {
-                    if(Objects.equals(words[2], "S") || "H".equals(words[2]) || "M".equals(words[2]) || "P".equals(words[2]) || "C".equals(words[2]) || "N".equals(words[2]))
+                    if(Objects.equals(words[4], "S") || "H".equals(words[4]) || "M".equals(words[4]) || "P".equals(words[4]) || "C".equals(words[4]) || "N".equals(words[4]))
                         return true;
                     return false;
                 }
@@ -96,7 +96,7 @@ public class ViewComponent {
                 if(words.length >= 3)
                     return true;
                 return false;
-            case "/growthread", "growmush":
+            case "/growthread", "/growmush":
                 if(words.length == 4)
                     return true;
                 return false;
@@ -121,7 +121,7 @@ public class ViewComponent {
                 if(words.length == 2)
                     return true;
                 return false;
-            case "move":
+            case "/move":
                 if(words.length == 3)
                     return true;
                 return false;

@@ -1,0 +1,6 @@
+/addplayer test1 R
+/addtekton t1
+/addinsect test1 i1 t1 P
+/addspore t1 s1
+/eat i1
+/showMap

@@ -16,6 +16,9 @@ tasks.withType(Jar::class) {
         attributes["Main-Class"] = "com.beingchilling.Main"
     }
 }
+tasks.withType(Test::class) {
+    testLogging.showStandardStreams = true
+}
 
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

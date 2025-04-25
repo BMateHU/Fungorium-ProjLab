@@ -1,0 +1,3 @@
+t1(type=N; insect=i1)
+i1(speed=2; cancut=false; caneat=true; tekton=t1; nutrient=5)
+test1(type=R; own=i1)
