@@ -244,6 +244,7 @@ public class Tekton implements TektonController, TektonView {
             }
         }
         for(MushroomThread mt : temp) {
+            GameModel.gameObjects.removeByV(mt);
             mushroomThread.remove(mt);
         }
     }

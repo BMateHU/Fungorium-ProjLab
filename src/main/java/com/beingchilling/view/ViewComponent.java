@@ -8,7 +8,7 @@ import java.util.Objects;
 //otherwise this is just command calls, easy to implement
 public class ViewComponent {
 
-    private ControllerComponent controllerComponent; //viewcomponent has controllercomponent (so eachother can call eachother)
+    private ControllerComponent controllerComponent;
 
     public ViewComponent() {}
 

@@ -76,7 +76,11 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * @return A gombatest amihez a fonal tartozik
      */
     public MushroomBody checkOwner(){
-        return new MushroomBody(new Tekton());
+        MushroomThread findowner = prevGrowed;
+        while(findowner != null){
+            findowner = findowner.prevGrowed;
+        }
+        return findowner.location.getBody();
     }
 
     public void disconnectThread() {
