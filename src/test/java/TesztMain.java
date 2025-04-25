@@ -27,10 +27,10 @@ public class TesztMain {
             BufferedReader br = new BufferedReader(fr);
             while(br.ready()) {
                 String command = br.readLine();
-//                if(vc.validate(command));
-//                    //cc.fvamilesz(command);
-//                else
-//                    Assertions.fail();
+                if(vc.validate(command))
+                    cc.ArgumentManagement(command);
+                else
+                    Assertions.fail();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -41,23 +41,32 @@ public class TesztMain {
     //kimeneti
     private boolean translateExpectedTo(String fileName) {
         File file = new File(fileName);
+        boolean result = true;
+        boolean whatToExpect = true;
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             while(br.ready()) {
                 String expected = br.readLine();
                 String[] eTrimmed = expected.trim().split("[()]");
+                if(eTrimmed.length == 1) {
+                    String[] temp = expected.split(" ");
+                    if(temp[temp.length-1].equals("failed")) {
+                        whatToExpect = false;
+                        continue;
+                    }
+                }
                 if(eTrimmed[1].equals(GameModel.gameObjects.getV(eTrimmed[0]).toString()))
                     ;
                 else
-                    return false;
+                    result = false;
             }
         }
         catch (IOException e)
         {
             throw new RuntimeException(e);
         }
-        return true;
+        return result == whatToExpect;
     }
 
     @Test
