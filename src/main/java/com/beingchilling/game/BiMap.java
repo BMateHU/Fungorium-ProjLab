@@ -33,11 +33,21 @@ public class BiMap<K, V> {
         backwardMap.put(value, key);
     }
 
+    /**
+     * Associates the specified value with the specified key in this map.
+     * @param value the value
+     * @return the key
+     */
     public K getK(V value)
     {
         return backwardMap.get(value);
     }
 
+    /**
+     * Returns the value to which the specified key is mapped
+     * @param key the value
+     * @return the value
+     */
     public V getV(K key)
     {
         return forwardMap.get(key);
@@ -63,39 +73,37 @@ public class BiMap<K, V> {
         backwardMap.remove(value);
     }
 
-
-    public void getKOrDefault(V value) {
-        backwardMap.getOrDefault(value, null);
-    }
-
-    public void getVOrDefault(K key) {
-        forwardMap.getOrDefault(key, null);
-    }
-
-    public void clear() {
-        forwardMap.clear();
-        backwardMap.clear();
-    }
-
     public Set<K> keySet()
     {
         return forwardMap.keySet();
     }
 
+    /**
+     * return all the values in the map
+     */
     public Set<V> valueSet()
     {
         return backwardMap.keySet();
     }
 
+    /**
+     * check if the map contains the Key
+     */
     public boolean containsK(K key)
     {
         return forwardMap.containsKey(key);
     }
 
+    /**
+     * check if the map contains the Value
+     */
     public boolean containsV(V value)
     {
         return backwardMap.containsKey(value);
     }
 
+    /**
+     * the size of the map
+     */
     public int size(){return backwardMap.size();}
 }

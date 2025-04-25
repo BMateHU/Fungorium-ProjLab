@@ -18,6 +18,7 @@ import static com.beingchilling.game.GameModel.gombasz;
 import static com.beingchilling.game.GameModel.map;
 import java.util.Objects;
 
+
 /// Kontroller részét valósítja meg a modellnek
 public class ControllerComponent {
 
@@ -103,8 +104,10 @@ public class ControllerComponent {
                         }
                     }
                     GameModel.gameObjects.put(words[2], newInsect);
-                    ((InsectSpecies)GameModel.gameObjects.getV(words[1])).addInsect(newInsect);
+                    InsectSpecies s = (InsectSpecies)GameModel.gameObjects.getV(words[1]);
+                    s.addInsect(newInsect);
                     ((Tekton)GameModel.gameObjects.getV(words[3])).addInsect(newInsect);
+                    GameModel.rovarasz.put(newInsect,s);
                     break;
                 case "/addmush":
                     MushroomBody newMushroom = new MushroomBody(GameModel.map.tektonList.get(words[4]));
@@ -115,7 +118,10 @@ public class ControllerComponent {
                         }
                     }
                     GameModel.gameObjects.put(words[2], newMushroom);
-                    ((MushroomSpecies)GameModel.gameObjects.getV(words[1])).addMushroomBody(newMushroom);
+                    MushroomSpecies owner = (MushroomSpecies)GameModel.gameObjects.getV(words[1]);
+                    owner.addMushroomBody(newMushroom);
+                    GameModel.gombasz.put(newMushroom,owner);
+
                     GameModel.map.tektonList.get(words[4]).addMushroom(newMushroom);
                     MushroomThread newThread = new MushroomThread();
                     GameModel.gameObjects.put(words[3], newThread);
@@ -222,7 +228,6 @@ public class ControllerComponent {
                     break;
         }
     }
-
     /**
      * A játék fő szállát valósítja meg. Körökre van osztva a játék, utána playerenként minden rovarral/gomával lép 1-et
      */
@@ -404,6 +409,7 @@ public class ControllerComponent {
     public void growMushroom(MushroomSpecies ms, TektonController target, String id) {
         target.growMushroomBody(ms);
         GameModel.gameObjects.put(id, ms.checkMushroomBody().getLast());
+        GameModel.gombasz.put(ms.checkMushroomBody().getLast(),ms);
     }
 
     /**
@@ -440,6 +446,7 @@ public class ControllerComponent {
     public void absorbInsect(MushroomThreadController source, String newMushroom) {
         MushroomBody mb = source.absorbInsect();
         GameModel.gameObjects.put(newMushroom, mb);
+        GameModel.gombasz.put(mb,GameModel.gombasz.get(source.checkOwner()));
     }
 
     /**
@@ -472,6 +479,14 @@ public class ControllerComponent {
     public void eat(InsectController insect) {
         GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
         insect.insectEat();
+        for(Tekton t : insect.toView().getLocation().getNeighbors())
+        {
+            if(!GameModel.rovarasz.containsKey(t.getInsect()))
+            {
+                GameModel.gameObjects.put(GameModel.gameObjects.getK(insect)+".clone",t.getInsect());
+                GameModel.rovarasz.put(t.getInsect(),GameModel.rovarasz.get(insect));
+            }
+        }
     }
 
     /**
