@@ -228,7 +228,7 @@ public class SzkeletonTest {
         MushroomBody MB = new MushroomBody(T1);
         MB.setBodyAge(2);
 
-        Assertions.assertTrue(MB.spreadSpore(T2));
+        Assertions.assertTrue(MB.spreadSpore(T2, new Spore(5)));
     }
 
     //Spóraszórás sikertelen
@@ -240,14 +240,14 @@ public class SzkeletonTest {
         T2.addNeighbor(T1);
 
         MushroomBody MB = new MushroomBody(T1);
-        MB.spreadSpore(T2);
-        MB.spreadSpore(T2);
-        MB.spreadSpore(T2);
-        MB.spreadSpore(T2);
-        MB.spreadSpore(T2);
+        MB.spreadSpore(T2, new Spore(5));
+        MB.spreadSpore(T2, new Spore(5));
+        MB.spreadSpore(T2, new Spore(5));
+        MB.spreadSpore(T2, new Spore(5));
+        MB.spreadSpore(T2, new Spore(5));
         MB.setBodyAge(0);
 
-        Assertions.assertFalse(MB.spreadSpore(T2));
+        Assertions.assertFalse(MB.spreadSpore(T2, new Spore(5)));
     }
 
     //Gombafonal növesztése
