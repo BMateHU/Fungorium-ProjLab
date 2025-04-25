@@ -10,38 +10,53 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class TesztMain {
 
     private final String commandFile = "input.txt";
     private final String expectedFile = "output.txt";
-    private final GameModel expectedModel = null;
-    private final GameModel actualModel = null;
-    private static ViewComponent vc = new ViewComponent();
-    private static ControllerComponent cc = new ControllerComponent(vc);
-
-    private boolean parseModel(GameModel actual, GameModel expected) {
-        return actual.toString().equals(expected.toString());
-    }
+    private static final ViewComponent vc = new ViewComponent();
+    private static final ControllerComponent cc = new ControllerComponent(vc);
 
     //bemeneti
-    private void interpretCommands(String fileName, GameModel model) {
+    private void interpretCommands(String fileName) {
         File file = new File(fileName);
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             while(br.ready()) {
-                vc.validate(br.readLine());
+                String command = br.readLine();
+//                if(vc.validate(command));
+//                    //cc.fvamilesz(command);
+//                else
+//                    Assertions.fail();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     //kimeneti
-    private boolean translateExpectedTo(String fileName, GameModel model) {
+    private boolean translateExpectedTo(String fileName) {
         File file = new File(fileName);
-
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            while(br.ready()) {
+                String expected = br.readLine();
+                String[] eTrimmed = expected.trim().split("[()]");
+                if(eTrimmed[1].equals(GameModel.gameObjects.getV(eTrimmed[0]).toString()))
+                    ;
+                else
+                    return false;
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 
@@ -56,14 +71,14 @@ public class TesztMain {
         for(File dir : fileList) {
             if(dir.isDirectory()) {
                 beforeTests();
-                interpretCommands(dir.getAbsolutePath() + "/" + commandFile, actualModel);
-                translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile, expectedModel);
-                Assertions.assertTrue(parseModel(actualModel, expectedModel));
+                interpretCommands(dir.getAbsolutePath() + "/" + commandFile);
+                Assertions.assertTrue(translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile));
             }
         }
     }
 
     private void beforeTests() {
+        GameModel.randomSwitch = false;
         GameModel.gameObjects = new BiMap<>();
         GameModel.gombasz = new HashMap<>();
         GameModel.map = new com.beingchilling.game.Map();

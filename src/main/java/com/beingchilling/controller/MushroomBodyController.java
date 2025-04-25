@@ -8,6 +8,6 @@ public interface MushroomBodyController {
     boolean spreadSpore(Tekton tekton);
     boolean growThread(MushroomThread mushroomThread, Tekton tekton);
     void setBodyAge(int bodyAge);
-
+    void setSporeNumber(int sporeNum);
     MushroomBodyView toView();
 }
