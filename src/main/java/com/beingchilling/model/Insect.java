@@ -173,12 +173,13 @@ public class Insect implements InsectController, InsectView {
     }
 
     public void cloneEffect() {
-        //only an insect, needs to be added to insect species
         for(Tekton t : location.getNeighbors())
         {
             if(t.getInsect() != null)
                 continue;
-            t.addInsect(new Insect(this));
+            Insect insectCloned = new Insect(this);
+            t.addInsect(insectCloned);
+            //GameModel.rovarasz.get(this).addInsect(insectCloned);
             return;
         }
         throw new ArrayIndexOutOfBoundsException("no place to clone, clone failed");

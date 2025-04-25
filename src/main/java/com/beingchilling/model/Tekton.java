@@ -7,6 +7,7 @@ import com.beingchilling.view.TektonView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Ez egy Tekton osztaly, ami tárolja a Tektonnak a szomszédjait egy Listában, Spórákat, szintén egy Listában, ami rajta van a Tektonon és MushroomThreadet,
@@ -59,19 +60,45 @@ public class Tekton implements TektonController, TektonView {
      * jelenlegi Tekton neighborhozÉs az új létre hozott Tektonnak is hozzáadjuk a 
      * jelenlegi Tektont mint neighborként
      */
-   public Tekton tektonBreak() {
-        //not full implemented
-        if(insect != null || mushroomBody != null){
+    public Tekton tektonBreak() {
+        if (insect != null || mushroomBody != null) {
             return null;
         }
+        if(GameModel.randomSwitch && !neighbors.isEmpty())
+        {
+            Random random = new Random();
+            int r1, r2;
 
-        clearSpore();
-        getThreads().clear();
-        Tekton T2 = new Tekton();
-        T2.neighbors.add(this);
-        updateNeighbor(new ArrayList<>(),new ArrayList<>());
-        return T2;
-   }
+            r1 = random.nextInt(neighbors.size() - 1);
+            do {
+                r2 = random.nextInt(neighbors.size() - 1);
+            } while (r1 == r2);
+
+            int num1 = Math.min(r1, r2);
+            int num2 = Math.max(r1, r2);
+
+            List<Tekton> randomNeighbours = this.neighbors.subList(num1, num2);
+
+            clearSpore();
+            getThreads().clear();
+            Tekton T2 = new Tekton();
+
+            T2.neighbors.add(this);
+            neighbors.add(T2);
+            updateNeighbor(new ArrayList<>(), randomNeighbours);
+            T2.updateNeighbor(randomNeighbours, new ArrayList<>());
+            return T2;
+        }
+        else {
+            clearSpore();
+            getThreads().clear();
+            Tekton T2 = new Tekton();
+            T2.neighbors.add(this);
+            neighbors.add(T2);
+            updateNeighbor(new ArrayList<>(), new ArrayList<>());
+            return T2;
+        }
+    }
 
     /**
      * A függvény megmondja a Tektonon lévő spóra

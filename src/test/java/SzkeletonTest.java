@@ -1,9 +1,16 @@
+import com.beingchilling.game.GameModel;
 import com.beingchilling.model.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SzkeletonTest {
 
+    @BeforeAll
+    static void setUp(){
+        GameModel.randomSwitch = false;
+    }
     //Rovar mozgás effektus nélkül
     @Test
     public void useCase1(){
