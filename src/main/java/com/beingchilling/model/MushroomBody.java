@@ -4,6 +4,10 @@ import com.beingchilling.controller.MushroomBodyController;
 import com.beingchilling.game.GameModel;
 import com.beingchilling.view.MushroomBodyView;
 
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 /**
  * Ez egy gombatest osztaly, ami tárolja a gombatest korát, sporaszamát, és melyik tektonon van
  */
@@ -20,11 +24,18 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      * Gombatest melyik tektonon van
      */
     private Tekton location;
+
+
     public MushroomBody(Tekton location) {
         bodyAge = 0;
         sporeNumber = 5;
         this.location = location;
     }
+
+    /**
+     * Randomszám generátor
+     */
+    private Random random = new Random();
 
     /**
      * Spórát szór egy adott tektonra.
@@ -50,28 +61,51 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      * @return sikeresség
      */
     public boolean growThread(MushroomThread mushroomThread, Tekton tekton) {
-        if(tekton.checkNeighbor(mushroomThread.getLocation()) ) {
-            MushroomThread MT2 = new MushroomThread();
-            if (tekton.addThread(MT2)) {
-                if(!tekton.getSpores().isEmpty()){
-                    //nincs random meg EZT MINDENKEPP
-                    for(Tekton t : tekton.getNeighbors()) {
-                        if(t != location) {
-                            MushroomThread MT3 = new MushroomThread();
-                            t.addThread(MT3);
+        if (tekton.checkNeighbor(mushroomThread.getLocation())) {
+            //ennel beadja a threadet
+            if (mushroomThread.growThread(tekton)) {
+
+                if (!tekton.getSpores().isEmpty() && GameModel.randomSwitch) {
+                    // osszes neighbourt kikeresi
+                    List<Tekton> possibleTargets = tekton.getNeighbors();
+
+                    //a sajat tektont es a kijelolt tektont kizarja
+                    List<Tekton> validTargets = possibleTargets.stream()
+                            .filter(t -> (t != this.location || t != tekton))
+                            .collect(Collectors.toList());
+
+                    if (!validTargets.isEmpty()) {
+                        //while ciklus vizsgalas
+                        boolean growsucsess = false;
+                        while (!growsucsess) {
+                            int randomIndex = random.nextInt(validTargets.size());
+                            Tekton randomNeighbor = validTargets.get(randomIndex);
+                            if (randomNeighbor.checkNeighbor(tekton)) {
+                                if (mushroomThread.growThread(randomNeighbor)) {
+                                    growsucsess = true;
+                                }
+                            }
+
+                        }
+                    }
+                }
+                //ha ki van kapcsolva a random
+                else if (!tekton.getSpores().isEmpty() && !GameModel.randomSwitch) {
+                    if (!tekton.getSpores().isEmpty()) {
+                        for (Tekton t : tekton.getNeighbors()) {
+                            //listaban az elsore
+                            if (t != location && mushroomThread.growThread(t)) {
+                                break;
+                            }
                         }
                     }
                 }
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        }
-        else if(tekton.checkNeighbor(location)) {
-            MushroomThread MT2 = new MushroomThread();
-            mushroomThread.addThread(MT2);
-            return tekton.addThread(MT2);
+        } else if (tekton.checkNeighbor(location)) {
+            return mushroomThread.growThread(location);
         }
         return false;
     }

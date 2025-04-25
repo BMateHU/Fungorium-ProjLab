@@ -168,7 +168,7 @@ public class ControllerComponent {
 
     public void growThread(TektonController source, MushroomThreadController newThread, TektonController target) {
         //TO BE IMPLEMENTED
-        newThread.growThread((Tekton)source, (Tekton)target);
+        newThread.growThread( (Tekton)target);
     }
 
     public void growMushroom(MushroomBodyController newMushroom, TektonController target) {
@@ -182,7 +182,9 @@ public class ControllerComponent {
 
     public void absorbInsect(MushroomThreadController source, MushroomBodyController newMushroom) {
         source.absorbInsect();
+        //uj mushroombodyt a mushroomspeciesben be kell adni
         //Ide kell vagy return mushroom vagy copy mushroom
+
     }
 
     private void breakTekton(TektonController source, TektonController newTekton) {
