@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+import static com.beingchilling.game.GameModel.gombasz;
+import static com.beingchilling.game.GameModel.map;
 import java.util.Objects;
 
 //otherwise this is just command calls, easy to implement
@@ -209,7 +214,121 @@ public class ControllerComponent {
     }
 
     public void gameLoop() {
+        //rovarnal a rovarasze-e a rovar nincs ellenorizve, gombanal szinten
+        int round = 0;
+        //game round
+        for(round = 0; round < 20 ; round++) {
+            //gombasz turn
 
+            for (MushroomSpecies species : GameModel.gombasz.values()) {
+
+                for(MushroomBody mb: species.checkMushroomBody()){
+                    boolean skipped = false;
+                    boolean spreadedspore = false;
+                    boolean growedthread = false;
+                    boolean mushroomgrowed = false;
+                    while(!skipped){
+                        Scanner scanner = new Scanner(System.in);
+
+                        System.out.print("Gomba"+ round + "köre : ");
+
+                        String beolvasottSor = scanner.nextLine();
+
+                        String[] words = beolvasottSor.strip().split(" ");
+                        switch (words[0]) {
+                            case "growmush":
+                                if (mushroomgrowed == false) {
+                                    ArgumentManagement(beolvasottSor);
+                                } else {
+                                    System.out.println("Ezt már csináltad");
+                                }
+                                mushroomgrowed = true;
+                                break;
+                            case "/spreadspore":
+                                if (spreadedspore == false) {
+                                    ArgumentManagement(beolvasottSor);
+                                } else {
+                                    System.out.println("Ezt már csináltad");
+                                }
+                                spreadedspore = true;
+                                break;
+                            case "/growthread":
+                                if (growedthread == false) {
+                                    ArgumentManagement(beolvasottSor);
+                                } else {
+                                    System.out.println("Ezt már csináltad");
+                                }
+                                growedthread = true;
+                                break;
+                            case "/skip":
+                                skipped = true;
+                                break;
+                            default:
+                                System.out.println("Ezt nem csinálhatod!");
+                        }
+                    }
+
+                }
+
+            }
+            for(InsectSpecies species: GameModel.rovarasz.values()){
+
+                for(Insect ins: species.getInsects()){
+                    boolean skipped = false;
+                    boolean moved = false;
+                    boolean ate = false;
+                    boolean cut = false;
+                    while(skipped){
+
+                        Scanner scanner = new Scanner(System.in);
+
+                        System.out.print("Rovar" + round + "köre : ");
+
+                        String beolvasottSor = scanner.nextLine();
+
+                        String[] words = beolvasottSor.strip().split(" ");
+                        switch (words[0]) {
+                            case "/move":
+                                if (moved == false) {
+                                    ArgumentManagement(beolvasottSor);
+                                } else {
+                                    System.out.println("Ezt már csináltad");
+                                }
+                                moved = true;
+                                break;
+                            case "/eat":
+                                if (ate == false) {
+                                    ArgumentManagement(beolvasottSor);
+                                } else {
+                                    System.out.println("Ezt már csináltad");
+                                }
+                                ate = true;
+                                break;
+                            case "/cut":
+                                if (cut == false) {
+                                    ArgumentManagement(beolvasottSor);
+                                } else {
+                                    System.out.println("Ezt már csináltad");
+                                }
+                                cut = true;
+                                break;
+                            case "/skip":
+                                skipped = true;
+                                break;
+                            default:
+                                System.out.println("Ezt nem csinálhatod!");
+                        }
+
+                        ArgumentManagement(beolvasottSor);
+                    }
+                }
+            }
+            if(round % 5 == 0){
+                for(Tekton t :GameModel.map.tektonList.values()){
+                    t.tektonBreak();
+                }
+            }
+        }
     }
 
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
