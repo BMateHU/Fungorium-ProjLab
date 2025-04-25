@@ -1,6 +1,7 @@
 package com.beingchilling.view;
 
 import com.beingchilling.controller.ControllerComponent;
+import com.beingchilling.game.GameModel;
 
 import java.util.Objects;
 
@@ -21,7 +22,7 @@ public class ViewComponent {
         String[] words = command.strip().split(" ");
         switch(words[0]) {
             case "/addplayer":
-                if(words.length == 3)
+                if(words.length == 3 && ("R".equals(words[2]) || "G".equals(words[2])))
                     return true;
                 return false;
             case "/addtekton":
@@ -134,16 +135,46 @@ public class ViewComponent {
     }
 
     public void help() {
-
+        System.out.println("Elérhető parancsok:");
+        System.out.println("/addplayer <player ID> <role> - Játékos hozzáadása (role: R - rovarász, G - gombász)");
+        System.out.println("/addtekton <tekton ID> [tekton type] - Tekton hozzáadása (default: N)");
+        System.out.println("/addinsect <player ID> <insect ID> <tekton ID> [effect] - Rovar hozzáadása tektonhoz (effect: S/H/M/P/C/N)");
+        System.out.println("/addmush <player ID> <mushroom ID> <thread ID> <tekton ID> [age] [spore] - Gombatest hozzáadása");
+        System.out.println("/addspore <tekton ID> <spore ID> [spore type] [nutrient] - Spóra hozzáadása tektonhoz");
+        System.out.println("/addthread <tekton ID> <thread ID> - Gombafonal hozzáadása tektonhoz");
+        System.out.println("/setneighbour <tekton1 ID> <tekton2 ID> - Tektonok szomszédságának beállítása");
+        System.out.println("/connectthread <thread1 ID> <thread2 ID> - Két fonal összekötése");
+        System.out.println("/showID - Jelenlegi objektumok ID-jainak kilistázása");
+        System.out.println("/help - Parancslista megjelenítése");
+        System.out.println("/break <source tekton ID> <new tekton ID> [neighbours ...] - Tekton eltörése és új létrehozása");
+        System.out.println("/absorb [tekton ID ...] - Gombafonalak felszívása tektonon");
+        System.out.println("/growthread <source thread ID> <new thread ID> <tekton ID> - Gombafonal növesztése");
+        System.out.println("/growmush <player ID> <mushroom ID> <tekton ID> - Gombatest növesztése");
+        System.out.println("/spreadspore <mushroom ID> <tekton ID> [spore type] - Spóra szórása gombatestből");
+        System.out.println("/absorbinsect <thread ID> <new mushroom ID> - Rovar felszívása fonal által");
+        System.out.println("/cut <insect ID> <thread ID> - Gombafonal elvágása rovarral");
+        System.out.println("/eat <insect ID> - Rovar spórát eszik a tektonon");
+        System.out.println("/move <insect ID> <tekton ID> - Rovar mozgatása másik tektonra");
+        System.out.println("/random on|off - Véletlenszerűség ki/be kapcsolása");
+        System.out.println("/load <file> - Előre megírt pálya betöltése");
+        System.out.println("/showMap - Jelenlegi pályaelemek kilistázása");
     }
 
-    public void showId() {
 
+    public void showId() {
+        System.out.println("Az összes regisztrált objektum ID-ja:");
+        for (String id : GameModel.gameObjects.keySet()) {
+            System.out.println("- " + id);
+        }
     }
 
     public void showMap() {
-
+        System.out.println("A pályán lévő Tekton objektumok ID-jai:");
+        for (String id : GameModel.map.tektonList.keySet()) {
+            System.out.println("- " + id);
+        }
     }
+
 
     public void unsuccessfulCommand() {
 

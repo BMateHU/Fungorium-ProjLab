@@ -91,6 +91,8 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
         this.bodyAge = bodyAge;
     }
 
+    public void setSporeNumber(int sporeNum) { this.sporeNumber = sporeNum; }
+
     public int getSporeNumber() {
         return sporeNumber;
     }
