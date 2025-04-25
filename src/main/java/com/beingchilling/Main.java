@@ -6,6 +6,7 @@ import com.beingchilling.model.MushroomBody;
 import com.beingchilling.view.ViewComponent;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,9 +22,13 @@ public class Main {
 
     public static void main(String[] args) {
         vc.setControllerComponent(cc);
-        URL url = Main.class.getResource("start.txt");
-        assert url != null;
-        cc.load(new File(url.getPath()));
+        try {
+            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
+            assert url != null;
+            cc.load(url);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
         cc.gameLoop();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
