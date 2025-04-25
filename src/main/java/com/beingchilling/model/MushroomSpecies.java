@@ -2,6 +2,7 @@ package com.beingchilling.model;
 
 import com.beingchilling.game.GameModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public class MushroomSpecies {
     /**
      * Nyilvántartja, egy gombafaj összes létező egyedét.
      */
-    private List<MushroomBody> mushroomBodies;
+    private List<MushroomBody> mushroomBodies = new ArrayList<>();
 
     /**
      * Lekéri a Gombatest listát
