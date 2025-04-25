@@ -1,13 +1,11 @@
 package com.beingchilling.controller;
 
+import com.beingchilling.Main;
 import com.beingchilling.game.GameModel;
 import com.beingchilling.model.*;
 import com.beingchilling.view.ViewComponent;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,9 +220,7 @@ public class ControllerComponent {
                     System.out.println("Jelen esetben a random: " + GameModel.randomSwitch);
                     break;
                 case "/load":
-                    URL url = this.getClass().getResource("");
-                    File file = new File(url.getPath());
-                    load(file);
+                    load(getClass().getClassLoader().getResourceAsStream("start.txt"));
                     break;
         }
     }
@@ -500,19 +496,19 @@ public class ControllerComponent {
 
     /**
      * Betölt egy fájlt a GameModelbe
-     * @param file A fájl amit betöltnük
+     * @param fis A fájl amit betöltnük
      */
-    public void load(File file) {
+    public void load(InputStream fis) {
         try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             while(br.ready()) {
                 String command2 = br.readLine();
                 if(viewComponent.validate(command2))
                     ArgumentManagement(command2);
                 else
                     return;
-                }
+            }
+            br.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
