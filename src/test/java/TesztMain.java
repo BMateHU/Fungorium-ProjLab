@@ -25,6 +25,8 @@ public class TesztMain {
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
+//            if(!br.ready())
+//                Assertions.fail();
             while(br.ready()) {
                 String command = br.readLine();
                 if(vc.validate(command))
@@ -46,6 +48,8 @@ public class TesztMain {
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
+//            if(!br.ready())
+//                Assertions.fail();
             while(br.ready()) {
                 String expected = br.readLine();
                 String[] eTrimmed = expected.trim().split("[()]");
@@ -81,7 +85,36 @@ public class TesztMain {
             if(dir.isDirectory()) {
                 beforeTests();
                 interpretCommands(dir.getAbsolutePath() + "/" + commandFile);
-                Assertions.assertTrue(translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile));
+                boolean result = translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile);
+                File resultFile = new File(dir.getAbsolutePath() + "/result.txt");
+                if(result) {
+                    try {
+                        FileWriter fw = new FileWriter(resultFile);
+                        fw.write("Test passed");
+                        fw.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
+                    try {
+                        FileWriter fw = new FileWriter(resultFile);
+                        fw.write("Test failed");
+                        fw.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                PrintStream out;
+                try {
+                    out = new PrintStream(new FileOutputStream(dir.getAbsolutePath() + "/result.txt", true));
+                    System.setOut(out);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                Assertions.assertTrue(result);
+                System.setOut(System.out);
+                out.close();
             }
         }
     }
