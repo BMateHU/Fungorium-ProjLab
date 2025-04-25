@@ -42,11 +42,10 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      * @param tekton melyik tentonra akarunk spórát szórni.
      * @return lehet vagy nem lehet
      */
-    public boolean spreadSpore(Tekton tekton) {
+    public boolean spreadSpore(Tekton tekton, Spore toSpread) {
         if(tekton.checkNeighbor(location) && bodyAge >= 2 && sporeNumber > 0) {
             popSpore();
-            Spore S = new Spore(3);
-            tekton.addSpore(S);
+            tekton.addSpore(toSpread);
             return true;
         }
         return false;
