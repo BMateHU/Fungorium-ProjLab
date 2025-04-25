@@ -35,6 +35,7 @@ public class TesztMain {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     //kimeneti
@@ -77,6 +78,7 @@ public class TesztMain {
     }
 
     private void beforeTests() {
+        GameModel.randomSwitch = false;
         GameModel.gameObjects = new BiMap<>();
         GameModel.gombasz = new HashMap<>();
         GameModel.map = new com.beingchilling.game.Map();
