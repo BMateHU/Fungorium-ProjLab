@@ -74,4 +74,6 @@ public class BiMap<K, V> {
     {
         return backwardMap.containsKey(value);
     }
+
+    public int size(){return backwardMap.size();}
 }
