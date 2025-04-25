@@ -1,4 +1,4 @@
-/addplayer test1 R
+/addplayer P1 R
 /addtekton t1
 /addtekton t2
 /addtekton t3
@@ -9,6 +9,9 @@
 /addthread t3 f3
 /connectthread f1 f2
 /connectthread f2 f3
-/addinsect test1 i1 t1
-/move i1 t3
+/addspore t2 s1
+/addinsect P1 i1 t1
+/move i1 t2
+/eat i1
+/cut i1 f2
 /showMap

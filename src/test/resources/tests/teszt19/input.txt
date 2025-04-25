@@ -1,0 +1,7 @@
+/addplayer test1 G
+/addtekton t1
+/addtekton t2
+/setneighbour t1 t2
+/addmush test1 m1 f0 t1 3 0
+/spreadspore m1 t2
+/showMap

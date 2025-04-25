@@ -1,0 +1,5 @@
+/addplayer test1 R
+/addtekton t1
+/addinsect test1 i1 t1
+/break t1 tb2
+/showMap

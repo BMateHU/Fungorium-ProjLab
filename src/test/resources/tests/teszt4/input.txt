@@ -4,6 +4,11 @@
 /addtekton t3
 /setneighbour t1 t2
 /setneighbour t2 t3
-/addinsect test1 i1 t1
+/addthread t1 f1
+/addthread t2 f2
+/addthread t3 f3
+/connectthread f1 f2
+/connectthread f2 f3
+/addinsect test1 i1 t1 P
 /move i1 t3
 /showMap

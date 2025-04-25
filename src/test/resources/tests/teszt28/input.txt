@@ -1,0 +1,8 @@
+/addtekton t1
+/addthread t1 f1
+/addtekton t2 T
+/addthread t2 f2
+/addtekton t3 L
+/addthread t3 f3
+/absorb
+/showMap
