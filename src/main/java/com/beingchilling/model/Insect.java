@@ -196,6 +196,9 @@ public class Insect implements InsectController, InsectView {
     public void destroy() {
         //need to delete it from insect species and when deleting dont forget to get the points out
         location.addInsect(null);
+        String id = GameModel.gameObjects.getK(this);
+        GameModel.rovarasz.remove(id);
+        GameModel.gameObjects.removeByK(id);
     }
 
     public int getInsectSpeed() {
