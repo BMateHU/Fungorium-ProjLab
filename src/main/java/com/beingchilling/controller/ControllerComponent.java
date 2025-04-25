@@ -18,14 +18,24 @@ import static com.beingchilling.game.GameModel.gombasz;
 import static com.beingchilling.game.GameModel.map;
 import java.util.Objects;
 
-//otherwise this is just command calls, easy to implement
 public class ControllerComponent {
 
+    /**
+     * viewComponent
+     */
     private final ViewComponent viewComponent;
 
+    /**
+     * Constructor for ControllerComponent
+     */
     public ControllerComponent(ViewComponent viewComponent) {
         this.viewComponent = viewComponent;
     }
+
+    /**
+     * command manager, process the command and validate
+     * @param command, parameters in string
+     */
 
     public void ArgumentManagement(String command) {
         if(!viewComponent.validate(command)) {
@@ -96,8 +106,10 @@ public class ControllerComponent {
                         }
                     }
                     GameModel.gameObjects.put(words[2], newInsect);
-                    ((InsectSpecies)GameModel.gameObjects.getV(words[1])).addInsect(newInsect);
+                    InsectSpecies s = (InsectSpecies)GameModel.gameObjects.getV(words[1]);
+                    s.addInsect(newInsect);
                     ((Tekton)GameModel.gameObjects.getV(words[3])).addInsect(newInsect);
+                    GameModel.rovarasz.put(newInsect,s);
                     break;
                 case "/addmush":
                     MushroomBody newMushroom = new MushroomBody(GameModel.map.tektonList.get(words[4]));
@@ -108,7 +120,10 @@ public class ControllerComponent {
                         }
                     }
                     GameModel.gameObjects.put(words[2], newMushroom);
-                    ((MushroomSpecies)GameModel.gameObjects.getV(words[1])).addMushroomBody(newMushroom);
+                    MushroomSpecies owner = (MushroomSpecies)GameModel.gameObjects.getV(words[1]);
+                    owner.addMushroomBody(newMushroom);
+                    GameModel.gombasz.put(newMushroom,owner);
+
                     GameModel.map.tektonList.get(words[4]).addMushroom(newMushroom);
                     MushroomThread newThread = new MushroomThread();
                     GameModel.gameObjects.put(words[3], newThread);
@@ -215,7 +230,10 @@ public class ControllerComponent {
                     break;
         }
     }
-
+    /**
+     * gameloop will handle the round of the game, it will decide when is whos turn and also take turn to every player
+     * it also maintains the round variable
+     */
     public void gameLoop() {
         //rovarnal a rovarasze-e a rovar nincs ellenorizve, gombanal szinten
         int round = 0;
@@ -373,16 +391,38 @@ public class ControllerComponent {
         }
     }
 
+    /**
+     *  Egy adott tektonra növeszt gombafonalat egy gombatest, attól függően,
+     *  hogy van-e a tekton szomszédján ugyanannak a gombatestnek fonala.
+     *  Ha nem a gombafonal végét növeszti, akkor egy új ágat hoz létre arra a tektonra.
+     * @param mtC a hosszabítani kívánt fonal
+     * @param target a Tekton ahová szeretnénk fonalat
+     * @param newThread the thread id in string
+     */
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
         GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
         mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target);
     }
 
+    /**
+     * A GombaTest növeszthető-e a Tektonon. A GombaTestet növesztéshez,
+     * Szükséges három darab spóra és rendelkezik gombaFonal a Tektonon.
+     * @param ms tárolja a létre hozott gombaTestet
+     * @param target the tekton where you grow
+     * @param id the mushroom id in string
+     */
     public void growMushroom(MushroomSpecies ms, TektonController target, String id) {
         target.growMushroomBody(ms);
         GameModel.gameObjects.put(id, ms.checkMushroomBody().getLast());
+        GameModel.gombasz.put(ms.checkMushroomBody().getLast(),ms);
     }
 
+    /**
+     * use the given mushroom to spread spore on the target tekton
+     * @param source the mushroom which spreads
+     * @param target the tekton u want to spread
+     * @param type the type of spore
+     */
     public void spreadSpore(MushroomBodyController source, TektonController target, String type) {
         Random rnd = new Random();
         Spore sp = switch (type) {
@@ -403,11 +443,23 @@ public class ControllerComponent {
         source.spreadSpore((Tekton)target, sp);
     }
 
+    /**
+     * Absorb the insect on the tekton
+     * @param source the thread u choose to absorb
+     * @param newMushroom the new mushroom id
+     */
     public void absorbInsect(MushroomThreadController source, String newMushroom) {
         MushroomBody mb = source.absorbInsect();
         GameModel.gameObjects.put(newMushroom, mb);
+        GameModel.gombasz.put(mb,GameModel.gombasz.get(source.checkOwner()));
     }
 
+    /**
+     * Tekton kettétörese, ha a Tektonon van Gombafonal és Spóra akkor azokat eltávolítjuk a Tektonról
+     * Létre hozzuk egy új Tektont és ezt az új létre hozott tekton hozzáadjuk a
+     * jelenlegi Tekton neighborhozÉs az új létre hozott Tektonnak is hozzáadjuk a
+     * jelenlegi Tektont mint neighborként
+     */
     private void breakTekton(TektonController source, String tektonID) {
         for(Spore spore : source.toView().getSpores())
             GameModel.gameObjects.removeByV(spore);
@@ -417,19 +469,45 @@ public class ControllerComponent {
         GameModel.map.tektonList.put(tektonID, newTekton);
     }
 
+    /**
+     * A függvény megmondja a rovar elvágja-e a gombaFonalat.
+     * @param target, gombaFonal, amit a rovar elvágna.
+     */
     public void cut(InsectController insect, MushroomThreadController target) {
         insect.insectCut((MushroomThread) target);
     }
 
+    /**
+     * A rovar megeszik a tektonon elhelyezett spórát.
+     */
     public void eat(InsectController insect) {
         GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
         insect.insectEat();
+        for(Tekton t : insect.toView().getLocation().getNeighbors())
+        {
+            if(!GameModel.rovarasz.containsKey(t.getInsect()))
+            {
+                GameModel.gameObjects.put(GameModel.gameObjects.getK(insect)+".clone",t.getInsect());
+                GameModel.rovarasz.put(t.getInsect(),GameModel.rovarasz.get(insect));
+            }
+        }
     }
 
+    /**
+     * függvény megmondja, hogy a paraméterként kapott Tektonra lehet a rovar átmenni.
+     * Vissza ad egy boolean értéket, True ad vissza, ha tekton távolsága a rovar sebbességével elérhető
+     * akkor a paraméterként kapott tektonra helyezzük át a rovart,
+     * és a jelenlegi tektonról pedig eltávolítjuk.
+     * Egyébként pedig False értéket ad vissza.
+     * @param target, hogy erre a tektonra tud-e a rovar átmenni
+     */
     public void move(InsectController insect, TektonController target) {
         insect.insectMove((Tekton) target);
     }
 
+    /**
+     * runs the command in the given file
+     */
     public void load(File file) {
         try {
             FileReader fr = new FileReader(file);

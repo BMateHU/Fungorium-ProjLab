@@ -175,7 +175,6 @@ public class ViewComponent {
         }
     }
 
-
     public void unsuccessfulCommand() {
         System.out.println("Nincs ilyen parancs!");
     }
