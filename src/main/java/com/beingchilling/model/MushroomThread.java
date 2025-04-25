@@ -49,13 +49,6 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         lifeSupport = false;
     }
 
-    /**
-     * Ha fonal tektonjára spóra kerül, akkor egy ideig magától hosszabulni fog a fonal.
-     */
-    public void speedUpGrowing(){
-        //i think speed up growing is implemented in mushroombody.growthread()
-        //speedUpGrowing
-    }
 
     /**
      * A listához hozzáadja az adott fonalat.
@@ -67,9 +60,15 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         thread.lifeSupport = lifeSupport;
     }
 
-    public void growThread(Tekton source, Tekton target) {
-        // i think this is too implemented in mushroombody.growthread()
-        //no cause thats wrong, thread should use thread not mushroom use thread, that could be halalfejes hiba
+
+    public boolean growThread(Tekton target) {
+        MushroomThread MT2 = new MushroomThread();
+        if(target.addThread(MT2)){
+            this.addThread(MT2);
+            return true;
+
+        }
+        return false;
     }
 
     /**
@@ -99,11 +98,15 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         life--;
     }
 
-    public void absorbInsect() {
-        //not fully implemented
-        for(int i=0; i<3; i++)
-            location.addSpore(new Spore(1));
-        location.growMushroomBody(new MushroomSpecies());
+    public MushroomBody absorbInsect() throws NullPointerException {
+        if(location.getInsect() == null){
+            throw new NullPointerException("Nincs Insect");
+        }
+        MushroomBody mb = new MushroomBody(location);
+        location.addMushroom(mb);
+        location.getInsect().destroy();
+        return mb;
+
     }
 
     public void destroy() {

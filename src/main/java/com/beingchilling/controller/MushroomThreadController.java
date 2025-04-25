@@ -7,16 +7,15 @@ import com.beingchilling.view.MushroomThreadView;
 
 public interface MushroomThreadController {
     void setLifeSupport(boolean lifeSupport);
-    void speedUpGrowing();
     void addThread(MushroomThread thread);
     MushroomBody checkOwner();
     void disconnectThread();
     void lifeReduce();
-    void absorbInsect();
+    MushroomBody absorbInsect();
     void destroy();
     void remove(MushroomThread mt);
     void setLocation(Tekton location);
-    void growThread(Tekton source, Tekton target);
+    boolean growThread(Tekton target);
 
 
     MushroomThreadView toView();
