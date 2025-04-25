@@ -22,7 +22,10 @@ public class ParaSpore extends Spore {
     public void sporeEffect(Insect r) {
         r.paraEffect();
     }
-
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     public String toString() {
         return "Nutrient:"+ sporeNutrient +"; type:P";
     }

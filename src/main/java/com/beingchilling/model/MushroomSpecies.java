@@ -26,13 +26,17 @@ public class MushroomSpecies {
      * @param mushroomBody gombatest amit fel akarunk vanni
      */
     public void addMushroomBody(MushroomBody mushroomBody){
-
+        mushroomBodies.add(mushroomBody);
     }
 
     public void setMushroomBodies(List<MushroomBody> mushroomBodies) {
         this.mushroomBodies = mushroomBodies;
     }
 
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         if(mushroomBodies.isEmpty())

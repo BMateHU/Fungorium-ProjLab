@@ -15,6 +15,10 @@ public class MultiThreadTekton extends Tekton{
         return true;
     }
 
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("type=MT");

@@ -8,6 +8,9 @@ import java.util.Objects;
 //otherwise this is just command calls, easy to implement
 public class ViewComponent {
 
+    /**
+     * Kontoller Komponent,azért hogy a viewComponent elréje a Kontoller Komponentet
+     */
     private ControllerComponent controllerComponent;
 
     public ViewComponent() {}
@@ -17,6 +20,9 @@ public class ViewComponent {
         this.controllerComponent = controllerComponent;
     }
 
+    /**
+     *  A id ellenörző kommand hogy helyes-e
+     */
     //validate is check if command correct -> then to controller, as new function HAVE TO which runs the methods which the command called
     public boolean validate(String command) {
         String[] words = command.strip().split(" ");
@@ -134,6 +140,9 @@ public class ViewComponent {
         return false;
     }
 
+    /**
+     * Ki írja az összes kommandokat helyes formátumban
+     */
     public void help() {
         System.out.println("Elérhető parancsok:");
         System.out.println("/addplayer <player ID> <role> - Játékos hozzáadása (role: R - rovarász, G - gombász)");
@@ -160,7 +169,9 @@ public class ViewComponent {
         System.out.println("/showMap - Jelenlegi pályaelemek kilistázása");
     }
 
-
+    /**
+     * Az összes regisztrált objektum ID-ját kiirja
+     */
     public void showId() {
         System.out.println("Az összes regisztrált objektum ID-ja:");
         for (String id : GameModel.gameObjects.keySet()) {
@@ -168,6 +179,9 @@ public class ViewComponent {
         }
     }
 
+    /**
+     *  A pályán lévő Tekton objektumok ID-jait kiírja
+     */
     public void showMap() {
         System.out.println("A pályán lévő Tekton objektumok ID-jai:");
         for (String id : GameModel.map.tektonList.keySet()) {
@@ -175,6 +189,9 @@ public class ViewComponent {
         }
     }
 
+    /**
+     * Ha rossz kommandot írsz be akkor ez hívódik meg
+     */
     public void unsuccessfulCommand() {
         System.out.println("Nincs ilyen parancs!");
     }

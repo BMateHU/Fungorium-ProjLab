@@ -5,9 +5,17 @@ import com.beingchilling.game.GameModel;
 public class LifeSupportTekton extends Tekton {
     public LifeSupportTekton() {}
 
+    /**
+     * Nem szívja fel
+     */
     @Override
     public void absorb() {}
 
+    /**
+     * Hozzáadja a fonalat
+     * @param thread Kiválasztott fonal
+     * @return boolean
+     */
     @Override
     public boolean addThread(MushroomThread thread) {
         thread.setLifeSupport(true);

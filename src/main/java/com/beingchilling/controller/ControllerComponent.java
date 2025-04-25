@@ -18,25 +18,23 @@ import static com.beingchilling.game.GameModel.gombasz;
 import static com.beingchilling.game.GameModel.map;
 import java.util.Objects;
 
+
+/// Kontroller részét valósítja meg a modellnek
 public class ControllerComponent {
 
-    /**
-     * viewComponent
-     */
+    /// A kontroller hozzáfér a viewhoz
     private final ViewComponent viewComponent;
 
-    /**
-     * Constructor for ControllerComponent
-     */
+    /// Kontroller konstruktora
     public ControllerComponent(ViewComponent viewComponent) {
         this.viewComponent = viewComponent;
     }
 
     /**
-     * command manager, process the command and validate
-     * @param command, parameters in string
+     * A parancsok alapján futtatja a függvényeket és menedzseli ezeket.
+     *
+     * @param command Ez egy parancs, amit a felhasználó ír a játék során
      */
-
     public void ArgumentManagement(String command) {
         if(!viewComponent.validate(command)) {
             viewComponent.unsuccessfulCommand();
@@ -231,10 +229,10 @@ public class ControllerComponent {
         }
     }
     /**
-     * gameloop will handle the round of the game, it will decide when is whos turn and also take turn to every player
-     * it also maintains the round variable
+     * A játék fő szállát valósítja meg. Körökre van osztva a játék, utána playerenként minden rovarral/gomával lép 1-et
      */
     public void gameLoop() {
+        //játékos szám lekérdezés
         //rovarnal a rovarasze-e a rovar nincs ellenorizve, gombanal szinten
         int round = 0;
         //game round
@@ -392,24 +390,21 @@ public class ControllerComponent {
     }
 
     /**
-     *  Egy adott tektonra növeszt gombafonalat egy gombatest, attól függően,
-     *  hogy van-e a tekton szomszédján ugyanannak a gombatestnek fonala.
-     *  Ha nem a gombafonal végét növeszti, akkor egy új ágat hoz létre arra a tektonra.
-     * @param mtC a hosszabítani kívánt fonal
-     * @param target a Tekton ahová szeretnénk fonalat
-     * @param newThread the thread id in string
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param mtC MushroomThread amelyet továbbnövesztünk
+     * @param target Tekton melyre továbbnő a thread
+     * @param newThread Az új thread ID-ja
      */
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
-        GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
         mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target);
+        GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
     }
 
     /**
-     * A GombaTest növeszthető-e a Tektonon. A GombaTestet növesztéshez,
-     * Szükséges három darab spóra és rendelkezik gombaFonal a Tektonon.
-     * @param ms tárolja a létre hozott gombaTestet
-     * @param target the tekton where you grow
-     * @param id the mushroom id in string
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param ms A gombának a faja.
+     * @param target Tekton amelyen növeszteni szeretné a játékos
+     * @param id Az új gomba ID-ja
      */
     public void growMushroom(MushroomSpecies ms, TektonController target, String id) {
         target.growMushroomBody(ms);
@@ -418,10 +413,10 @@ public class ControllerComponent {
     }
 
     /**
-     * use the given mushroom to spread spore on the target tekton
-     * @param source the mushroom which spreads
-     * @param target the tekton u want to spread
-     * @param type the type of spore
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param source MushroomBody amelyből lőjjük a spórát
+     * @param target Tekton amelyre lőjjük a spórát
+     * @param type Spóra típusa
      */
     public void spreadSpore(MushroomBodyController source, TektonController target, String type) {
         Random rnd = new Random();
@@ -444,9 +439,9 @@ public class ControllerComponent {
     }
 
     /**
-     * Absorb the insect on the tekton
-     * @param source the thread u choose to absorb
-     * @param newMushroom the new mushroom id
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param source A gombafonal amelynél szívja fel a player a rovart.
+     * @param newMushroom Az új gomba ID-je
      */
     public void absorbInsect(MushroomThreadController source, String newMushroom) {
         MushroomBody mb = source.absorbInsect();
@@ -455,10 +450,9 @@ public class ControllerComponent {
     }
 
     /**
-     * Tekton kettétörese, ha a Tektonon van Gombafonal és Spóra akkor azokat eltávolítjuk a Tektonról
-     * Létre hozzuk egy új Tektont és ezt az új létre hozott tekton hozzáadjuk a
-     * jelenlegi Tekton neighborhozÉs az új létre hozott Tektonnak is hozzáadjuk a
-     * jelenlegi Tektont mint neighborként
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param source A tekton amelyet eltörünk
+     * @param tektonID Az új tekton id-ja
      */
     private void breakTekton(TektonController source, String tektonID) {
         for(Spore spore : source.toView().getSpores())
@@ -470,15 +464,17 @@ public class ControllerComponent {
     }
 
     /**
-     * A függvény megmondja a rovar elvágja-e a gombaFonalat.
-     * @param target, gombaFonal, amit a rovar elvágna.
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param insect A rovar amellyel vágjuk a fonalat
+     * @param target A fonal amelyet elvágunk
      */
     public void cut(InsectController insect, MushroomThreadController target) {
         insect.insectCut((MushroomThread) target);
     }
 
     /**
-     * A rovar megeszik a tektonon elhelyezett spórát.
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param insect A rovar amely enni fog
      */
     public void eat(InsectController insect) {
         GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
@@ -494,19 +490,17 @@ public class ControllerComponent {
     }
 
     /**
-     * függvény megmondja, hogy a paraméterként kapott Tektonra lehet a rovar átmenni.
-     * Vissza ad egy boolean értéket, True ad vissza, ha tekton távolsága a rovar sebbességével elérhető
-     * akkor a paraméterként kapott tektonra helyezzük át a rovart,
-     * és a jelenlegi tektonról pedig eltávolítjuk.
-     * Egyébként pedig False értéket ad vissza.
-     * @param target, hogy erre a tektonra tud-e a rovar átmenni
+     * Ez egy függvény amely továbbítja a modellbeli részhez.
+     * @param insect A rovar amely mozogni fog
+     * @param target A tekton, amelyre mozogni fog
      */
     public void move(InsectController insect, TektonController target) {
         insect.insectMove((Tekton) target);
     }
 
     /**
-     * runs the command in the given file
+     * Betölt egy fájlt a GameModelbe
+     * @param file A fájl amit betöltnük
      */
     public void load(File file) {
         try {

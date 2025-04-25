@@ -6,13 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsectSpecies {
-
+    /**
+     * Ebben tárolja a rovarokat
+     */
     private final List<Insect> insects;
 
     public InsectSpecies() {
         insects = new ArrayList<>();
     }
 
+    /**
+     * Hozzáadja a rovarat a Listához
+     * @param insect
+     */
     public void addInsect(Insect insect) {
         insects.add(insect);
     }
@@ -24,7 +30,10 @@ public class InsectSpecies {
     public List<Insect> getInsects() {
         return insects;
     }
-
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         if(insects.isEmpty())

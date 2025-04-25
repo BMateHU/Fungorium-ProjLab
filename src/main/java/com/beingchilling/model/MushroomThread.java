@@ -98,10 +98,18 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         }
     }
 
+    /**
+     * Eggyel csökkenti a life-ot
+     */
     public void lifeReduce() {
         life--;
     }
 
+    /**
+     * Felszívja a rovarat a tektonról, és növesz egy gombát
+     * @return Mushrommbody amelyiket növesztette
+     * @throws NullPointerException
+     */
     public MushroomBody absorbInsect() throws NullPointerException {
         if(location.getInsect() == null){
             throw new NullPointerException("Nincs Insect");
@@ -113,6 +121,9 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
     }
 
+    /**
+     * Az egész gombafonalat törli
+     */
     public void destroy() {
         if(prevGrowed != null)
             prevGrowed.nextGrowed.remove(this);
@@ -127,6 +138,10 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         location = null;
     }
 
+    /**
+     * A kiválasztott threadről eltávolítja
+     * @param thread
+     */
     public void remove(MushroomThread thread) {
         nextGrowed.remove(thread);
     }
@@ -157,6 +172,10 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         return this;
     }
 
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         StringBuilder prev = new StringBuilder("; prev");

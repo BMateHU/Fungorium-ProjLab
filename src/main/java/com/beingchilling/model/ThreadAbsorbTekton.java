@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadAbsorbTekton extends Tekton {
-
+    /**
+     * Mindenképp felszívja a fonalat
+     */
     @Override
     public void absorb() {
         List<MushroomThread> temp = new ArrayList<>();
@@ -19,7 +21,10 @@ public class ThreadAbsorbTekton extends Tekton {
             getThreads().remove(mt);
         }
     }
-
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("type=TA");
