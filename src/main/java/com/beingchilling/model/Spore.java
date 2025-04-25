@@ -45,7 +45,10 @@ public class Spore implements SporeController, SporeView {
     public SporeController toController() {
         return this;
     }
-
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         return "Nutrient:"+ sporeNutrient +"; type:N";

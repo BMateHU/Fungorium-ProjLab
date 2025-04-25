@@ -22,7 +22,10 @@ public class MuteSpore extends Spore {
     public void sporeEffect(Insect r) {
         r.muteEffect();
     }
-
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         return "Nutrient:"+ sporeNutrient +"; type:M";

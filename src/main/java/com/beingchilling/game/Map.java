@@ -7,5 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Map {
+    /**
+     * Mapon lévő tektonok listája HashMapban
+     */
     public HashMap<String, Tekton> tektonList = new HashMap<>();
 }

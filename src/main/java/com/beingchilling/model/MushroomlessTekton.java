@@ -14,6 +14,10 @@ public class MushroomlessTekton extends Tekton{
         return false;
     }
 
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("type=MS");
