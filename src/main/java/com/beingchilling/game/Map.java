@@ -7,5 +7,5 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Map {
-    HashMap<String, Tekton> tektonList = new HashMap<>();
+    public HashMap<String, Tekton> tektonList = new HashMap<>();
 }
