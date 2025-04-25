@@ -5,16 +5,27 @@ import java.util.HashMap;
 import java.util.Set;
 
 
-
+/**
+ * Generikus osztály mind a két irányban HashMap
+ * @param <K> kulcs
+ * @param <V> érték
+ */
 public class BiMap<K, V> {
 
+    /**
+     * A map kulcs alapján tárolunk értékeket
+     */
     private final HashMap<K, V> forwardMap = new HashMap<>();
+
+    /**
+     * A map értké alapján tároljuk a kulcsokat
+     */
     private final HashMap<V, K> backwardMap = new HashMap<>();
 
     /**
-     * Associates the specified value with the specified key in this map.
-     * @param key the key
-     * @param value the value
+     * A mapba rakja a megadott kulcsot és értékét
+     * @param key kulcs
+     * @param value ért
      */
     public void put(K key, V value)
     {
@@ -43,8 +54,8 @@ public class BiMap<K, V> {
     }
 
     /**
-     * Remove the pair from the map by key
-     * @param key the value
+     * Kulcs szerint törli a Mapból az értéket
+     * @param key
      */
     public void removeByK(K key)
     {
@@ -53,8 +64,8 @@ public class BiMap<K, V> {
     }
 
     /**
-     * Remove the pair from the map by value
-     * @param value the value
+     * Érték szerint törli a Mapból a kulcsot
+     * @param value
      */
     public void removeByV(V value)
     {
@@ -62,9 +73,20 @@ public class BiMap<K, V> {
         backwardMap.remove(value);
     }
 
-    /**
-     * return all the keys in the map
-     */
+
+    public void getKOrDefault(V value) {
+        backwardMap.getOrDefault(value, null);
+    }
+
+    public void getVOrDefault(K key) {
+        forwardMap.getOrDefault(key, null);
+    }
+
+    public void clear() {
+        forwardMap.clear();
+        backwardMap.clear();
+    }
+
     public Set<K> keySet()
     {
         return forwardMap.keySet();

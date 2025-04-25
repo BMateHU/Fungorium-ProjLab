@@ -195,6 +195,9 @@ public class Insect implements InsectController, InsectView {
         insectSpeed = 2;
     }
 
+    /**
+     * Destruktor
+     */
     public void destroy() {
         //need to delete it from insect species and when deleting dont forget to get the points out
         location.addInsect(null);
@@ -207,10 +210,18 @@ public class Insect implements InsectController, InsectView {
         return insectSpeed;
     }
 
+    /**
+     * Eltudja-e vágni a gombaFonalat.
+     * @return boolean
+     */
     public boolean canCutThread() {
         return cutThread;
     }
 
+    /**
+     * Meg tudja-e enni a spórát
+     * @return boolean
+     */
     public boolean canEatSpore() {
         return eatSpore;
     }
@@ -235,6 +246,10 @@ public class Insect implements InsectController, InsectView {
         return this;
     }
 
+    /**
+     * Kimeneti nyelvvel megeggyező stringgé írja át az adott objectet.
+     * @return A szöveg amit kikéne írni
+     */
     @Override
     public String toString() {
         return "speed="+insectSpeed+"; cancut="+cutThread+"; caneat="+eatSpore+"; " +
