@@ -117,9 +117,9 @@ public class ControllerComponent {
                     break;
                 case "/addmush":
                     MushroomBody newMushroom = new MushroomBody(GameModel.map.tektonList.get(words[4]));
-                    if(words.length > 4) {
+                    if(words.length > 5) {
                         newMushroom.setBodyAge(Integer.parseInt(words[5]));
-                        if(words.length > 5) {
+                        if(words.length > 6) {
                             newMushroom.setSporeNumber(Integer.parseInt(words[6]));
                         }
                     }
@@ -217,6 +217,8 @@ public class ControllerComponent {
                     break;
                 case "/cut":
                     //((Insect)GameModel.gameObjects.getV(words[1])).insectCut(((MushroomThread)GameModel.gameObjects.getV(words[2])));
+                    if((MushroomThread)GameModel.gameObjects.getV(words[2]) == null)
+                        break;//cause meaning rovar tring to cut a not existed fonal
                     cut((Insect)GameModel.gameObjects.getV(words[1]),(MushroomThread)GameModel.gameObjects.getV(words[2]));
                     break;
                 case "/eat":
@@ -484,6 +486,8 @@ public class ControllerComponent {
      * @param insect A rovar amely enni fog
      */
     public void eat(InsectController insect) {
+        if(insect.toView().getLocation().getSpores().isEmpty())
+            return;
         GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
         insect.insectEat();
         for(Tekton t : insect.toView().getLocation().getNeighbors())
