@@ -9,7 +9,7 @@
 /connectthread f0 f1
 /addspore t2 s1
 /addspore t2 s2
-/spreadspore m1 t2
-/growmush test1 m2 t2
+/spreadspore m1 t2 N
+/growmush P1 m2 t2
 /growthread f1 f2 t3
 /showMap

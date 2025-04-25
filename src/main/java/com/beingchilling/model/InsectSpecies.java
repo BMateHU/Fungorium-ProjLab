@@ -40,9 +40,15 @@ public class InsectSpecies {
             return "type=R";
 
         StringBuilder own = new StringBuilder("own=");
+        int count = 0;
         for(Insect insect : insects){
+            if(insect == null)
+                continue;
+            count++;
             own.append(GameModel.gameObjects.getK(insect)).append(", ");
         }
+        if(count == 0)
+            return "type=R";
         own.delete(own.length()-2, own.length());
         return "type=R; " + own;
     }
