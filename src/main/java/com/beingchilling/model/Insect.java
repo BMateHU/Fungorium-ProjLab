@@ -77,6 +77,7 @@ public class Insect implements InsectController, InsectView {
     public void insectEat() throws ArrayIndexOutOfBoundsException {
         if(eatSpore && !location.getSpores().isEmpty()) {
             Spore ss = location.popSpore();
+            currentNutrient += ss.getSporeNutrient();
             ss.sporeEffect(this);
         }
         else {

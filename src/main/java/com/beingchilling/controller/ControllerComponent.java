@@ -27,8 +27,10 @@ public class ControllerComponent {
     }
 
     public void ArgumentManagement(String command) {
-        if(!viewComponent.validate(command))
-            return; // i guess exception
+        if(!viewComponent.validate(command)) {
+            viewComponent.unsuccessfulCommand();
+            return;
+        }
         String[] words = command.strip().split(" ");
             switch(words[0]) {
                 case "/addplayer":
@@ -177,8 +179,6 @@ public class ControllerComponent {
                     }
                     break;
                 case "/growthread":
-                    MushroomThread newThread3 = new MushroomThread();
-                    GameModel.gameObjects.put(words[2], newThread3);
                     growThread((MushroomThread) GameModel.gameObjects.getV(words[1]), GameModel.map.tektonList.get(words[3]), words[2]);
                     break;
                 case "/growmush":
