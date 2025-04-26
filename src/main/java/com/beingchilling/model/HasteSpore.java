@@ -28,6 +28,6 @@ public class HasteSpore extends Spore {
      */
     @Override
     public String toString() {
-        return "Nutrient:"+ sporeNutrient +"; type:H";
+        return "nutrient="+ sporeNutrient +"; type:H";
     }
 }

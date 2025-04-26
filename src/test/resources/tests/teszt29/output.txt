@@ -1,4 +1,4 @@
 t1(type=N)
-t2(type=T)
-t3(type=L; threads=f3)
-f3(life=3; lifeSupport=false; tekton=t3)
+t2(type=TA)
+t3(type=LS; threads=f3)
+f3(life=3; lifesupport=true; tekton=t3)

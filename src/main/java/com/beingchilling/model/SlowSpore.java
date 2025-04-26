@@ -28,6 +28,6 @@ public class SlowSpore extends Spore {
      */
     @Override
     public String toString() {
-        return "Nutrient:"+ sporeNutrient +"; type:S";
+        return "nutrient="+ sporeNutrient +"; type:S";
     }
 }

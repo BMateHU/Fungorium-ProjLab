@@ -67,7 +67,6 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         if(target.addThread(MT2)){
             this.addThread(MT2);
             return true;
-
         }
         return false;
     }
@@ -86,18 +85,34 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
     public void disconnectThread() {
         if(prevGrowed == null){
-            return;//maybe need throw
+            return;
         }
         prevGrowed.nextGrowed.remove(this);
         prevGrowed = null;
-        for(MushroomThread thread : nextGrowed){
-            if(thread.getLocation().getBody() != null)
-                return;
-        }
-        for(MushroomThread thread : nextGrowed){
-            thread.lifeSupport = false;
-        }
+        if(hasMush(nextGrowed) || this.location.getBody() != null)
+            return;
+        else
+            setLifeSupportForNext(this,false);
     }
+
+    private void setLifeSupportForNext(MushroomThread t, boolean b)
+    {
+        t.setLifeSupport(b);
+        for(MushroomThread thread : t.nextGrowed)
+            setLifeSupportForNext(thread, b);
+    }
+    private boolean hasMush(List<MushroomThread> l)
+    {
+        for(MushroomThread t : l)
+        {
+            if(t.location.getBody() != null)
+                return true;
+            else
+                hasMush(t.nextGrowed);
+        }
+        return false;
+    }
+
 
     /**
      * Eggyel csökkenti a life-ot

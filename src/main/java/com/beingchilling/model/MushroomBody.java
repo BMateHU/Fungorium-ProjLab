@@ -146,6 +146,6 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      */
     @Override
     public String toString() {
-        return "Age="+bodyAge+"; Spore="+sporeNumber+"; tekton="+ GameModel.gameObjects.getK(location);
+        return "Age="+bodyAge+"; spore="+sporeNumber+"; tekton="+ GameModel.gameObjects.getK(location);
     }
 }
