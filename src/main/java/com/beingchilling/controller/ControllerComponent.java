@@ -487,6 +487,15 @@ public class ControllerComponent {
             return;
         GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
         insect.insectEat();
+        for(Tekton t : insect.toView().getLocation().getNeighbors())
+        {
+            if(!GameModel.rovarasz.containsKey(t.getInsect()))
+            {
+                GameModel.gameObjects.put(GameModel.gameObjects.getK(insect)+".clone",t.getInsect());
+                GameModel.rovarasz.put(t.getInsect(),GameModel.rovarasz.get(insect));
+                GameModel.rovarasz.get(insect).addInsect(t.getInsect());
+            }
+        }
     }
 
     /**

@@ -99,8 +99,8 @@ public class TesztMain {
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                log.info("Hanyadik teszt: " + tests);
-                log.info("Teszt neve: " + dir.getName());
+                //log.info("Hanyadik teszt: " + tests);
+                //log.info("Teszt neve: " + dir.getName());
                 beforeTests();
                 interpretCommands(dir.getAbsolutePath() + "/" + commandFile);
                 boolean result = translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile);
@@ -109,6 +109,7 @@ public class TesztMain {
                     try {
                         FileWriter fw = new FileWriter(resultFile);
                         fw.write("Test passed");
+                        //log.info(dir.getName()+" test passed");
                         fw.close();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -118,6 +119,7 @@ public class TesztMain {
                     try {
                         FileWriter fw = new FileWriter(resultFile);
                         fw.write("Test failed");
+                        log.info(dir.getName()+" test failed");
                         for(Object o : GameModel.gameObjects.valueSet()) {
                             fw.append(o.toString() + "\n");
                         }
