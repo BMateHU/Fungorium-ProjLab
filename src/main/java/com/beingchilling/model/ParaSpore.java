@@ -27,6 +27,6 @@ public class ParaSpore extends Spore {
      * @return A szöveg amit kikéne írni
      */
     public String toString() {
-        return "Nutrient:"+ sporeNutrient +"; type:P";
+        return "nutrient="+ sporeNutrient +"; type:P";
     }
 }

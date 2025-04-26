@@ -117,6 +117,8 @@ public class ControllerComponent {
                     break;
                 case "/addmush":
                     MushroomBody newMushroom = new MushroomBody(GameModel.map.tektonList.get(words[4]));
+                    newMushroom.setBodyAge(3);
+                    newMushroom.setSporeNumber(3);
                     if(words.length > 5) {
                         newMushroom.setBodyAge(Integer.parseInt(words[5]));
                         if(words.length > 6) {
@@ -130,6 +132,7 @@ public class ControllerComponent {
 
                     GameModel.map.tektonList.get(words[4]).addMushroom(newMushroom);
                     MushroomThread newThread = new MushroomThread();
+                    newThread.setLifeSupport(true);
                     GameModel.gameObjects.put(words[3], newThread);
                     GameModel.map.tektonList.get(words[4]).addThread(newThread);
                     break;
@@ -154,11 +157,8 @@ public class ControllerComponent {
                     break;
                 case "/addthread":
                     MushroomThread newThread2 = new MushroomThread();
-                    GameModel.map.tektonList.get(words[1]).addThread(newThread2);
-                    GameModel.gameObjects.put(words[2], newThread2);
-                    newThread2.getLocation();
-
-                    ((MushroomThread)GameModel.gameObjects.getV(words[2])).getLocation();
+                    if(GameModel.map.tektonList.get(words[1]).addThread(newThread2))
+                        GameModel.gameObjects.put(words[2], newThread2);
                     break;
                 case "/setneighbour":
                     GameModel.map.tektonList.get(words[1]).addNeighbor(GameModel.map.tektonList.get(words[2]));
@@ -403,8 +403,8 @@ public class ControllerComponent {
      * @param newThread Az új thread ID-ja
      */
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
-        mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target);
-        GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
+        if(mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target))
+            GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
     }
 
     /**
@@ -414,9 +414,13 @@ public class ControllerComponent {
      * @param id Az új gomba ID-ja
      */
     public void growMushroom(MushroomSpecies ms, TektonController target, String id) {
-        target.growMushroomBody(ms);
-        GameModel.gameObjects.put(id, ms.checkMushroomBody().getLast());
-        GameModel.gombasz.put(ms.checkMushroomBody().getLast(),ms);
+        if(target.growMushroomBody(ms)) {
+            GameModel.gameObjects.put(id, ms.checkMushroomBody().getLast());
+            GameModel.gombasz.put(ms.checkMushroomBody().getLast(), ms);
+        }
+        else {
+            System.out.println("Nem sikerült");
+        }
     }
 
     /**
@@ -427,21 +431,28 @@ public class ControllerComponent {
      */
     public void spreadSpore(MushroomBodyController source, TektonController target, String type) {
         Random rnd = new Random();
-        Spore sp = switch (type) {
-            case "S" -> new SlowSpore(rnd.nextInt(10));
-            case "H" -> new HasteSpore(rnd.nextInt(10));
-            case "M" -> new MuteSpore(rnd.nextInt(10));
-            case "P" -> new ParaSpore(rnd.nextInt(10));
-            case "C" -> new CloneSpore(rnd.nextInt(10));
-            default -> new Spore(rnd.nextInt(10));
-        };
-        int i = 0;
-        while(true) {
-            Object o = GameModel.gameObjects.getV(("s" + i++));
-            if(o == null)
-                break;
+        Spore sp;
+        if(GameModel.randomSwitch) {
+            sp = switch (type) {
+                case "S" -> new SlowSpore(rnd.nextInt(10));
+                case "H" -> new HasteSpore(rnd.nextInt(10));
+                case "M" -> new MuteSpore(rnd.nextInt(10));
+                case "P" -> new ParaSpore(rnd.nextInt(10));
+                case "C" -> new CloneSpore(rnd.nextInt(10));
+                default -> new Spore(rnd.nextInt(10));
+            };
         }
-        GameModel.gameObjects.put(("s" + i), sp);
+        else {
+            sp = switch (type) {
+                case "S" -> new SlowSpore(5);
+                case "H" -> new HasteSpore(5);
+                case "M" -> new MuteSpore(5);
+                case "P" -> new ParaSpore(5);
+                case "C" -> new CloneSpore(5);
+                default -> new Spore(5);
+            };
+        }
+        GameModel.gameObjects.put((GameModel.gameObjects.getK((MushroomBody) source) + "_spore" + source.toView().getSporeNumber()), sp);
         source.spreadSpore((Tekton)target, sp);
     }
 
@@ -454,6 +465,7 @@ public class ControllerComponent {
         MushroomBody mb = source.absorbInsect();
         GameModel.gameObjects.put(newMushroom, mb);
         GameModel.gombasz.put(mb,GameModel.gombasz.get(source.checkOwner()));
+        GameModel.gombasz.get(source.checkOwner()).addMushroomBody(mb);
     }
 
     /**
@@ -462,12 +474,15 @@ public class ControllerComponent {
      * @param tektonID Az új tekton id-ja
      */
     private void breakTekton(TektonController source, String tektonID) {
-        for(Spore spore : source.toView().getSpores())
-            GameModel.gameObjects.removeByV(spore);
-        for(MushroomThread mt : source.toView().getThreads())
-            GameModel.gameObjects.removeByV(mt);
         Tekton newTekton = source.tektonBreak();
-        GameModel.map.tektonList.put(tektonID, newTekton);
+        if(newTekton != null) {
+            for (Spore spore : source.toView().getSpores())
+                GameModel.gameObjects.removeByV(spore);
+            for (MushroomThread mt : source.toView().getThreads())
+                GameModel.gameObjects.removeByV(mt);
+            GameModel.map.tektonList.put(tektonID, newTekton);
+            GameModel.gameObjects.put(tektonID, newTekton);
+        }
     }
 
     /**
@@ -486,8 +501,14 @@ public class ControllerComponent {
     public void eat(InsectController insect) {
         if(insect.toView().getLocation().getSpores().isEmpty())
             return;
-        GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
-        insect.insectEat();
+        Spore s = insect.toView().getLocation().getSpores().getFirst();
+        try {
+            insect.insectEat();
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            System.out.println("Nem tud enni!");
+            return;
+        }
+        GameModel.gameObjects.removeByV(s);
         for(Tekton t : insect.toView().getLocation().getNeighbors())
         {
             if(!GameModel.rovarasz.containsKey(t.getInsect()))

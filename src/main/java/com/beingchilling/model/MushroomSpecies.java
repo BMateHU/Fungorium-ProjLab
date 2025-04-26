@@ -41,13 +41,13 @@ public class MushroomSpecies {
     @Override
     public String toString() {
         if(mushroomBodies.isEmpty())
-            return "Type=G";
+            return "type=G";
 
-        StringBuilder own = new StringBuilder("Own=");
+        StringBuilder own = new StringBuilder("own=");
         for(MushroomBody mushroomBody : mushroomBodies){
             own.append(GameModel.gameObjects.getK(mushroomBody)).append(", ");
         }
         own.delete(own.length()-2, own.length());
-        return "Type=G; " + own;
+        return "type=G; " + own;
     }
 }

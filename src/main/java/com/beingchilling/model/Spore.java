@@ -51,6 +51,6 @@ public class Spore implements SporeController, SporeView {
      */
     @Override
     public String toString() {
-        return "Nutrient:"+ sporeNutrient +"; type:N";
+        return "nutrient="+ sporeNutrient +"; type=N";
     }
 }

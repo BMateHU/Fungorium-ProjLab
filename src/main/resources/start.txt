@@ -1,0 +1,141 @@
+/addtekton t11
+/addtekton t12
+/addtekton t13
+/addtekton t14
+/addtekton t15
+/addtekton t16
+/addtekton t17
+/addtekton t21
+/addtekton t22
+/addtekton t23
+/addtekton t24
+/addtekton t25
+/addtekton t26
+/addtekton t27
+/addtekton t31
+/addtekton t32
+/addtekton t33
+/addtekton t34
+/addtekton t35
+/addtekton t36
+/addtekton t37
+/addtekton t41
+/addtekton t42
+/addtekton t43
+/addtekton t44
+/addtekton t45
+/addtekton t46
+/addtekton t47
+/addtekton t51
+/addtekton t52
+/addtekton t53
+/addtekton t54
+/addtekton t55
+/addtekton t56
+/addtekton t57
+/addtekton t61
+/addtekton t62
+/addtekton t63
+/addtekton t64
+/addtekton t65
+/addtekton t66
+/addtekton t67
+/addtekton t71
+/addtekton t72
+/addtekton t73
+/addtekton t74
+/addtekton t75
+/addtekton t76
+/addtekton t77
+/setneighbour t11 t12
+/setneighbour t12 t13
+/setneighbour t13 t14
+/setneighbour t14 t15
+/setneighbour t15 t16
+/setneighbour t16 t17
+/setneighbour t21 t22
+/setneighbour t22 t23
+/setneighbour t23 t24
+/setneighbour t24 t25
+/setneighbour t25 t26
+/setneighbour t26 t27
+/setneighbour t31 t32
+/setneighbour t32 t33
+/setneighbour t33 t34
+/setneighbour t34 t35
+/setneighbour t35 t36
+/setneighbour t36 t37
+/setneighbour t41 t42
+/setneighbour t42 t43
+/setneighbour t43 t44
+/setneighbour t44 t45
+/setneighbour t45 t46
+/setneighbour t46 t47
+/setneighbour t51 t52
+/setneighbour t52 t53
+/setneighbour t53 t54
+/setneighbour t54 t55
+/setneighbour t55 t56
+/setneighbour t56 t57
+/setneighbour t61 t62
+/setneighbour t62 t63
+/setneighbour t63 t64
+/setneighbour t64 t65
+/setneighbour t65 t66
+/setneighbour t66 t67
+/setneighbour t71 t72
+/setneighbour t72 t73
+/setneighbour t73 t74
+/setneighbour t74 t75
+/setneighbour t75 t76
+/setneighbour t76 t77
+/setneighbour t11 t21
+/setneighbour t12 t22
+/setneighbour t13 t23
+/setneighbour t14 t24
+/setneighbour t15 t25
+/setneighbour t16 t26
+/setneighbour t17 t27
+/setneighbour t21 t31
+/setneighbour t22 t32
+/setneighbour t23 t33
+/setneighbour t24 t34
+/setneighbour t25 t35
+/setneighbour t26 t36
+/setneighbour t27 t37
+/setneighbour t31 t41
+/setneighbour t32 t42
+/setneighbour t33 t43
+/setneighbour t34 t44
+/setneighbour t35 t45
+/setneighbour t36 t46
+/setneighbour t37 t47
+/setneighbour t41 t51
+/setneighbour t42 t52
+/setneighbour t43 t53
+/setneighbour t44 t54
+/setneighbour t45 t55
+/setneighbour t46 t56
+/setneighbour t47 t57
+/setneighbour t51 t61
+/setneighbour t52 t62
+/setneighbour t53 t63
+/setneighbour t54 t64
+/setneighbour t55 t65
+/setneighbour t56 t66
+/setneighbour t57 t67
+/setneighbour t61 t71
+/setneighbour t62 t72
+/setneighbour t63 t73
+/setneighbour t64 t74
+/setneighbour t65 t75
+/setneighbour t66 t76
+/setneighbour t67 t77
+/addplayer g1 G
+/addplayer g2 G
+/addplayer r1 R
+/addplayer r2 R
+/addmush g1 g1m1 g1m1f0 t42
+/addmush g2 g2m1 g2m1f0 t46
+/addinsect r1 r1i1 t41
+/addinsect r2 r2i1 t47
