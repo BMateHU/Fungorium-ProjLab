@@ -449,7 +449,7 @@ public class ControllerComponent {
      */
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
         if(mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target))
-            GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
+            GameModel.gameObjects.put(newThread, target.toView().getThreads().get(target.toView().getThreads().size()-1));
         else {
             System.out.println("Nem sikerült a fonal novesztes!");
             sikertelen_command = true;
@@ -478,8 +478,8 @@ public class ControllerComponent {
      */
     public void growMushroom(MushroomSpecies ms, TektonController target, String id) {
         if(target.growMushroomBody(ms)) {
-            GameModel.gameObjects.put(id, ms.checkMushroomBody().getLast());
-            GameModel.gombasz.put(ms.checkMushroomBody().getLast(), ms);
+            GameModel.gameObjects.put(id, ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1));
+            GameModel.gombasz.put(ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1), ms);
         }
         else {
             System.out.println("Nem sikerült");
@@ -580,7 +580,7 @@ public class ControllerComponent {
             sikertelen_command = true;
             return;
         }
-        Spore s = insect.toView().getLocation().getSpores().getFirst();
+        Spore s = insect.toView().getLocation().getSpores().get(insect.toView().getLocation().getSpores().size()-1);
         try {
             insect.insectEat();
         } catch (ArrayIndexOutOfBoundsException aioobe) {
