@@ -117,7 +117,7 @@ public class TesztMain {
                 else {
                     try {
                         resultFw.append(dir.getName()).append("\n");
-
+                        log.warning(dir.getName() + "\n");
                         FileWriter fw = new FileWriter(resultFile);
                         fw.write("Test failed\n");
                         FileReader fr = new FileReader(dir.getAbsolutePath() + "/" + expectedFile);
