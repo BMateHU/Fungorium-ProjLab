@@ -448,6 +448,20 @@ public class ControllerComponent {
             System.out.println("Nem sikerült a fonal novesztes!");
             sikertelen_command = true;
         }
+        for(Tekton t : ((Tekton) target).getNeighbors())
+        {
+            if(!t.getThreads().isEmpty())
+            {
+                for(MushroomThread MT:t.getThreads())
+                {
+                    if(!GameModel.gameObjects.containsV(MT))
+                    {
+                        String id = newThread + ".ran";
+                        GameModel.gameObjects.put(id,MT);
+                    }
+                }
+            }
+        }
     }
 
     /**
