@@ -133,24 +133,22 @@ public class ControllerComponent {
                     break;
                 case "/addspore":
                     int nutrient = 5;
-                    Tekton tekton = null;
-                    if(words.length > 2)
-                        tekton = GameModel.map.tektonList.get(words[1]);
-                    Spore spore;
+                    Tekton tekton = GameModel.map.tektonList.get(words[1]);
+                    Spore spore = new Spore(nutrient);
                     if(words.length > 4)
                         nutrient = Integer.parseInt(words[5]);
                     if(words.length > 3) {
                         spore = switch (words[3]) {
-                            case "S" -> new SlowSpore(nutrient); //only has ctor with sporeNutrient so why is sporeNutrient optional
+                            case "S" -> new SlowSpore(nutrient);
                             case "H" -> new HasteSpore(nutrient);
                             case "M" -> new MuteSpore(nutrient);
                             case "P" -> new ParaSpore(nutrient);
                             case "C" -> new CloneSpore(nutrient);
                             default -> new Spore(nutrient);
                         };
-                        GameModel.gameObjects.put(words[2], spore);
-                        tekton.addSpore(spore);
                     }
+                    GameModel.gameObjects.put(words[2], spore);
+                    tekton.addSpore(spore);
                     break;
                 case "/addthread":
                     MushroomThread newThread2 = new MushroomThread();
