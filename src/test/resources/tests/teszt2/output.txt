@@ -1,4 +1,3 @@
-move failed
 t1(type=N; insect=i1; neighbours=t2)
 t2(type=N; neighbours=t1, t3)
 t3(type=N; neighbours=t2)

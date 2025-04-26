@@ -82,16 +82,18 @@ public class TesztMain {
     }
 
     @Test
-    public void runTests() {
+    public void runTests() throws IOException {
         vc.setControllerComponent(cc);
-        int tests = 0;
         URL asd = this.getClass().getResource("tests");
         Assertions.assertNotNull(asd);
         File test = new File(asd.getPath());
         List<File> fileList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(test.listFiles())));
+
+        File resultDirs = new File(asd.getPath() + "/results.txt");
+        FileWriter resultFw = new FileWriter(resultDirs);
+        resultFw.write("Failed:\n");
         for(File dir : fileList) {
             if(dir.isDirectory()) {
-                tests++;
                 PrintStream out;
                 try {
                     out = new PrintStream(new FileOutputStream(dir.getAbsolutePath() + "/result.txt", true));
@@ -99,8 +101,6 @@ public class TesztMain {
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                //log.info("Hanyadik teszt: " + tests);
-                //log.info("Teszt neve: " + dir.getName());
                 beforeTests();
                 interpretCommands(dir.getAbsolutePath() + "/" + commandFile);
                 boolean result = translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile);
@@ -109,7 +109,6 @@ public class TesztMain {
                     try {
                         FileWriter fw = new FileWriter(resultFile);
                         fw.write("Test passed");
-                        //log.info(dir.getName()+" test passed");
                         fw.close();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -117,6 +116,8 @@ public class TesztMain {
                 }
                 else {
                     try {
+                        resultFw.append(dir.getName()).append("\n");
+
                         FileWriter fw = new FileWriter(resultFile);
                         fw.write("Test failed\n");
                         FileReader fr = new FileReader(dir.getAbsolutePath() + "/" + expectedFile);
@@ -157,6 +158,7 @@ public class TesztMain {
                 out.close();
             }
         }
+        resultFw.close();
     }
 
     private void beforeTests() {
