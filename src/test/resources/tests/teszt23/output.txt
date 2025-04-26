@@ -1,4 +1,3 @@
-grow mushroom failed
 t1(type=N; mushroom=m1; neighbours=t2)
 t2(type=N; spores=s1,s2,s3; neighbours=t1)
 s1(nutrient=5; type=N)
