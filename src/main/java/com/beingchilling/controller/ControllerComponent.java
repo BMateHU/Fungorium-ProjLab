@@ -443,9 +443,19 @@ public class ControllerComponent {
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
         if(mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target))
             GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
-        else {
-            System.out.println("Nem sikerült a fonal novesztes!");
-            sikertelen_command = true;
+        for(Tekton t : ((Tekton) target).getNeighbors())
+        {
+            if(!t.getThreads().isEmpty())
+            {
+                for(MushroomThread MT:t.getThreads())
+                {
+                    if(!GameModel.gameObjects.containsV(MT))
+                    {
+                        String id = newThread + ".ran";
+                        GameModel.gameObjects.put(id,MT);
+                    }
+                }
+            }
         }
     }
 

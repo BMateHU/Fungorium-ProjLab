@@ -63,8 +63,9 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
 
     public boolean growThread(Tekton target) {
+
         MushroomThread MT2 = new MushroomThread();
-        if(target.addThread(MT2)){
+        if(target.addThread(MT2) && (prevGrowed==null || target != prevGrowed.location)){
             this.addThread(MT2);
             return true;
         }
