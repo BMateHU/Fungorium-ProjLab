@@ -335,8 +335,11 @@ public class ControllerComponent {
                             case "/skip":
                                 skipped = true;
                                 break;
+                            case "/exit":
+                                System.exit(0);
+                                break;
                             default:
-                                if(words[0].contains("add"))
+                                if(words[0].contains("add") || words[0].contains("load"))
                                     System.out.println("Ezt nem csinálhatod!");
                                 else
                                     ArgumentManagement(beolvasottSor);
@@ -414,6 +417,9 @@ public class ControllerComponent {
                                 break;
                             case "/skip":
                                 skipped = true;
+                                break;
+                            case "/exit":
+                                System.exit(0);
                                 break;
                             default:
                                 if(words[0].contains("add"))
