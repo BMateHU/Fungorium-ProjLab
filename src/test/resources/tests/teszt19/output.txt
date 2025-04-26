@@ -1,4 +1,3 @@
-spread spore failed
 t1(type=N; neighbours=t2)
 t2(type=N; neighbours=t1)
 f0(life=3; lifesupport=true; t1)
