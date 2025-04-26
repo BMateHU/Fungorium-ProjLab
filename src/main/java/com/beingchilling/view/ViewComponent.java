@@ -26,7 +26,7 @@ public class ViewComponent {
     //validate is check if command correct -> then to controller, as new function HAVE TO which runs the methods which the command called
     public boolean validate(String command) {
         String[] words = command.strip().split(" ");
-        switch(words[0]) {
+        switch(words[0].toLowerCase()) {
             case "/addplayer":
                 if(words.length == 3 && ("R".equals(words[2]) || "G".equals(words[2])))
                     return true;
@@ -90,7 +90,7 @@ public class ViewComponent {
                 if(words.length == 3)
                     return true;
                 return false;
-            case "/showID", "/help", "/absorb", "/showMap":
+            case "/showid", "/help", "/absorb", "/showmap":
                 return true;
             case "/break":
                 if(words.length >= 3)
@@ -144,18 +144,18 @@ public class ViewComponent {
      * Ki írja az összes kommandokat helyes formátumban
      */
     public void help() {
-        System.out.println("Elérhető parancsok:");
-        System.out.println("/addplayer <player ID> <role> - Játékos hozzáadása (role: R - rovarász, G - gombász)");
-        System.out.println("/addtekton <tekton ID> [tekton type] - Tekton hozzáadása (default: N)");
-        System.out.println("/addinsect <player ID> <insect ID> <tekton ID> [effect] - Rovar hozzáadása tektonhoz (effect: S/H/M/P/C/N)");
-        System.out.println("/addmush <player ID> <mushroom ID> <thread ID> <tekton ID> [age] [spore] - Gombatest hozzáadása");
-        System.out.println("/addspore <tekton ID> <spore ID> [spore type] [nutrient] - Spóra hozzáadása tektonhoz");
-        System.out.println("/addthread <tekton ID> <thread ID> - Gombafonal hozzáadása tektonhoz");
-        System.out.println("/setneighbour <tekton1 ID> <tekton2 ID> - Tektonok szomszédságának beállítása");
-        System.out.println("/connectthread <thread1 ID> <thread2 ID> - Két fonal összekötése");
-        System.out.println("/showID - Jelenlegi objektumok ID-jainak kilistázása");
+        System.out.println("Összes parancs:");
+//        System.out.println("/addplayer <player ID> <role> - Játékos hozzáadása (role: R - rovarász, G - gombász)");
+//        System.out.println("/addtekton <tekton ID> [tekton type] - Tekton hozzáadása (default: N)");
+//        System.out.println("/addinsect <player ID> <insect ID> <tekton ID> [effect] - Rovar hozzáadása tektonhoz (effect: S/H/M/P/C/N)");
+//        System.out.println("/addmush <player ID> <mushroom ID> <thread ID> <tekton ID> [age] [spore] - Gombatest hozzáadása");
+//        System.out.println("/addspore <tekton ID> <spore ID> [spore type] [nutrient] - Spóra hozzáadása tektonhoz");
+//        System.out.println("/addthread <tekton ID> <thread ID> - Gombafonal hozzáadása tektonhoz");
+//        System.out.println("/setneighbour <tekton1 ID> <tekton2 ID> - Tektonok szomszédságának beállítása");
+//        System.out.println("/connectthread <thread1 ID> <thread2 ID> - Két fonal összekötése");
+        System.out.println("/showid - Jelenlegi objektumok ID-jainak kilistázása");
         System.out.println("/help - Parancslista megjelenítése");
-        System.out.println("/break <source tekton ID> <new tekton ID> [neighbours ...] - Tekton eltörése és új létrehozása");
+        //System.out.println("/break <source tekton ID> <new tekton ID> [neighbours ...] - Tekton eltörése és új létrehozása");
         System.out.println("/absorb [tekton ID ...] - Gombafonalak felszívása tektonon");
         System.out.println("/growthread <source thread ID> <new thread ID> <tekton ID> - Gombafonal növesztése");
         System.out.println("/growmush <player ID> <mushroom ID> <tekton ID> - Gombatest növesztése");
@@ -164,9 +164,9 @@ public class ViewComponent {
         System.out.println("/cut <insect ID> <thread ID> - Gombafonal elvágása rovarral");
         System.out.println("/eat <insect ID> - Rovar spórát eszik a tektonon");
         System.out.println("/move <insect ID> <tekton ID> - Rovar mozgatása másik tektonra");
-        System.out.println("/random on|off - Véletlenszerűség ki/be kapcsolása");
-        System.out.println("/load <file> - Előre megírt pálya betöltése");
-        System.out.println("/showMap - Jelenlegi pályaelemek kilistázása");
+        //System.out.println("/random on|off - Véletlenszerűség ki/be kapcsolása");
+        System.out.println("/load - Előre megírt pálya betöltése");
+        System.out.println("/showmap - Jelenlegi pályaelemek kilistázása");
     }
 
     /**

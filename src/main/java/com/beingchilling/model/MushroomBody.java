@@ -67,7 +67,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
                     //a sajat tektont es a kijelolt tektont kizarja
                     List<Tekton> validTargets = possibleTargets.stream()
                             .filter(t -> (t != this.location || t != tekton))
-                            .collect(Collectors.toList());
+                            .toList();
 
                     if (!validTargets.isEmpty()) {
                         //while ciklus vizsgalas
