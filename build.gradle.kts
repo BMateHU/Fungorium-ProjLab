@@ -10,12 +10,21 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = "com.beingchilling.Main"
+}
+
+tasks.withType(JavaExec::class) {
+    standardInput = System.`in`
+}
+
 tasks.withType(Jar::class) {
     manifest {
         attributes["Manifest-Version"] = version
         attributes["Main-Class"] = "com.beingchilling.Main"
     }
 }
+
 tasks.withType(Test::class) {
     testLogging.showStandardStreams = true
 }
