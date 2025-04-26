@@ -89,7 +89,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
                     if (!tekton.getSpores().isEmpty()) {
                         for (Tekton t : tekton.getNeighbors()) {
                             //listaban az elsore
-                            if (t != location && mushroomThread.growThread(t)) {
+                            if (t != location && mushroomThread.getNextGrowed().getLast().growThread(t)) {
                                 break;
                             }
                         }
