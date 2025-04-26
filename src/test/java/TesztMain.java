@@ -118,17 +118,41 @@ public class TesztMain {
                 else {
                     try {
                         FileWriter fw = new FileWriter(resultFile);
-                        fw.write("Test failed");
-                        log.info(dir.getName()+" test failed");
-                        for(Object o : GameModel.gameObjects.valueSet()) {
-                            fw.append(o.toString() + "\n");
+                        fw.write("Test failed\n");
+                        FileReader fr = new FileReader(dir.getAbsolutePath() + "/" + expectedFile);
+                        BufferedReader br = new BufferedReader(fr);
+                        if(!br.ready())
+                            Assertions.fail();
+
+                        fw.append("\nExpected:\n");
+                        List<String> ids = new ArrayList<>();
+
+                        while(br.ready()) {
+                            String expected = br.readLine();
+                            String[] eTrimmed = expected.trim().split("[()]");
+                            if (eTrimmed.length == 1) {
+                                String[] temp = expected.split(" ");
+                                if (temp[temp.length - 1].equals("failed")) {
+                                    fw.append("Unsuccessful command\n");
+                                    continue;
+                                }
+                            }
+                            ids.add(eTrimmed[0]);
+                            fw.append(eTrimmed[1]).append("\n");
+                        }
+
+                        fw.append("\nActual:\n");
+
+                        for(String str : ids) {
+                            Object o = GameModel.gameObjects.getV(str);
+                            if(o != null)
+                                fw.append(o.toString()).append("\n");
                         }
                         fw.close();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                } //not working :) valszeg azert mert csak a translateExpectedTo eredmenyet nezi, nem mas throwjat
-                //idk
+                }
                 System.setOut(System.out);
                 out.close();
             }
