@@ -462,6 +462,10 @@ public class ControllerComponent {
      */
     public void absorbInsect(MushroomThreadController source, String newMushroom) {
         MushroomBody mb = source.absorbInsect();
+        if (mb==null) {
+            System.out.println("Nem sikerült"); // maybe can change to not parad
+            return;
+        }
         GameModel.gameObjects.put(newMushroom, mb);
         GameModel.gombasz.put(mb,GameModel.gombasz.get(source.checkOwner()));
         GameModel.gombasz.get(source.checkOwner()).addMushroomBody(mb);

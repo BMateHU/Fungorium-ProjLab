@@ -130,11 +130,14 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         if(location.getInsect() == null){
             throw new NullPointerException("Nincs Insect");
         }
-        MushroomBody mb = new MushroomBody(location);
-        location.addMushroom(mb);
-        location.getInsect().destroy();
-        return mb;
-
+        if(!location.getInsect().canCutThread() && !location.getInsect().canEatSpore())
+        {
+            MushroomBody mb = new MushroomBody(location);
+            location.addMushroom(mb);
+            location.getInsect().destroy();
+            return mb;
+        }
+        return null;
     }
 
     /**
