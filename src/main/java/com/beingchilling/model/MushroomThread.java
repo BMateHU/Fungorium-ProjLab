@@ -127,8 +127,8 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * @throws NullPointerException
      */
     public MushroomBody absorbInsect() throws NullPointerException {
-        if(location.getInsect() == null){
-            throw new NullPointerException("Nincs Insect");
+        if(location.getInsect() == null || (location.getInsect().canCutThread() && location.getInsect().canEatSpore() && location.getInsect().getInsectSpeed() != 0)){
+            throw new NullPointerException("Nincs insect, vagy nem paralized");
         }
         if(!location.getInsect().canCutThread() && !location.getInsect().canEatSpore())
         {
