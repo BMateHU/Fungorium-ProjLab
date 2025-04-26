@@ -180,6 +180,7 @@ public class Insect implements InsectController, InsectView {
                 continue;
             Insect insectCloned = new Insect(this);
             t.addInsect(insectCloned);
+            insectCloned.setLocation(t);
             //GameModel.rovarasz.get(this).addInsect(insectCloned);
             return;
         }

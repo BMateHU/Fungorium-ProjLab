@@ -496,6 +496,7 @@ public class ControllerComponent {
             {
                 GameModel.gameObjects.put(GameModel.gameObjects.getK(insect)+".clone",t.getInsect());
                 GameModel.rovarasz.put(t.getInsect(),GameModel.rovarasz.get(insect));
+                GameModel.rovarasz.get(insect).addInsect(t.getInsect());
             }
         }
     }
