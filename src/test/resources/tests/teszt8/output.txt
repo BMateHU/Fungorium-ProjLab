@@ -1,5 +1,5 @@
-t1(type=N; insect=i1; threads=f1; neighbours=t2)
-t2(type=N; threads=f2; neighbours=t1, t3)
+t1(type=N; threads=f1; neighbours=t2)
+t2(type=N; insect=i1; threads=f2; neighbours=t1, t3)
 t3(type=N; threads=f3; neighbours=t2)
 f1(life=3; lifesupport=false; tekton=t1)
 f2(life=3; lifesupport=false; tekton=t2; next=f3)
