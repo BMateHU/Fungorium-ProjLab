@@ -461,14 +461,15 @@ public class ControllerComponent {
      * @param newMushroom Az új gomba ID-je
      */
     public void absorbInsect(MushroomThreadController source, String newMushroom) {
-        MushroomBody mb = source.absorbInsect();
-        if (mb==null) {
-            System.out.println("Nem sikerült"); // maybe can change to not parad
-            return;
+        try {
+            MushroomBody mb = source.absorbInsect();
+            GameModel.gameObjects.put(newMushroom, mb);
+            GameModel.gombasz.put(mb, GameModel.gombasz.get(source.checkOwner()));
+            GameModel.gombasz.get(source.checkOwner()).addMushroomBody(mb);
         }
-        GameModel.gameObjects.put(newMushroom, mb);
-        GameModel.gombasz.put(mb,GameModel.gombasz.get(source.checkOwner()));
-        GameModel.gombasz.get(source.checkOwner()).addMushroomBody(mb);
+        catch (NullPointerException npe) {
+            System.out.println(npe.getMessage());
+        }
     }
 
     /**
