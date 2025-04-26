@@ -1,5 +1,4 @@
-eat failed
-t1(type=N; insect=i1; spore=s1)
+t1(type=N; insect=i1; spores=s1)
 i1(speed=0; cancut=false; caneat=false; tekton=t1; nutrient=0)
-s1(nutrient=0; type=N)
+s1(nutrient=5; type=N)
 test1(type=R; own=i1)

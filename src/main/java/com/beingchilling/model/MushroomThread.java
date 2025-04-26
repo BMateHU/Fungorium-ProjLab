@@ -63,11 +63,11 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
 
     public boolean growThread(Tekton target) {
+
         MushroomThread MT2 = new MushroomThread();
-        if(target.addThread(MT2)){
+        if(target.addThread(MT2) && (prevGrowed==null || target != prevGrowed.location)){
             this.addThread(MT2);
             return true;
-
         }
         return false;
     }
@@ -77,8 +77,8 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * @return A gombatest amihez a fonal tartozik
      */
     public MushroomBody checkOwner(){
-        MushroomThread findowner = prevGrowed;
-        while(findowner != null){
+        MushroomThread findowner = this;
+        while(findowner.prevGrowed != null){
             findowner = findowner.prevGrowed;
         }
         return findowner.location.getBody();
@@ -86,18 +86,34 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
     public void disconnectThread() {
         if(prevGrowed == null){
-            return;//maybe need throw
+            return;
         }
         prevGrowed.nextGrowed.remove(this);
         prevGrowed = null;
-        for(MushroomThread thread : nextGrowed){
-            if(thread.getLocation().getBody() != null)
-                return;
-        }
-        for(MushroomThread thread : nextGrowed){
-            thread.lifeSupport = false;
-        }
+        if(hasMush(nextGrowed) || this.location.getBody() != null)
+            return;
+        else
+            setLifeSupportForNext(this,false);
     }
+
+    private void setLifeSupportForNext(MushroomThread t, boolean b)
+    {
+        t.setLifeSupport(b);
+        for(MushroomThread thread : t.nextGrowed)
+            setLifeSupportForNext(thread, b);
+    }
+    private boolean hasMush(List<MushroomThread> l)
+    {
+        for(MushroomThread t : l)
+        {
+            if(t.location.getBody() != null)
+                return true;
+            else
+                hasMush(t.nextGrowed);
+        }
+        return false;
+    }
+
 
     /**
      * Eggyel csökkenti a life-ot
@@ -112,14 +128,17 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      * @throws NullPointerException
      */
     public MushroomBody absorbInsect() throws NullPointerException {
-        if(location.getInsect() == null){
-            throw new NullPointerException("Nincs Insect");
+        if(location.getInsect() == null || (location.getInsect().canCutThread() && location.getInsect().canEatSpore() && location.getInsect().getInsectSpeed() != 0)){
+            throw new NullPointerException("Nincs insect, vagy nem paralized");
         }
-        MushroomBody mb = new MushroomBody(location);
-        location.addMushroom(mb);
-        location.getInsect().destroy();
-        return mb;
-
+        if(!location.getInsect().canCutThread() && !location.getInsect().canEatSpore())
+        {
+            MushroomBody mb = new MushroomBody(location);
+            location.addMushroom(mb);
+            location.getInsect().destroy();
+            return mb;
+        }
+        return null;
     }
 
     /**

@@ -1,6 +1,5 @@
-spread spore failed
-t1(type=N; neighbours=t2)
-t2(type=N; neighbours=t1)
-f0(life=3; lifesupport=true; t1)
-m1(Age=3; spore=0; t1)
+t1(type=N; mushroom=m1; threads=f0; neighbours=t2)
+t2(type=N; spores=m1_spore1; neighbours=t1)
+f0(life=3; lifesupport=true; tekton=t1)
+m1(Age=3; spore=0; tekton=t1)
 test1(type=G; own=m1)

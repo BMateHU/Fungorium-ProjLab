@@ -25,6 +25,6 @@ public class CloneSpore extends Spore {
      */
     @Override
     public String toString() {
-        return "Nutrient:"+ sporeNutrient +"; type:C";
+        return "nutrient="+ sporeNutrient +"; type:C";
     }
 }

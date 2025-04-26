@@ -180,6 +180,7 @@ public class Insect implements InsectController, InsectView {
                 continue;
             Insect insectCloned = new Insect(this);
             t.addInsect(insectCloned);
+            insectCloned.setLocation(t);
             //GameModel.rovarasz.get(this).addInsect(insectCloned);
             return;
         }
@@ -202,7 +203,7 @@ public class Insect implements InsectController, InsectView {
         //need to delete it from insect species and when deleting dont forget to get the points out
         location.addInsect(null);
         String id = GameModel.gameObjects.getK(this);
-        GameModel.rovarasz.remove(id);
+        GameModel.rovarasz.get(this).remove(this);
         GameModel.gameObjects.removeByK(id);
     }
 

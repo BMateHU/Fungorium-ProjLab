@@ -106,7 +106,7 @@ public class Tekton implements TektonController, TektonView {
      * @return vissza adja a Sporát
      */
     public Spore popSpore(){
-        return spore.removeFirst();
+        return spore.remove(0);
     }
     
     /**

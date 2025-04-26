@@ -6,7 +6,7 @@ import com.beingchilling.view.InsectView;
 
 public interface InsectController {
     boolean insectMove(Tekton tek);
-    void insectEat();
+    void insectEat() throws ArrayIndexOutOfBoundsException;
     boolean insectCut(MushroomThread mt);
     void hasteEffect();
     void slowEffect();

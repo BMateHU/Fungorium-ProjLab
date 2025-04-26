@@ -82,16 +82,18 @@ public class TesztMain {
     }
 
     @Test
-    public void runTests() {
+    public void runTests() throws IOException {
         vc.setControllerComponent(cc);
-        int tests = 0;
         URL asd = this.getClass().getResource("tests");
         Assertions.assertNotNull(asd);
         File test = new File(asd.getPath());
         List<File> fileList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(test.listFiles())));
+
+        File resultDirs = new File(asd.getPath() + "/results.txt");
+        FileWriter resultFw = new FileWriter(resultDirs);
+        resultFw.write("Failed:\n");
         for(File dir : fileList) {
             if(dir.isDirectory()) {
-                tests++;
                 PrintStream out;
                 try {
                     out = new PrintStream(new FileOutputStream(dir.getAbsolutePath() + "/result.txt", true));
@@ -99,8 +101,6 @@ public class TesztMain {
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                log.info("Hanyadik teszt: " + tests);
-                log.info("Teszt neve: " + dir.getName());
                 beforeTests();
                 interpretCommands(dir.getAbsolutePath() + "/" + commandFile);
                 boolean result = translateExpectedTo(dir.getAbsolutePath() + "/" + expectedFile);
@@ -116,21 +116,49 @@ public class TesztMain {
                 }
                 else {
                     try {
+                        resultFw.append(dir.getName()).append("\n");
+                        log.warning(dir.getName() + "\n");
                         FileWriter fw = new FileWriter(resultFile);
-                        fw.write("Test failed");
-                        for(Object o : GameModel.gameObjects.valueSet()) {
-                            fw.append(o.toString() + "\n");
+                        fw.write("Test failed\n");
+                        FileReader fr = new FileReader(dir.getAbsolutePath() + "/" + expectedFile);
+                        BufferedReader br = new BufferedReader(fr);
+                        if(!br.ready())
+                            Assertions.fail();
+
+                        fw.append("\nExpected:\n");
+                        List<String> ids = new ArrayList<>();
+
+                        while(br.ready()) {
+                            String expected = br.readLine();
+                            String[] eTrimmed = expected.trim().split("[()]");
+                            if (eTrimmed.length == 1) {
+                                String[] temp = expected.split(" ");
+                                if (temp[temp.length - 1].equals("failed")) {
+                                    fw.append("Unsuccessful command\n");
+                                    continue;
+                                }
+                            }
+                            ids.add(eTrimmed[0]);
+                            fw.append(eTrimmed[1]).append("\n");
+                        }
+
+                        fw.append("\nActual:\n");
+
+                        for(String str : ids) {
+                            Object o = GameModel.gameObjects.getV(str);
+                            if(o != null)
+                                fw.append(o.toString()).append("\n");
                         }
                         fw.close();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                } //not working :) valszeg azert mert csak a translateExpectedTo eredmenyet nezi, nem mas throwjat
-                //idk
+                }
                 System.setOut(System.out);
                 out.close();
             }
         }
+        resultFw.close();
     }
 
     private void beforeTests() {

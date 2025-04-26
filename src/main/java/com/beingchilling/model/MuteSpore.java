@@ -28,6 +28,6 @@ public class MuteSpore extends Spore {
      */
     @Override
     public String toString() {
-        return "Nutrient:"+ sporeNutrient +"; type:M";
+        return "nutrient="+ sporeNutrient +"; type:M";
     }
 }

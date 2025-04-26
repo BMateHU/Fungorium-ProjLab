@@ -67,7 +67,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
                     //a sajat tektont es a kijelolt tektont kizarja
                     List<Tekton> validTargets = possibleTargets.stream()
                             .filter(t -> (t != this.location || t != tekton))
-                            .collect(Collectors.toList());
+                            .toList();
 
                     if (!validTargets.isEmpty()) {
                         //while ciklus vizsgalas
@@ -89,7 +89,7 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
                     if (!tekton.getSpores().isEmpty()) {
                         for (Tekton t : tekton.getNeighbors()) {
                             //listaban az elsore
-                            if (t != location && mushroomThread.growThread(t)) {
+                            if (t != location && mushroomThread.getNextGrowed().get(mushroomThread.getNextGrowed().size()-1).growThread(t)) {
                                 break;
                             }
                         }
@@ -146,6 +146,6 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
      */
     @Override
     public String toString() {
-        return "Age="+bodyAge+"; Spore="+sporeNumber+"; tekton="+ GameModel.gameObjects.getK(location);
+        return "Age="+bodyAge+"; spore="+sporeNumber+"; tekton="+ GameModel.gameObjects.getK(location);
     }
 }

@@ -7,5 +7,5 @@
 /addthread t2 f1
 /connectthread f0 f1
 /addinsect P1 i1 t2 P
-/absorbinsect f2 m2
+/absorbinsect f1 m2
 /showMap

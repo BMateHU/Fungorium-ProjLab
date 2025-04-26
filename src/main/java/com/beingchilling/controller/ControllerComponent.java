@@ -23,6 +23,8 @@ public class ControllerComponent {
     /// A kontroller hozzáfér a viewhoz
     private final ViewComponent viewComponent;
 
+    private boolean sikertelen_command = false;
+
     /// Kontroller konstruktora
     public ControllerComponent(ViewComponent viewComponent) {
         this.viewComponent = viewComponent;
@@ -39,7 +41,7 @@ public class ControllerComponent {
             return;
         }
         String[] words = command.strip().split(" ");
-            switch(words[0]) {
+            switch(words[0].toLowerCase()) {
                 case "/addplayer":
                     if(Objects.equals(words[2], "R")) {
                         GameModel.gameObjects.put(words[1], new InsectSpecies());
@@ -117,9 +119,11 @@ public class ControllerComponent {
                     break;
                 case "/addmush":
                     MushroomBody newMushroom = new MushroomBody(GameModel.map.tektonList.get(words[4]));
-                    if(words.length > 4) {
+                    newMushroom.setBodyAge(3);
+                    newMushroom.setSporeNumber(3);
+                    if(words.length > 5) {
                         newMushroom.setBodyAge(Integer.parseInt(words[5]));
-                        if(words.length > 5) {
+                        if(words.length > 6) {
                             newMushroom.setSporeNumber(Integer.parseInt(words[6]));
                         }
                     }
@@ -130,37 +134,33 @@ public class ControllerComponent {
 
                     GameModel.map.tektonList.get(words[4]).addMushroom(newMushroom);
                     MushroomThread newThread = new MushroomThread();
+                    newThread.setLifeSupport(true);
                     GameModel.gameObjects.put(words[3], newThread);
                     GameModel.map.tektonList.get(words[4]).addThread(newThread);
                     break;
                 case "/addspore":
                     int nutrient = 5;
-                    Tekton tekton = null;
-                    if(words.length > 2)
-                        tekton = GameModel.map.tektonList.get(words[1]);
-                    Spore spore;
+                    Tekton tekton = GameModel.map.tektonList.get(words[1]);
+                    Spore spore = new Spore(nutrient);
                     if(words.length > 4)
                         nutrient = Integer.parseInt(words[5]);
                     if(words.length > 3) {
                         spore = switch (words[3]) {
-                            case "S" -> new SlowSpore(nutrient); //only has ctor with sporeNutrient so why is sporeNutrient optional
+                            case "S" -> new SlowSpore(nutrient);
                             case "H" -> new HasteSpore(nutrient);
                             case "M" -> new MuteSpore(nutrient);
                             case "P" -> new ParaSpore(nutrient);
                             case "C" -> new CloneSpore(nutrient);
                             default -> new Spore(nutrient);
                         };
-                        GameModel.gameObjects.put(words[2], spore);
-                        tekton.addSpore(spore);
                     }
+                    GameModel.gameObjects.put(words[2], spore);
+                    tekton.addSpore(spore);
                     break;
                 case "/addthread":
                     MushroomThread newThread2 = new MushroomThread();
-                    GameModel.map.tektonList.get(words[1]).addThread(newThread2);
-                    GameModel.gameObjects.put(words[2], newThread2);
-                    newThread2.getLocation();
-
-                    ((MushroomThread)GameModel.gameObjects.getV(words[2])).getLocation();
+                    if(GameModel.map.tektonList.get(words[1]).addThread(newThread2))
+                        GameModel.gameObjects.put(words[2], newThread2);
                     break;
                 case "/setneighbour":
                     GameModel.map.tektonList.get(words[1]).addNeighbor(GameModel.map.tektonList.get(words[2]));
@@ -169,7 +169,7 @@ public class ControllerComponent {
                 case "/connectthread":
                     ((MushroomThread)GameModel.gameObjects.getV(words[1])).addThread(((MushroomThread)GameModel.gameObjects.getV(words[2])));
                     break;
-                case "/showID":
+                case "/showid":
                     viewComponent.showId();
                     break;
                 case "/help":
@@ -187,7 +187,7 @@ public class ControllerComponent {
                         }
                     }
                     break;
-                case "/showMap":
+                case "/showmap":
                     viewComponent.showMap();
                     break;
                 case "/break":
@@ -210,17 +210,20 @@ public class ControllerComponent {
                     growMushroom(ms, target, words[2]);
                     break;
                 case "/spreadspore":
-                    spreadSpore((MushroomBody)GameModel.gameObjects.getV(words[1]), (Tekton)GameModel.gameObjects.getV(words[2]), words[3]);
+                    String type = "";
+                    if(words.length == 4)
+                        type = words[3];
+                    spreadSpore((MushroomBody)GameModel.gameObjects.getV(words[1]), (Tekton)GameModel.gameObjects.getV(words[2]), type);
                     break;
                 case "/absorbinsect":
                     absorbInsect((MushroomThread)GameModel.gameObjects.getV(words[1]), words[2]);
                     break;
                 case "/cut":
-                    //((Insect)GameModel.gameObjects.getV(words[1])).insectCut(((MushroomThread)GameModel.gameObjects.getV(words[2])));
+                    if((MushroomThread)GameModel.gameObjects.getV(words[2]) == null)
+                        break;//cause meaning rovar tring to cut a not existed fonal
                     cut((Insect)GameModel.gameObjects.getV(words[1]),(MushroomThread)GameModel.gameObjects.getV(words[2]));
                     break;
                 case "/eat":
-                    //((Insect)GameModel.gameObjects.getV(words[1])).insectEat();
                     eat((Insect)GameModel.gameObjects.getV(words[1]));
                     break;
                 case "/move":
@@ -242,6 +245,7 @@ public class ControllerComponent {
         //játékos szám lekérdezés
         //rovarnal a rovarasze-e a rovar nincs ellenorizve, gombanal szinten
         int round = 0;
+
         //game round
         for(round = 0; round < 20 ; round++) {
             //gombasz turn
@@ -257,7 +261,7 @@ public class ControllerComponent {
                     while(!skipped){
                         Scanner scanner = new Scanner(System.in);
 
-                        System.out.print("Gomba"+ round + "köre : ");
+                        System.out.print("Gomba "+ round + ". köre, " + GameModel.gameObjects.getK(mb) + " gombája: \n");
 
                         String beolvasottSor = scanner.nextLine();
 
@@ -269,12 +273,17 @@ public class ControllerComponent {
                                     break;
                                 }
                                 if (!absorbinsect) {
+                                    absorbinsect = true;
                                     ArgumentManagement(beolvasottSor);
-                                    species.addMushroomBody((MushroomBody) GameModel.gameObjects.getV(words[2]));
+                                    if(!sikertelen_command)
+                                        species.addMushroomBody((MushroomBody) GameModel.gameObjects.getV(words[2]));
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        absorbinsect = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                absorbinsect = true;
                                 break;
                             case "/growmush":
                                 if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
@@ -282,11 +291,15 @@ public class ControllerComponent {
                                     break;
                                 }
                                 if (!mushroomgrowed) {
+                                    mushroomgrowed = true;
                                     ArgumentManagement(beolvasottSor);
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        mushroomgrowed = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                mushroomgrowed = true;
                                 break;
                             case "/spreadspore":
                                 if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
@@ -294,11 +307,15 @@ public class ControllerComponent {
                                     break;
                                 }
                                 if (!spreadedspore) {
+                                    spreadedspore = true;
                                     ArgumentManagement(beolvasottSor);
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        spreadedspore = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                spreadedspore = true;
                                 break;
                             case "/growthread":
                                 if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
@@ -306,17 +323,27 @@ public class ControllerComponent {
                                     break;
                                 }
                                 if (!growedthread) {
+                                    growedthread = true;
                                     ArgumentManagement(beolvasottSor);
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        growedthread = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                growedthread = true;
                                 break;
                             case "/skip":
                                 skipped = true;
                                 break;
+                            case "/exit":
+                                System.exit(0);
+                                break;
                             default:
-                                System.out.println("Ezt nem csinálhatod!");
+                                if(words[0].contains("add") || words[0].contains("load"))
+                                    System.out.println("Ezt nem csinálhatod!");
+                                else
+                                    ArgumentManagement(beolvasottSor);
                         }
                     }
 
@@ -334,7 +361,7 @@ public class ControllerComponent {
 
                         Scanner scanner = new Scanner(System.in);
 
-                        System.out.print("Rovar" + round + "köre : ");
+                        System.out.print("Rovar " + round + ". köre, " + GameModel.gameObjects.getK(ins) + " rovara: \n");
 
                         String beolvasottSor = scanner.nextLine();
                         viewComponent.validate(beolvasottSor);
@@ -347,11 +374,15 @@ public class ControllerComponent {
                                     break;
                                 }
                                 if (!moved) {
+                                    moved = true;
                                     ArgumentManagement(beolvasottSor);
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        moved = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                moved = true;
                                 break;
                             case "/eat":
                                 if(!species.getInsects().contains(GameModel.gameObjects.getV(words[1]))) {
@@ -359,11 +390,15 @@ public class ControllerComponent {
                                     break;
                                 }
                                 if (!ate) {
+                                    ate = true;
                                     ArgumentManagement(beolvasottSor);
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        ate = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                ate = true;
                                 break;
                             case "/cut":
                                 if(!species.getInsects().contains(GameModel.gameObjects.getV(words[1]))) {
@@ -372,16 +407,26 @@ public class ControllerComponent {
                                 }
                                 if (!cut) {
                                     ArgumentManagement(beolvasottSor);
+                                    cut = true;
+                                    if(sikertelen_command) {
+                                        sikertelen_command = false;
+                                        cut = false;
+                                    }
                                 } else {
                                     System.out.println("Ezt már csináltad");
                                 }
-                                cut = true;
                                 break;
                             case "/skip":
                                 skipped = true;
                                 break;
+                            case "/exit":
+                                System.exit(0);
+                                break;
                             default:
-                                System.out.println("Ezt nem csinálhatod!");
+                                if(words[0].contains("add"))
+                                    System.out.println("Ezt nem csinálhatod!");
+                                else
+                                    ArgumentManagement(beolvasottSor);
                         }
 
                         ArgumentManagement(beolvasottSor);
@@ -403,8 +448,26 @@ public class ControllerComponent {
      * @param newThread Az új thread ID-ja
      */
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
-        mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target);
-        GameModel.gameObjects.put(newThread, target.toView().getThreads().getLast());
+        if(mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target))
+            GameModel.gameObjects.put(newThread, target.toView().getThreads().get(target.toView().getThreads().size()-1));
+        else {
+            System.out.println("Nem sikerült a fonal novesztes!");
+            sikertelen_command = true;
+        }
+        for(Tekton t : ((Tekton) target).getNeighbors())
+        {
+            if(!t.getThreads().isEmpty())
+            {
+                for(MushroomThread MT:t.getThreads())
+                {
+                    if(!GameModel.gameObjects.containsV(MT))
+                    {
+                        String id = newThread + ".ran";
+                        GameModel.gameObjects.put(id,MT);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -414,9 +477,14 @@ public class ControllerComponent {
      * @param id Az új gomba ID-ja
      */
     public void growMushroom(MushroomSpecies ms, TektonController target, String id) {
-        target.growMushroomBody(ms);
-        GameModel.gameObjects.put(id, ms.checkMushroomBody().getLast());
-        GameModel.gombasz.put(ms.checkMushroomBody().getLast(),ms);
+        if(target.growMushroomBody(ms)) {
+            GameModel.gameObjects.put(id, ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1));
+            GameModel.gombasz.put(ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1), ms);
+        }
+        else {
+            System.out.println("Nem sikerült");
+            sikertelen_command = true;
+        }
     }
 
     /**
@@ -427,22 +495,33 @@ public class ControllerComponent {
      */
     public void spreadSpore(MushroomBodyController source, TektonController target, String type) {
         Random rnd = new Random();
-        Spore sp = switch (type) {
-            case "S" -> new SlowSpore(rnd.nextInt(10));
-            case "H" -> new HasteSpore(rnd.nextInt(10));
-            case "M" -> new MuteSpore(rnd.nextInt(10));
-            case "P" -> new ParaSpore(rnd.nextInt(10));
-            case "C" -> new CloneSpore(rnd.nextInt(10));
-            default -> new Spore(rnd.nextInt(10));
-        };
-        int i = 0;
-        while(true) {
-            Object o = GameModel.gameObjects.getV(("s" + i++));
-            if(o == null)
-                break;
+        Spore sp;
+        if(GameModel.randomSwitch) {
+            sp = switch (type) {
+                case "S" -> new SlowSpore(rnd.nextInt(10));
+                case "H" -> new HasteSpore(rnd.nextInt(10));
+                case "M" -> new MuteSpore(rnd.nextInt(10));
+                case "P" -> new ParaSpore(rnd.nextInt(10));
+                case "C" -> new CloneSpore(rnd.nextInt(10));
+                default -> new Spore(rnd.nextInt(10));
+            };
         }
-        GameModel.gameObjects.put(("s" + i), sp);
-        source.spreadSpore((Tekton)target, sp);
+        else {
+            sp = switch (type) {
+                case "S" -> new SlowSpore(5);
+                case "H" -> new HasteSpore(5);
+                case "M" -> new MuteSpore(5);
+                case "P" -> new ParaSpore(5);
+                case "C" -> new CloneSpore(5);
+                default -> new Spore(5);
+            };
+        }
+        GameModel.gameObjects.put((GameModel.gameObjects.getK((MushroomBody) source) + "_spore" + source.toView().getSporeNumber()), sp);
+        if(!source.spreadSpore((Tekton)target, sp)) {
+            GameModel.gameObjects.removeByV(sp);
+            System.out.println("Spóraszórás sikertelen.");
+            sikertelen_command = true;
+        }
     }
 
     /**
@@ -451,9 +530,16 @@ public class ControllerComponent {
      * @param newMushroom Az új gomba ID-je
      */
     public void absorbInsect(MushroomThreadController source, String newMushroom) {
-        MushroomBody mb = source.absorbInsect();
-        GameModel.gameObjects.put(newMushroom, mb);
-        GameModel.gombasz.put(mb,GameModel.gombasz.get(source.checkOwner()));
+        try {
+            MushroomBody mb = source.absorbInsect();
+            GameModel.gameObjects.put(newMushroom, mb);
+            GameModel.gombasz.put(mb, GameModel.gombasz.get(source.checkOwner()));
+            GameModel.gombasz.get(source.checkOwner()).addMushroomBody(mb);
+        }
+        catch (NullPointerException npe) {
+            System.out.println(npe.getMessage());
+            sikertelen_command = true;
+        }
     }
 
     /**
@@ -462,12 +548,15 @@ public class ControllerComponent {
      * @param tektonID Az új tekton id-ja
      */
     private void breakTekton(TektonController source, String tektonID) {
-        for(Spore spore : source.toView().getSpores())
-            GameModel.gameObjects.removeByV(spore);
-        for(MushroomThread mt : source.toView().getThreads())
-            GameModel.gameObjects.removeByV(mt);
         Tekton newTekton = source.tektonBreak();
-        GameModel.map.tektonList.put(tektonID, newTekton);
+        if(newTekton != null) {
+            for (Spore spore : source.toView().getSpores())
+                GameModel.gameObjects.removeByV(spore);
+            for (MushroomThread mt : source.toView().getThreads())
+                GameModel.gameObjects.removeByV(mt);
+            GameModel.map.tektonList.put(tektonID, newTekton);
+            GameModel.gameObjects.put(tektonID, newTekton);
+        }
     }
 
     /**
@@ -476,7 +565,10 @@ public class ControllerComponent {
      * @param target A fonal amelyet elvágunk
      */
     public void cut(InsectController insect, MushroomThreadController target) {
-        insect.insectCut((MushroomThread) target);
+        if(!insect.insectCut((MushroomThread) target)) {
+            System.out.println("Sikertelen vagas!");
+            sikertelen_command = true;
+        }
     }
 
     /**
@@ -484,14 +576,26 @@ public class ControllerComponent {
      * @param insect A rovar amely enni fog
      */
     public void eat(InsectController insect) {
-        GameModel.gameObjects.removeByV(insect.toView().getLocation().getSpores().getFirst());
-        insect.insectEat();
+        if(insect.toView().getLocation().getSpores().isEmpty()) {
+            sikertelen_command = true;
+            return;
+        }
+        Spore s = insect.toView().getLocation().getSpores().get(insect.toView().getLocation().getSpores().size()-1);
+        try {
+            insect.insectEat();
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            System.out.println("Nem tud enni!");
+            sikertelen_command = true;
+            return;
+        }
+        GameModel.gameObjects.removeByV(s);
         for(Tekton t : insect.toView().getLocation().getNeighbors())
         {
             if(!GameModel.rovarasz.containsKey(t.getInsect()))
             {
                 GameModel.gameObjects.put(GameModel.gameObjects.getK(insect)+".clone",t.getInsect());
                 GameModel.rovarasz.put(t.getInsect(),GameModel.rovarasz.get(insect));
+                GameModel.rovarasz.get(insect).addInsect(t.getInsect());
             }
         }
     }
@@ -502,7 +606,10 @@ public class ControllerComponent {
      * @param target A tekton, amelyre mozogni fog
      */
     public void move(InsectController insect, TektonController target) {
-        insect.insectMove((Tekton) target);
+        if(!insect.insectMove((Tekton) target)) {
+            System.out.println("Sikertelen mozgas!");
+            sikertelen_command = true;
+        }
     }
 
     /**
