@@ -77,7 +77,7 @@ public class Tekton implements TektonController, TektonView {
             int num1 = Math.min(r1, r2);
             int num2 = Math.max(r1, r2);
 
-            List<Tekton> randomNeighbours = this.neighbors.subList(num1, num2);
+            List<Tekton> randomNeighbours = new ArrayList<>(this.neighbors.subList(num1, num2));
 
             clearSpore();
             getThreads().clear();
@@ -85,8 +85,8 @@ public class Tekton implements TektonController, TektonView {
 
             T2.neighbors.add(this);
             neighbors.add(T2);
-            updateNeighbor(new ArrayList<>(), randomNeighbours);
-            T2.updateNeighbor(randomNeighbours, new ArrayList<>());
+            updateNeighbor(new ArrayList<>(), new ArrayList<>(randomNeighbours));
+            T2.updateNeighbor(new ArrayList<>(randomNeighbours), new ArrayList<>());
             return T2;
         }
         else {

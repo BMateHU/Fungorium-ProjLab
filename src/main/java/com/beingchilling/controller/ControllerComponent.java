@@ -1,19 +1,17 @@
 package com.beingchilling.controller;
 
-import com.beingchilling.Main;
 import com.beingchilling.game.GameModel;
 import com.beingchilling.model.*;
 import com.beingchilling.view.ViewComponent;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import static com.beingchilling.game.GameModel.gombasz;
-import static com.beingchilling.game.GameModel.map;
+import java.util.Objects;
+
 
 /// Kontroller részét valósítja meg a modellnek
 public class ControllerComponent {
@@ -217,7 +215,7 @@ public class ControllerComponent {
                     absorbInsect((MushroomThread)GameModel.gameObjects.getV(words[1]), words[2]);
                     break;
                 case "/cut":
-                    if((MushroomThread)GameModel.gameObjects.getV(words[2]) == null)
+                    if(GameModel.gameObjects.getV(words[2]) == null)
                         break;//cause meaning rovar tring to cut a not existed fonal
                     cut((Insect)GameModel.gameObjects.getV(words[1]),(MushroomThread)GameModel.gameObjects.getV(words[2]));
                     break;
@@ -243,10 +241,9 @@ public class ControllerComponent {
     public void gameLoop() {
         //játékos szám lekérdezés
         //rovarnal a rovarasze-e a rovar nincs ellenorizve, gombanal szinten
-        int round = 0;
 
         //game round
-        for(round = 0; round < 20 ; round++) {
+        for(int round = 1; round < 21; round++) {
             //gombasz turn
 
             for (MushroomSpecies species : GameModel.gombasz.values()) {
@@ -345,9 +342,7 @@ public class ControllerComponent {
                                     ArgumentManagement(beolvasottSor);
                         }
                     }
-
                 }
-
             }
             for(InsectSpecies species: GameModel.rovarasz.values()){
 
@@ -363,7 +358,6 @@ public class ControllerComponent {
                         System.out.print("Rovar " + round + ". köre, " + GameModel.gameObjects.getK(ins) + " rovara: \n");
 
                         String beolvasottSor = scanner.nextLine();
-                        viewComponent.validate(beolvasottSor);
 
                         String[] words = beolvasottSor.strip().split(" ");
                         switch (words[0]) {
@@ -427,16 +421,28 @@ public class ControllerComponent {
                                 else
                                     ArgumentManagement(beolvasottSor);
                         }
-
-                        ArgumentManagement(beolvasottSor);
                     }
                 }
             }
-            if(round % 5 == 0){
-                for(Tekton t :GameModel.map.tektonList.values()){
-                    t.tektonBreak();
+            if(round % 5 == 0) {
+                Random rnd = new Random();
+                for(Tekton t : new ArrayList<>(GameModel.map.tektonList.values())){
+                    if(rnd.nextInt(100) < 3)
+                        ArgumentManagement("/break " + GameModel.gameObjects.getK(t) + " " + GameModel.gameObjects.getK(t) + "_" + round + "_break");
                 }
             }
+        }
+        System.out.println("Scores:\n");
+        for(InsectSpecies is : GameModel.rovarasz.values()) {
+            int score = 0;
+            for(Insect ins : is.getInsects()) {
+                score += ins.getCurrentNutrient();
+            }
+            System.out.println("\t" + GameModel.gameObjects.getK(is) + " " + score + "\n");
+        }
+        for(MushroomSpecies ms : GameModel.gombasz.values()) {
+            int score = ms.checkMushroomBody().size();
+            System.out.println("\t" + GameModel.gameObjects.getK(ms) + " " + score + "\n");
         }
     }
 
@@ -515,7 +521,7 @@ public class ControllerComponent {
                 default -> new Spore(5);
             };
         }
-        GameModel.gameObjects.put((GameModel.gameObjects.getK((MushroomBody) source) + "_spore" + source.toView().getSporeNumber()), sp);
+        GameModel.gameObjects.put((GameModel.gameObjects.getK(source) + "_spore" + source.toView().getSporeNumber()), sp);
         if(!source.spreadSpore((Tekton)target, sp)) {
             GameModel.gameObjects.removeByV(sp);
             System.out.println("Spóraszórás sikertelen.");
