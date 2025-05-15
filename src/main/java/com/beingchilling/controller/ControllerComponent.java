@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import java.util.Objects;
 
@@ -19,7 +18,7 @@ public class ControllerComponent {
     /// A kontroller hozzáfér a viewhoz
     private final ViewComponent viewComponent;
 
-    private boolean sikertelen_command = false;
+    private int round, whichPlayer, whichPuppet;
 
     /// Kontroller konstruktora
     public ControllerComponent(ViewComponent viewComponent) {
@@ -234,216 +233,6 @@ public class ControllerComponent {
                     break;
         }
     }
-    /**
-     * A játék fő szállát valósítja meg. Körökre van osztva a játék, utána playerenként minden rovarral/gomával lép 1-et
-     */
-    public void gameLoop() {
-        //játékos szám lekérdezés
-        //rovarnal a rovarasze-e a rovar nincs ellenorizve, gombanal szinten
-
-        //game round
-        for(int round = 1; round < 21; round++) {
-            //gombasz turn
-
-            for (MushroomSpecies species : GameModel.gombasz.values()) {
-
-                for(MushroomBody mb: species.checkMushroomBody()){
-                    boolean skipped = false;
-                    boolean spreadedspore = false;
-                    boolean growedthread = false;
-                    boolean mushroomgrowed = false; //search for id es add hozza mushroomspecies-hez
-                    boolean absorbinsect = false;
-                    while(!skipped){
-                        Scanner scanner = new Scanner(System.in);
-
-                        System.out.print("Gomba "+ round + ". köre, " + GameModel.gameObjects.getK(mb) + " gombája: \n");
-
-                        String beolvasottSor = scanner.nextLine();
-
-                        String[] words = beolvasottSor.strip().split(" ");
-                        switch (words[0]) {
-                            case "/absorbinsect":
-                                if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a gombat nem iranyithatod");
-                                    break;
-                                }
-                                if (!absorbinsect) {
-                                    absorbinsect = true;
-                                    ArgumentManagement(beolvasottSor);
-                                    if(!sikertelen_command)
-                                        species.addMushroomBody((MushroomBody) GameModel.gameObjects.getV(words[2]));
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        absorbinsect = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/growmush":
-                                if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a gombat nem iranyithatod");
-                                    break;
-                                }
-                                if (!mushroomgrowed) {
-                                    mushroomgrowed = true;
-                                    ArgumentManagement(beolvasottSor);
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        mushroomgrowed = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/spreadspore":
-                                if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a gombat nem iranyithatod");
-                                    break;
-                                }
-                                if (!spreadedspore) {
-                                    spreadedspore = true;
-                                    ArgumentManagement(beolvasottSor);
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        spreadedspore = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/growthread":
-                                if(!species.checkMushroomBody().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a gombat nem iranyithatod");
-                                    break;
-                                }
-                                if (!growedthread) {
-                                    growedthread = true;
-                                    ArgumentManagement(beolvasottSor);
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        growedthread = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/skip":
-                                skipped = true;
-                                break;
-                            case "/exit":
-                                System.exit(0);
-                                break;
-                            default:
-                                if(words[0].contains("add") || words[0].contains("load"))
-                                    System.out.println("Ezt nem csinálhatod!");
-                                else
-                                    ArgumentManagement(beolvasottSor);
-                        }
-                    }
-                }
-            }
-            for(InsectSpecies species: GameModel.rovarasz.values()){
-
-                for(Insect ins: species.getInsects()){
-                    boolean skipped = false;
-                    boolean moved = false;
-                    boolean ate = false;
-                    boolean cut = false;
-                    while(!skipped){
-
-                        Scanner scanner = new Scanner(System.in);
-
-                        System.out.print("Rovar " + round + ". köre, " + GameModel.gameObjects.getK(ins) + " rovara: \n");
-
-                        String beolvasottSor = scanner.nextLine();
-
-                        String[] words = beolvasottSor.strip().split(" ");
-                        switch (words[0]) {
-                            case "/move":
-                                if(!species.getInsects().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a rovart nem iranyithatod");
-                                    break;
-                                }
-                                if (!moved) {
-                                    moved = true;
-                                    ArgumentManagement(beolvasottSor);
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        moved = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/eat":
-                                if(!species.getInsects().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a rovart nem iranyithatod");
-                                    break;
-                                }
-                                if (!ate) {
-                                    ate = true;
-                                    ArgumentManagement(beolvasottSor);
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        ate = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/cut":
-                                if(!species.getInsects().contains(GameModel.gameObjects.getV(words[1]))) {
-                                    System.out.println("Ez a rovart nem iranyithatod");
-                                    break;
-                                }
-                                if (!cut) {
-                                    ArgumentManagement(beolvasottSor);
-                                    cut = true;
-                                    if(sikertelen_command) {
-                                        sikertelen_command = false;
-                                        cut = false;
-                                    }
-                                } else {
-                                    System.out.println("Ezt már csináltad");
-                                }
-                                break;
-                            case "/skip":
-                                skipped = true;
-                                break;
-                            case "/exit":
-                                System.exit(0);
-                                break;
-                            default:
-                                if(words[0].contains("add"))
-                                    System.out.println("Ezt nem csinálhatod!");
-                                else
-                                    ArgumentManagement(beolvasottSor);
-                        }
-                    }
-                }
-            }
-            if(round % 5 == 0) {
-                Random rnd = new Random();
-                for(Tekton t : new ArrayList<>(GameModel.map.tektonList.values())){
-                    if(rnd.nextInt(100) < 3)
-                        ArgumentManagement("/break " + GameModel.gameObjects.getK(t) + " " + GameModel.gameObjects.getK(t) + "_" + round + "_break");
-                }
-            }
-        }
-        System.out.println("Scores:\n");
-        for(InsectSpecies is : GameModel.rovarasz.values()) {
-            int score = 0;
-            for(Insect ins : is.getInsects()) {
-                score += ins.getCurrentNutrient();
-            }
-            System.out.println("\t" + GameModel.gameObjects.getK(is) + " " + score + "\n");
-        }
-        for(MushroomSpecies ms : GameModel.gombasz.values()) {
-            int score = ms.checkMushroomBody().size();
-            System.out.println("\t" + GameModel.gameObjects.getK(ms) + " " + score + "\n");
-        }
-    }
 
     /**
      * Ez egy függvény amely továbbítja a modellbeli részhez.
@@ -456,7 +245,7 @@ public class ControllerComponent {
             GameModel.gameObjects.put(newThread, target.toView().getThreads().get(target.toView().getThreads().size()-1));
         else {
             System.out.println("Nem sikerült a fonal novesztes!");
-            sikertelen_command = true;
+            
         }
         for(Tekton t : ((Tekton) target).getNeighbors())
         {
@@ -487,7 +276,7 @@ public class ControllerComponent {
         }
         else {
             System.out.println("Nem sikerült");
-            sikertelen_command = true;
+            
         }
     }
 
@@ -524,7 +313,7 @@ public class ControllerComponent {
         if(!source.spreadSpore((Tekton)target, sp)) {
             GameModel.gameObjects.removeByV(sp);
             System.out.println("Spóraszórás sikertelen.");
-            sikertelen_command = true;
+            
         }
     }
 
@@ -542,7 +331,7 @@ public class ControllerComponent {
         }
         catch (NullPointerException npe) {
             System.out.println(npe.getMessage());
-            sikertelen_command = true;
+            
         }
     }
 
@@ -571,7 +360,7 @@ public class ControllerComponent {
     public void cut(InsectController insect, MushroomThreadController target) {
         if(!insect.insectCut((MushroomThread) target)) {
             System.out.println("Sikertelen vagas!");
-            sikertelen_command = true;
+            
         }
     }
 
@@ -581,7 +370,7 @@ public class ControllerComponent {
      */
     public void eat(InsectController insect) {
         if(insect.toView().getLocation().getSpores().isEmpty()) {
-            sikertelen_command = true;
+            
             return;
         }
         Spore s = insect.toView().getLocation().getSpores().get(insect.toView().getLocation().getSpores().size()-1);
@@ -589,7 +378,7 @@ public class ControllerComponent {
             insect.insectEat();
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             System.out.println("Nem tud enni!");
-            sikertelen_command = true;
+            
             return;
         }
         GameModel.gameObjects.removeByV(s);
@@ -612,7 +401,7 @@ public class ControllerComponent {
     public void move(InsectController insect, TektonController target) {
         if(!insect.insectMove((Tekton) target)) {
             System.out.println("Sikertelen mozgas!");
-            sikertelen_command = true;
+            
         }
     }
 
@@ -634,5 +423,33 @@ public class ControllerComponent {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getWhichPuppet() {
+        return whichPuppet;
+    }
+
+    public void setWhichPuppet(int whichPuppet) {
+        this.whichPuppet = whichPuppet;
+    }
+
+    public int getWhichPlayer() {
+        return whichPlayer;
+    }
+
+    public void setWhichPlayer(int whichPlayer) {
+        this.whichPlayer = whichPlayer;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public void nextPuppet() {
+        whichPuppet++;
     }
 }

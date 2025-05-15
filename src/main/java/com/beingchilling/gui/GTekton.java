@@ -1,4 +1,32 @@
 package com.beingchilling.gui;
 
-public class GTekton {
+import com.beingchilling.view.TektonView;
+
+import javax.swing.*;
+
+public class GTekton extends JComponent {
+
+    TektonView tekton;
+
+    private int x, y;
+
+    public GTekton(TektonView tekton) {
+        this.tekton = tekton;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }
