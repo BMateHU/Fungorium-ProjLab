@@ -1,9 +1,14 @@
 package com.beingchilling.gui;
 
+import com.beingchilling.controller.ControllerComponent;
+import com.beingchilling.view.ViewComponent;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Path2D;
 import java.util.HashMap;
 
@@ -38,9 +43,14 @@ public class GUI
 
     private boolean isCurrentPanelMushroom = true; //just for testing u can delete it anytime u want
 
+    ViewComponent vc = new ViewComponent();
+    ControllerComponent cc = new ControllerComponent(vc);
+
     private JFrame frame;
 
     public GUI() {
+        vc.setControllerComponent(cc);
+
         frame = new JFrame();
         frame.setTitle("Fungorium");
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT); // Set fixed size
@@ -101,16 +111,15 @@ public class GUI
     private JPanel createTopPanel() {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY), // Bottom border
-                new EmptyBorder(5, 5, 5, 5) // Padding
+                BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY),
+                new EmptyBorder(5, 5, 5, 5)
         ));
-        round = new JLabel("round 1");
+        round = new JLabel("round " + cc.getRound());
         round.setFont(round.getFont().deriveFont(Font.BOLD, 14f));
         topPanel.add(round);
         return topPanel;
     }
 
-    // Helper method to create the sidebar panel
     private JPanel createSidebarPanelForMushroom() {
         // Main sidebar still uses BorderLayout
         JPanel sidebarPanel = new JPanel(new BorderLayout(0, 10)); // 0 Hgap, 10 Vgap
@@ -121,7 +130,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player 1: Gomba 1");
+        playerStats = new JLabel("Player " + cc.getWhichPlayer() + ": Gomba " + cc.getWhichPuppet());
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
@@ -141,6 +150,11 @@ public class GUI
         growThreadButton = new JButton("Grow Thread");
         growThreadParam1 = new JComboBox<>(new String[]{"Thread 1"});
         growThreadParam2 = new JComboBox<>(new String[]{"Tekton 1"});
+
+        growThreadButton.addActionListener(e -> {
+            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " + growThreadParam2.getSelectedItem());
+        });
+
         configurePlaceholderComponents(placeholder1, growThreadButton, growThreadParam1, growThreadParam2);
 
         // Placeholder 2: Grow Mushroom
@@ -216,6 +230,8 @@ public class GUI
         placeholder1.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         moveButton = new JButton("Move");
         moveParam1 = new JComboBox<>(new String[]{"Tekton 1"});
+
+
         configurePlaceholderComponents(placeholder1, moveButton, moveParam1);
 
         // Placeholder 2: Grow Mushroom
