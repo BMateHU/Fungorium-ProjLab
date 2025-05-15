@@ -1,4 +1,4 @@
-package com.beingchilling.view;
+package com.beingchilling.gui;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.util.HashMap;
 
-public class GUI extends JFrame
+public class GUI
 {
     private HashMap<Object, JComponent> objects;
     private JLabel playerStats;
@@ -36,18 +36,25 @@ public class GUI extends JFrame
     private static final int FRAME_HEIGHT = 800;
     private static final int SIDEBAR_WIDTH = 250;
 
-    private boolean isCurrentPanelMushroom = true;//just for testing u can delete it anytime u want
+    private boolean isCurrentPanelMushroom = true; //just for testing u can delete it anytime u want
+
+    private JFrame frame;
 
     public GUI() {
-        setTitle("Fungorium");
-        setSize(FRAME_WIDTH, FRAME_HEIGHT); // Set fixed size
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window
+        frame = new JFrame();
+        frame.setTitle("Fungorium");
+        frame.setSize(FRAME_WIDTH, FRAME_HEIGHT); // Set fixed size
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null); // Center the window
         mushroomPanel = new JPanel();
         insectPanel = new JPanel();
+        objects = new HashMap<>();
+
         init();
 
+        frame.setVisible(true);
     }
+
     public void init() {
         mushroomPanel.setLayout(new BorderLayout(0, 0));
         JPanel topPanel = createTopPanel();
@@ -60,7 +67,7 @@ public class GUI extends JFrame
         mushroomPanel.add(topPanel, BorderLayout.NORTH);
         mushroomPanel.add(splitPaneMushroom, BorderLayout.CENTER);
 
-        add(mushroomPanel);
+        frame.add(mushroomPanel);
 
         insectPanel.setLayout(new BorderLayout(0, 0));
         JPanel sidebarPanelInsect = createSidebarPanelForInsect();
@@ -75,17 +82,20 @@ public class GUI extends JFrame
 
     public void switchPanels() {
         if(isCurrentPanelMushroom) {
-            remove(mushroomPanel);
-            add(insectPanel);
+            frame.remove(mushroomPanel);
+            frame.add(insectPanel);
         }
         else {
-            remove(insectPanel);
-            add(mushroomPanel);
+            frame.remove(insectPanel);
+            frame. add(mushroomPanel);
         }
+        reDrawAll();
     }
 
     public void reDrawAll() {
-
+        frame.revalidate();
+        insectPanel.revalidate();
+        mushroomPanel.revalidate();
     }
 
     private JPanel createTopPanel() {
