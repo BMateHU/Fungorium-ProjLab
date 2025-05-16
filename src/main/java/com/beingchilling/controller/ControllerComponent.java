@@ -18,7 +18,7 @@ public class ControllerComponent {
     /// A kontroller hozzáfér a viewhoz
     private final ViewComponent viewComponent;
 
-    private int round, whichPlayer, whichPuppet;
+    private int round = 1 , whichPlayer = 1, whichPuppet = 1;
 
     /// Kontroller konstruktora
     public ControllerComponent(ViewComponent viewComponent) {
