@@ -151,17 +151,8 @@ public class ViewComponent {
      */
     public void help() {
         System.out.println("Összes parancs:");
-//        System.out.println("/addplayer <player ID> <role> - Játékos hozzáadása (role: R - rovarász, G - gombász)");
-//        System.out.println("/addtekton <tekton ID> [tekton type] - Tekton hozzáadása (default: N)");
-//        System.out.println("/addinsect <player ID> <insect ID> <tekton ID> [effect] - Rovar hozzáadása tektonhoz (effect: S/H/M/P/C/N)");
-//        System.out.println("/addmush <player ID> <mushroom ID> <thread ID> <tekton ID> [age] [spore] - Gombatest hozzáadása");
-//        System.out.println("/addspore <tekton ID> <spore ID> [spore type] [nutrient] - Spóra hozzáadása tektonhoz");
-//        System.out.println("/addthread <tekton ID> <thread ID> - Gombafonal hozzáadása tektonhoz");
-//        System.out.println("/setneighbour <tekton1 ID> <tekton2 ID> - Tektonok szomszédságának beállítása");
-//        System.out.println("/connectthread <thread1 ID> <thread2 ID> - Két fonal összekötése");
         System.out.println("/showid - Jelenlegi objektumok ID-jainak kilistázása");
         System.out.println("/help - Parancslista megjelenítése");
-        //System.out.println("/break <source tekton ID> <new tekton ID> [neighbours ...] - Tekton eltörése és új létrehozása");
         System.out.println("/absorb [tekton ID ...] - Gombafonalak felszívása tektonon");
         System.out.println("/growthread <source thread ID> <new thread ID> <tekton ID> - Gombafonal növesztése");
         System.out.println("/growmush <player ID> <mushroom ID> <tekton ID> - Gombatest növesztése");
@@ -170,7 +161,6 @@ public class ViewComponent {
         System.out.println("/cut <insect ID> <thread ID> - Gombafonal elvágása rovarral");
         System.out.println("/eat <insect ID> - Rovar spórát eszik a tektonon");
         System.out.println("/move <insect ID> <tekton ID> - Rovar mozgatása másik tektonra");
-        //System.out.println("/random on|off - Véletlenszerűség ki/be kapcsolása");
         System.out.println("/load - Előre megírt pálya betöltése");
         System.out.println("/showmap - Jelenlegi pályaelemek kilistázása");
     }

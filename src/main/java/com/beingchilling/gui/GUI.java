@@ -114,22 +114,7 @@ public class GUI
         }
         else {
             frame.remove(insectPanel);
-            insectPanel = null;
-            if(mushroomPanel == null) {
-                mushroomPanel = new JPanel();
-                mushroomPanel.setLayout(new BorderLayout(0, 0));
-                JPanel topPanel = createTopPanel();
-                JPanel sidebarPanelMushroom = createSidebarPanelForMushroom();
-                JPanel contentPanel = createContentPanel();
-                JSplitPane splitPaneMushroom = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebarPanelMushroom, contentPanel);
-                splitPaneMushroom.setDividerLocation(SIDEBAR_WIDTH);
-                splitPaneMushroom.setEnabled(false);
-
-                mushroomPanel.add(topPanel, BorderLayout.NORTH);
-                mushroomPanel.add(splitPaneMushroom, BorderLayout.CENTER);
-            }
             frame.add(mushroomPanel);
-            isCurrentPanelMushroom = true;
         }
         reDrawAll();
     }
