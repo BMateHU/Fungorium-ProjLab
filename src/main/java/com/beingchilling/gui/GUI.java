@@ -2,6 +2,9 @@ package com.beingchilling.gui;
 
 import com.beingchilling.controller.ControllerComponent;
 import com.beingchilling.game.GameModel;
+import com.beingchilling.model.Insect;
+import com.beingchilling.model.InsectSpecies;
+import com.beingchilling.model.MushroomBody;
 import com.beingchilling.model.MushroomSpecies;
 import com.beingchilling.view.ViewComponent;
 
@@ -13,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Path2D;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GUI
 {
@@ -213,7 +218,28 @@ public class GUI
         JPanel bottomButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         skipButton = new JButton("skip");
         skipButton.addActionListener(e -> {
-           // TODO
+            Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
+            Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+            if(cc.getWhichPlayer() >= GameModel.gombasz.size()) { // if its insect turn
+                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
+                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size()) { // if no next player,set to 1
+                        cc.setWhichPlayer(1);
+                    }
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+            else {//if it mushroom turn
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+
         });
         endGameButton = new JButton("end game");
         endGameButton.addActionListener(e -> {
@@ -295,7 +321,28 @@ public class GUI
         JPanel bottomButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         skipButton = new JButton("skip");
         skipButton.addActionListener(e -> {
-            // TODO
+            Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
+            Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+            if(cc.getWhichPlayer() >= GameModel.gombasz.size()) { // if its insect turn
+                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
+                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size()) { // if no next player,set to 1
+                        cc.setWhichPlayer(1);
+                    }
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+            else {//if it mushroom turn
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+
         });
         endGameButton = new JButton("end game");
         endGameButton.addActionListener(e -> {
