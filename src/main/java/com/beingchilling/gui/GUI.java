@@ -1,6 +1,8 @@
 package com.beingchilling.gui;
 
 import com.beingchilling.controller.ControllerComponent;
+import com.beingchilling.game.GameModel;
+import com.beingchilling.model.MushroomSpecies;
 import com.beingchilling.view.ViewComponent;
 
 import javax.swing.*;
@@ -152,7 +154,8 @@ public class GUI
         growThreadParam2 = new JComboBox<>(new String[]{"Tekton 1"});
 
         growThreadButton.addActionListener(e -> {
-            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " + growThreadParam2.getSelectedItem());
+            String lastThreadID = growThreadParam1.getItemAt(growThreadParam1.getItemCount()-1);
+            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " + growThreadParam2.getSelectedItem() + " " + lastThreadID.substring(0, lastThreadID.length() - 1) + growThreadParam1.getItemCount());
         });
 
         configurePlaceholderComponents(placeholder1, growThreadButton, growThreadParam1, growThreadParam2);
@@ -163,6 +166,13 @@ public class GUI
         placeholder2.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         growMushButton = new JButton("Grow Mushroom");
         growMushParam1 = new JComboBox<>(new String[]{"Tekton 1"});
+
+        growMushButton.addActionListener(e -> {
+            MushroomSpecies s = (MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID());
+            String lastMushroomID = GameModel.gameObjects.getK(s.checkMushroomBody().get(s.checkMushroomBody().size()-1));
+            cc.ArgumentManagement("/growmush " + vc.getCurrentPlayerID() + " "+ lastMushroomID.substring(0, lastMushroomID.length() - 1)+s.checkMushroomBody().size() + " " + growMushParam1.getSelectedItem());
+        });
+
         configurePlaceholderComponents(placeholder2, growMushButton, growMushParam1);
 
         // Placeholder 3: Spread Spore
@@ -171,7 +181,11 @@ public class GUI
         placeholder3.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         spreadSporeButton = new JButton("Spread Spore");
         spreadSporeParam1 = new JComboBox<>(new String[]{"Tekton 1"});
-        spreadSporeParam2 = new JComboBox<>(new String[]{"Haste"});
+        spreadSporeParam2 = new JComboBox<>(new String[]{"Haste","Slow","Mute","Para","Clone","Normal"});
+
+        spreadSporeButton.addActionListener(e -> {
+            cc.ArgumentManagement("/spreadspore " + vc.getCurrentPuppetID() + " " + spreadSporeParam1.getSelectedItem() + " " + ((String)spreadSporeParam2.getSelectedItem()).charAt(0));
+        });
         configurePlaceholderComponents(placeholder3, spreadSporeButton, spreadSporeParam1, spreadSporeParam2);
 
         // Placeholder 4: Absorb Insect
@@ -180,6 +194,11 @@ public class GUI
         placeholder4.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         absorbInsectButton = new JButton("Absorb Insect");
         absorbInsectParam1 = new JComboBox<>(new String[]{"Thread 1"});
+        absorbInsectButton.addActionListener(e -> {
+            MushroomSpecies s = (MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID());
+            String lastMushroomID = GameModel.gameObjects.getK(s.checkMushroomBody().get(s.checkMushroomBody().size()-1));
+            cc.ArgumentManagement("/absorbinsect " + absorbInsectParam1.getSelectedItem() + " " + lastMushroomID.substring(0, lastMushroomID.length() - 1)+s.checkMushroomBody().size());
+        });
         configurePlaceholderComponents(placeholder4, absorbInsectButton, absorbInsectParam1);
 
         // Add placeholders to the grid layout panel
@@ -193,7 +212,13 @@ public class GUI
         // --- Bottom Buttons (South) ---
         JPanel bottomButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         skipButton = new JButton("skip");
+        skipButton.addActionListener(e -> {
+           // TODO
+        });
         endGameButton = new JButton("end game");
+        endGameButton.addActionListener(e -> {
+            System.exit(0);
+        });
         bottomButtonsPanel.add(skipButton);
         bottomButtonsPanel.add(endGameButton);
         sidebarPanel.add(bottomButtonsPanel, BorderLayout.SOUTH);
@@ -230,7 +255,9 @@ public class GUI
         placeholder1.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         moveButton = new JButton("Move");
         moveParam1 = new JComboBox<>(new String[]{"Tekton 1"});
-
+        moveButton.addActionListener(e -> {
+            cc.ArgumentManagement("/move " + vc.getCurrentPuppetID() + " " + moveParam1.getSelectedItem());
+        });
 
         configurePlaceholderComponents(placeholder1, moveButton, moveParam1);
 
@@ -239,6 +266,10 @@ public class GUI
         placeholder2.setLayout(new BoxLayout(placeholder2, BoxLayout.Y_AXIS));
         placeholder2.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         eatButton = new JButton("Eat");
+
+        eatButton.addActionListener(e -> {
+            cc.ArgumentManagement("/eat " + vc.getCurrentPuppetID());
+        });
         configurePlaceholderComponents(placeholder2, eatButton);
 
         // Placeholder 3: Spread Spore
@@ -247,6 +278,9 @@ public class GUI
         placeholder3.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         cutButton = new JButton("Cut");
         cutParam1 = new JComboBox<>(new String[]{"Thread 1"});
+        cutButton.addActionListener(e -> {
+            cc.ArgumentManagement("/cut " + vc.getCurrentPuppetID() + " " + cutParam1.getSelectedItem());
+        });
         configurePlaceholderComponents(placeholder3, cutButton, cutParam1);
 
 
@@ -260,7 +294,13 @@ public class GUI
         // --- Bottom Buttons (South) ---
         JPanel bottomButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         skipButton = new JButton("skip");
+        skipButton.addActionListener(e -> {
+            // TODO
+        });
         endGameButton = new JButton("end game");
+        endGameButton.addActionListener(e -> {
+            System.exit(0);
+        });
         bottomButtonsPanel.add(skipButton);
         bottomButtonsPanel.add(endGameButton);
         sidebarPanel.add(bottomButtonsPanel, BorderLayout.SOUTH);
