@@ -97,7 +97,7 @@ public class GUI
         }
         else {
             frame.remove(insectPanel);
-            frame. add(mushroomPanel);
+            frame.add(mushroomPanel);
         }
         reDrawAll();
     }

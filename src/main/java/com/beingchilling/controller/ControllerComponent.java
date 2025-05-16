@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 /// Kontroller részét valósítja meg a modellnek
-public class ControllerComponent {
+public class ControllerComponent implements IFactory {
 
     /// A kontroller hozzáfér a viewhoz
     private final ViewComponent viewComponent;
@@ -451,5 +451,30 @@ public class ControllerComponent {
 
     public void nextPuppet() {
         whichPuppet++;
+    }
+
+    @Override
+    public void onCreationTekton(Tekton t) {
+
+    }
+
+    @Override
+    public void onCreationMushroomBody(MushroomBody mb) {
+
+    }
+
+    @Override
+    public void onCreationSpore(Spore sp) {
+
+    }
+
+    @Override
+    public void onCreationInsect(Insect ins) {
+
+    }
+
+    @Override
+    public void onCreationMushroomThread(MushroomThread mt) {
+
     }
 }
