@@ -9,7 +9,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Path2D;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class GUI
@@ -50,6 +54,14 @@ public class GUI
 
     public GUI() {
         vc.setControllerComponent(cc);
+
+        try {
+            InputStream url = GUI.class.getClassLoader().getResourceAsStream("start.txt");
+            assert url != null;
+            cc.load(url);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
 
         frame = new JFrame();
         frame.setTitle("Fungorium");
@@ -285,127 +297,149 @@ public class GUI
 
     // Helper method to create the main content panel with drawing
     private JPanel createContentPanel() {
-        JPanel contentPanel = new JPanel(new BorderLayout()); // Use BorderLayout
-        contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Padding
-        contentPanel.setBackground(Color.WHITE); // Set background for the main container
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setBackground(Color.WHITE);
 
-        // Create and add the custom drawing panel
         DrawingPanel drawingPanel = new DrawingPanel();
-        contentPanel.add(drawingPanel, BorderLayout.CENTER); // Add drawing panel to the center
+        JScrollPane scrollPane = new JScrollPane(drawingPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
         return contentPanel;
     }
 
     // Inner class for custom drawing
     private class DrawingPanel extends JPanel {
+        private static final int VIRTUAL_WIDTH = 5000;
+        private static final int VIRTUAL_HEIGHT = 5000;
+
+        private Point panStartPoint;
+        private Point viewStartPoint;
+
+        public DrawingPanel() {
+            setPreferredSize(new Dimension(VIRTUAL_WIDTH, VIRTUAL_HEIGHT));
+            setBackground(Color.LIGHT_GRAY);
+
+            MouseAdapter mouseAdapter = new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        panStartPoint = e.getPoint();
+                        JViewport viewport = (JViewport) getParent();
+                        viewStartPoint = viewport.getViewPosition();
+                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                    }
+                }
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e) && panStartPoint != null && viewStartPoint != null) {
+                        Point currentPoint = e.getPoint();
+                        int dx = currentPoint.x - panStartPoint.x;
+                        int dy = currentPoint.y - panStartPoint.y;
+                        JViewport viewport = (JViewport) getParent();
+                        int newX = viewStartPoint.x - dx;
+                        int newY = viewStartPoint.y - dy;
+                        viewport.setViewPosition(new Point(newX, newY));
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        panStartPoint = null;
+                        viewStartPoint = null;
+                        setCursor(Cursor.getDefaultCursor());
+                    }
+                }
+            };
+            addMouseListener(mouseAdapter);
+            addMouseMotionListener(mouseAdapter);
+        }
+
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g); // Always call superclass method first
-            Graphics2D g2d = (Graphics2D) g; // Cast to Graphics2D for more features
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
 
-            // Enable anti-aliasing for smoother shapes and text
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-
-            // Get panel dimensions for positioning
             int panelWidth = getWidth();
             int panelHeight = getHeight();
 
-            // Define circle properties
             int circleRadius = 50;
             int circleDiameter = circleRadius * 2;
-            int triangleBase = panelWidth / 3; // Base width of the triangle formed by centers
-            int triangleHeight = panelHeight / 4; // Height of the triangle
+            int triangleBase = panelWidth / 3;
+            int triangleHeight = panelHeight / 4;
 
-            // Calculate positions for a triangle layout
-
-            // Circle 1 (Top vertex) - Centered horizontally, higher up
             int c1x = panelWidth / 2 - circleRadius;
-            int c1y = panelHeight / 2 - triangleHeight / 2 - circleRadius; // Move up
+            int c1y = panelHeight / 2 - triangleHeight / 2 - circleRadius;
             Point center1 = new Point(c1x + circleRadius, c1y + circleRadius);
 
-            // Circle 2 (Bottom-left vertex)
-            int c2x = panelWidth / 2 - triangleBase / 2 - circleRadius; // Move left from center
-            int c2y = panelHeight / 2 + triangleHeight / 2 - circleRadius; // Move down
+            int c2x = panelWidth / 2 - triangleBase / 2 - circleRadius;
+            int c2y = panelHeight / 2 + triangleHeight / 2 - circleRadius;
             Point center2 = new Point(c2x + circleRadius, c2y + circleRadius);
 
-            // Circle 3 (Bottom-right vertex)
-            int c3x = panelWidth / 2 + triangleBase / 2 - circleRadius; // Move right from center
-            int c3y = panelHeight / 2 + triangleHeight / 2 - circleRadius; // Move down (same y as c2)
+            int c3x = panelWidth / 2 + triangleBase / 2 - circleRadius;
+            int c3y = panelHeight / 2 + triangleHeight / 2 - circleRadius;
             Point center3 = new Point(c3x + circleRadius, c3y + circleRadius);
 
+            g2d.setColor(Color.BLUE);
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawOval(c1x, c1y, circleDiameter, circleDiameter);
+            g2d.drawOval(c2x, c2y, circleDiameter, circleDiameter);
+            g2d.drawOval(c3x, c3y, circleDiameter, circleDiameter);
 
-            // --- Draw Circles ---
-            g2d.setColor(Color.BLUE); // Example color
-            g2d.setStroke(new BasicStroke(2)); // Make circle lines slightly thicker
-            g2d.drawOval(c1x, c1y, circleDiameter, circleDiameter); // Circle 1 (Top)
-            g2d.drawOval(c2x, c2y, circleDiameter, circleDiameter); // Circle 2 (Bottom-left)
-            g2d.drawOval(c3x, c3y, circleDiameter, circleDiameter); // Circle 3 (Bottom-right)
+            Stroke defaultStroke = g2d.getStroke();
 
-            // --- Draw Connecting Lines ---
-            Stroke defaultStroke = g2d.getStroke(); // Save default stroke (which is now BasicStroke(2))
-
-            // Line 1: Straight line (Top to Bottom-Left)
             g2d.setColor(Color.BLACK);
             g2d.drawLine(center1.x, center1.y, center2.x, center2.y);
 
-            // Line 2: Dashed line (Top to Bottom-Right)
-            // Define a dashed stroke: {dash length, space length}
             Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
             g2d.setStroke(dashedStroke);
             g2d.drawLine(center1.x, center1.y, center3.x, center3.y);
 
-            g2d.setStroke(defaultStroke); // Restore default stroke (solid, thickness 2)
+            g2d.setStroke(defaultStroke);
 
-            // --- Draw Shapes on Circles ---
-
-            // Brown Square on Circle 3 (Bottom-Right)
             int squareSize = 20;
-            int squareX = center3.x - squareSize / 2; // Center the square on Circle 3
+            int squareX = center3.x - squareSize / 2;
             int squareY = center3.y - squareSize / 2;
-            g2d.setColor(new Color(139, 69, 19)); // Brown color
+            g2d.setColor(new Color(139, 69, 19));
             g2d.fillRect(squareX, squareY, squareSize, squareSize);
-            g2d.setColor(Color.BLACK); // Outline for visibility
+            g2d.setColor(Color.BLACK);
             g2d.drawRect(squareX, squareY, squareSize, squareSize);
 
 
-            // Yellow Triangle on Circle 2 (Bottom-Left)
-            int triangleShapeSize = 25; // Size of the yellow triangle shape
+            int triangleShapeSize = 25;
             Path2D triangleShape = new Path2D.Double();
-            // Define vertices relative to the center of circle 2
-            triangleShape.moveTo(center2.x, center2.y - triangleShapeSize / 1.5); // Top point
-            triangleShape.lineTo(center2.x - triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0); // Bottom left
-            triangleShape.lineTo(center2.x + triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0); // Bottom right
+            triangleShape.moveTo(center2.x, center2.y - triangleShapeSize / 1.5);
+            triangleShape.lineTo(center2.x - triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0);
+            triangleShape.lineTo(center2.x + triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0);
             triangleShape.closePath();
 
             g2d.setColor(Color.YELLOW);
             g2d.fill(triangleShape);
-            g2d.setColor(Color.BLACK); // Outline for visibility
+            g2d.setColor(Color.BLACK);
             g2d.draw(triangleShape);
 
-            // *** NEW: Draw 3 small green circles inside Circle 1 (Top) ***
             int smallCircleRadius = 8;
             int smallCircleDiameter = smallCircleRadius * 2;
             g2d.setColor(Color.GREEN);
-            // Position them in a small triangle pattern inside Circle 1
             int offset = circleRadius / 3;
-            g2d.fillOval(center1.x - smallCircleRadius, center1.y - offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter); // Top small circle
-            g2d.fillOval(center1.x - offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter); // Bottom-left small circle
-            g2d.fillOval(center1.x + offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter); // Bottom-right small circle
+            g2d.fillOval(center1.x - smallCircleRadius, center1.y - offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
+            g2d.fillOval(center1.x - offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
+            g2d.fillOval(center1.x + offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
 
 
-            // *** NEW: Draw Labels ***
             g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Arial", Font.BOLD, 12)); // Set font for labels
+            g2d.setFont(new Font("Arial", Font.BOLD, 12));
 
-            // Label positioning offsets
-            int labelOffset = circleRadius + 15; // Distance below the circle center for Tekton labels
-            int shapeLabelOffset = 15; // Distance below the shape for Gomba/Rovar labels
+            int labelOffset = circleRadius + 15;
+            int shapeLabelOffset = 15;
 
-            // --- Tekton Labels ---
-            // Center the text horizontally below the circle centers
-            FontMetrics fm = g2d.getFontMetrics(); // Get font metrics for text centering
+            FontMetrics fm = g2d.getFontMetrics();
 
             String tekton1Label = "Tekton1";
             int tekton1Width = fm.stringWidth(tekton1Label);
@@ -419,17 +453,13 @@ public class GUI
             int tekton3Width = fm.stringWidth(tekton3Label);
             g2d.drawString(tekton3Label, center3.x - tekton3Width / 2, center3.y + labelOffset);
 
-            // --- Shape Labels ---
             String gombaLabel = "Gomba1";
             int gombaWidth = fm.stringWidth(gombaLabel);
-            // Position below the triangle on Circle 2
-            g2d.drawString(gombaLabel, center2.x - gombaWidth / 2, (int)(center2.y + triangleShapeSize / 3.0) + shapeLabelOffset + 5); // Adjusted y-pos based on triangle bottom
+            g2d.drawString(gombaLabel, center2.x - gombaWidth / 2, (int)(center2.y + triangleShapeSize / 3.0) + shapeLabelOffset + 5);
 
             String rovarLabel = "Rovar1";
             int rovarWidth = fm.stringWidth(rovarLabel);
-            // Position below the square on Circle 3
-            g2d.drawString(rovarLabel, center3.x - rovarWidth / 2, squareY + squareSize + shapeLabelOffset); // Adjusted y-pos based on square bottom
-
+            g2d.drawString(rovarLabel, center3.x - rovarWidth / 2, squareY + squareSize + shapeLabelOffset);
         }
     }
 }
