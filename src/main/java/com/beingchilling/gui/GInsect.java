@@ -1,6 +1,7 @@
 package com.beingchilling.gui;
 
 import com.beingchilling.game.GameModel;
+import com.beingchilling.model.Insect;
 import com.beingchilling.model.Tekton;
 import com.beingchilling.view.InsectView;
 
@@ -26,10 +27,10 @@ public class GInsect extends JComponent {
         g2d.setColor(Color.BLACK);
         g2d.drawRect(coordX, coordY, squareSize, squareSize);
         FontMetrics fm = g2d.getFontMetrics();
-        String insectId = GameModel.gameObjects.getK(this);
+        String insectId = GameModel.gameObjects.getK((Insect)insect);
         //this add the Id next to the object
         g2d.drawString(insectId, coordX + 10, coordY);
-
+        g2d.setColor(Color.BLUE);
     }
 
 }

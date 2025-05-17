@@ -33,5 +33,6 @@ public class GSpore extends JComponent {
         FontMetrics fm = g2d.getFontMetrics();
         //this add the spore number next to the object
         g2d.drawString(Integer.toString(spore), coordX + GTekton.RADIUS + 15, coordY + offsetY);
+        g2d.setColor(Color.BLUE);
     }
 }

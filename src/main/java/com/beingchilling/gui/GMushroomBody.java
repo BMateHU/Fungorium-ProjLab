@@ -1,6 +1,7 @@
 package com.beingchilling.gui;
 
 import com.beingchilling.game.GameModel;
+import com.beingchilling.model.MushroomBody;
 import com.beingchilling.view.InsectView;
 import com.beingchilling.view.MushroomBodyView;
 
@@ -34,8 +35,9 @@ public class GMushroomBody extends JComponent {
         g2d.setColor(Color.BLACK);
         g2d.draw(triangleShape);
         FontMetrics fm = g2d.getFontMetrics();
-        String mushroomId = GameModel.gameObjects.getK(this);
+        String mushroomId = GameModel.gameObjects.getK((MushroomBody)mushroom);
         //this add the Id next to the object
         g2d.drawString(mushroomId, coordX + 10, coordY);
+        g2d.setColor(Color.BLUE);
     }
 }
