@@ -2,10 +2,7 @@ package com.beingchilling.gui;
 
 import com.beingchilling.controller.ControllerComponent;
 import com.beingchilling.game.GameModel;
-import com.beingchilling.model.Insect;
-import com.beingchilling.model.InsectSpecies;
-import com.beingchilling.model.MushroomBody;
-import com.beingchilling.model.MushroomSpecies;
+import com.beingchilling.model.*;
 import com.beingchilling.view.ViewComponent;
 
 import javax.swing.*;
@@ -15,9 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Path2D;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GUI
 {
@@ -170,13 +165,22 @@ public class GUI
         placeholder2.setLayout(new BoxLayout(placeholder2, BoxLayout.Y_AXIS));
         placeholder2.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         growMushButton = new JButton("Grow Mushroom");
-        growMushParam1 = new JComboBox<>(new String[]{"Tekton 1"});
+        growMushParam1 = new JComboBox<>();
 
         growMushButton.addActionListener(e -> {
             MushroomSpecies s = (MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID());
             String lastMushroomID = GameModel.gameObjects.getK(s.checkMushroomBody().get(s.checkMushroomBody().size()-1));
             cc.ArgumentManagement("/growmush " + vc.getCurrentPlayerID() + " "+ lastMushroomID.substring(0, lastMushroomID.length() - 1)+s.checkMushroomBody().size() + " " + growMushParam1.getSelectedItem());
         });
+
+        //------------------------------------------------------------------------------
+        MushroomBody mb = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(MushroomThread mt : mb.getLocation().getThreads())
+            for(MushroomThread mt2 : mt.getThreads()) {
+                if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
+                    growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
+            }
+        //------------------------------------------------------------------------------
 
         configurePlaceholderComponents(placeholder2, growMushButton, growMushParam1);
 
@@ -185,12 +189,21 @@ public class GUI
         placeholder3.setLayout(new BoxLayout(placeholder3, BoxLayout.Y_AXIS));
         placeholder3.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         spreadSporeButton = new JButton("Spread Spore");
-        spreadSporeParam1 = new JComboBox<>(new String[]{"Tekton 1"});
+        spreadSporeParam1 = new JComboBox<>();
         spreadSporeParam2 = new JComboBox<>(new String[]{"Haste","Slow","Mute","Para","Clone","Normal"});
 
         spreadSporeButton.addActionListener(e -> {
             cc.ArgumentManagement("/spreadspore " + vc.getCurrentPuppetID() + " " + spreadSporeParam1.getSelectedItem() + " " + ((String)spreadSporeParam2.getSelectedItem()).charAt(0));
         });
+
+        //------------------------------------------------------------------------------
+        spreadSporeParam1.removeAllItems();
+        MushroomBody mb2 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(Tekton t : mb2.getLocation().getNeighbors()) {
+            spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+        }
+        //------------------------------------------------------------------------------
+
         configurePlaceholderComponents(placeholder3, spreadSporeButton, spreadSporeParam1, spreadSporeParam2);
 
         // Placeholder 4: Absorb Insect
@@ -204,6 +217,16 @@ public class GUI
             String lastMushroomID = GameModel.gameObjects.getK(s.checkMushroomBody().get(s.checkMushroomBody().size()-1));
             cc.ArgumentManagement("/absorbinsect " + absorbInsectParam1.getSelectedItem() + " " + lastMushroomID.substring(0, lastMushroomID.length() - 1)+s.checkMushroomBody().size());
         });
+
+        //------------------------------------------------------------------------------
+        absorbInsectParam1.removeAllItems();
+        MushroomBody mb3 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(MushroomThread mt : mb3.getLocation().getThreads()) {
+            if(mt.getLocation().getBody() == null && mt.getLocation().getInsect() != null)
+                absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
+        }
+        //------------------------------------------------------------------------------
+
         configurePlaceholderComponents(placeholder4, absorbInsectButton, absorbInsectParam1);
 
         // Add placeholders to the grid layout panel
@@ -262,7 +285,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player 1: Insect 1");
+        playerStats = new JLabel("Player" + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
@@ -275,7 +298,6 @@ public class GUI
         Border placeholderBorder = BorderFactory.createLineBorder(Color.DARK_GRAY);
         EmptyBorder innerPadding = new EmptyBorder(5, 5, 5, 5); // Inner padding for placeholders
 
-        // Placeholder 1: Grow Thread
         JPanel placeholder1 = new JPanel();
         placeholder1.setLayout(new BoxLayout(placeholder1, BoxLayout.Y_AXIS));
         placeholder1.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
@@ -285,9 +307,14 @@ public class GUI
             cc.ArgumentManagement("/move " + vc.getCurrentPuppetID() + " " + moveParam1.getSelectedItem());
         });
 
+        //------------------------------------------------------------------------------
+        Insect i2 = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(Tekton t : i2.getLocation().getNeighborWithThread())
+            moveParam1.addItem(GameModel.gameObjects.getK(t));
+        //------------------------------------------------------------------------------
+
         configurePlaceholderComponents(placeholder1, moveButton, moveParam1);
 
-        // Placeholder 2: Grow Mushroom
         JPanel placeholder2 = new JPanel();
         placeholder2.setLayout(new BoxLayout(placeholder2, BoxLayout.Y_AXIS));
         placeholder2.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
@@ -298,12 +325,22 @@ public class GUI
         });
         configurePlaceholderComponents(placeholder2, eatButton);
 
-        // Placeholder 3: Spread Spore
         JPanel placeholder3 = new JPanel();
         placeholder3.setLayout(new BoxLayout(placeholder3, BoxLayout.Y_AXIS));
         placeholder3.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         cutButton = new JButton("Cut");
-        cutParam1 = new JComboBox<>(new String[]{"Thread 1"});
+        cutParam1 = new JComboBox<>();
+
+        //-----------------------------------------------------------------------
+        Insect i = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        Tekton t = i.getLocation();
+        for(MushroomThread thread : t.getThreads()) {
+            if(i.canCutThread()) {
+                cutParam1.addItem(GameModel.gameObjects.getK(thread));
+            }
+        }
+        //-----------------------------------------------------------------------
+
         cutButton.addActionListener(e -> {
             cc.ArgumentManagement("/cut " + vc.getCurrentPuppetID() + " " + cutParam1.getSelectedItem());
         });
@@ -324,6 +361,8 @@ public class GUI
             Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
             Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
             if(cc.getWhichPlayer() >= GameModel.gombasz.size()) { // if its insect turn
+                if(cc.getWhichPlayer() == GameModel.gombasz.size())
+                    switchPanels();
                 if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
                     cc.setWhichPuppet(1);//go to 1 puppet of next player
                     cc.setWhichPlayer(cc.getWhichPlayer()+1);
