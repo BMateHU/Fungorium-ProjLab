@@ -1,5 +1,6 @@
 package com.beingchilling.controller;
 
+import com.beingchilling.Main;
 import com.beingchilling.game.GameModel;
 import com.beingchilling.gui.*;
 import com.beingchilling.model.*;
@@ -476,6 +477,7 @@ public class ControllerComponent implements IFactory {
 
         ((GTekton)GUI.objects.getV(t)).setX(p.x);
         ((GTekton)GUI.objects.getV(t)).setY(p.y);
+        Main.frame.reDrawAll();
     }
 
     private Point randomPoint(int x, int y) {
@@ -493,15 +495,18 @@ public class ControllerComponent implements IFactory {
     @Override
     public void onCreationMushroomBody(MushroomBody mb) {
         GUI.objects.put(mb, new GMushroomBody(mb));
+        Main.frame.reDrawAll();
     }
 
     @Override
     public void onCreationSpore(Spore sp, TektonView t) {
         GUI.objects.put(sp, new GSpore(sp, t));
+        Main.frame.reDrawAll();
     }
 
     @Override
     public void onCreationInsect(Insect ins) {
         GUI.objects.put(ins, new GInsect(ins));
+        Main.frame.reDrawAll();
     }
 }
