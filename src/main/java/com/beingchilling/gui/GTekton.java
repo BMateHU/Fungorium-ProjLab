@@ -1,6 +1,7 @@
 package com.beingchilling.gui;
 
 import com.beingchilling.game.GameModel;
+import com.beingchilling.model.Tekton;
 import com.beingchilling.view.TektonView;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ public class GTekton extends JComponent {
     ArrayList<JComponent> spores = new ArrayList<>();
     JComponent mushroomBody;
     JComponent insect;
-    public static final int RADIUS = 20;
+    public static final int RADIUS = 50;
     private int x, y; //this should mark center point of the circle, (as I saw the normal X and Y is the left upper corner of the circle (so just - radius)
 
     public GTekton(TektonView tekton) {
@@ -22,21 +23,29 @@ public class GTekton extends JComponent {
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
-        mushroomBody = GUI.objects.getV(tekton.getBody());
-        insect = GUI.objects.getV(tekton.getInsect());
+        if(!tekton.getSpores().isEmpty())
+            tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
+        if(tekton.getBody() != null)
+            mushroomBody = GUI.objects.getV(tekton.getBody());
+        if(tekton.getInsect() != null)
+            insect = GUI.objects.getV(tekton.getInsect());
         super.paint(g);
-        //kor
         g2d.setColor(Color.BLUE);
         g2d.setStroke(new BasicStroke(2));
-        g2d.drawOval(x, y, RADIUS * 2, RADIUS * 2);
+        g2d.drawOval(x- RADIUS, y- RADIUS, RADIUS * 2, RADIUS * 2);
         FontMetrics fm = g2d.getFontMetrics();
-        String tektonId = GameModel.gameObjects.getK(this);
+        String tektonId = GameModel.gameObjects.getK((Tekton)tekton);
+
         g2d.drawString(tektonId, x, y + RADIUS + 20);
 
-        mushroomBody.paint(g);
-        insect.paint(g);
-        spores.getFirst().paint(g);
+        if(mushroomBody != null)
+            mushroomBody.paint(g);
+        if(insect != null)
+            insect.paint(g);
+        if(!spores.isEmpty())
+            for(int i = 0; i < 4; i++) {
+                spores.get(i).paint(g);
+            }
 
 
 
