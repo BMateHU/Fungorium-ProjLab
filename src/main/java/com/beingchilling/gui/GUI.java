@@ -55,27 +55,27 @@ public class GUI
 
     public GUI() {
         vc.setControllerComponent(cc);
-
-        try {
-            InputStream url = GUI.class.getClassLoader().getResourceAsStream("start.txt");
-            assert url != null;
-            cc.load(url);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        mushroomPanel = new JPanel();
+        insectPanel = new JPanel();
+        objects = new BiMap<>();
 
         frame = new JFrame();
         frame.setTitle("Fungorium");
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT); // Set fixed size
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null); // Center the window
-        mushroomPanel = new JPanel();
-        insectPanel = new JPanel();
-        objects = new BiMap<>();
 
         init();
 
         frame.setVisible(true);
+
+        try {
+            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
+            assert url != null;
+            cc.load(url);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private final JPanel topPanel = createTopPanel();

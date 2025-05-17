@@ -21,10 +21,13 @@ public class GTekton extends JComponent {
 
     @Override
     public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
-        mushroomBody = GUI.objects.getV(tekton.getBody());
-        insect = GUI.objects.getV(tekton.getInsect());
+        if(!tekton.getSpores().isEmpty())
+            tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
+        if(tekton.getBody() != null)
+            mushroomBody = GUI.objects.getV(tekton.getBody());
+        if(tekton.getInsect() != null)
+            insect = GUI.objects.getV(tekton.getInsect());
+
         super.paint(g);
         //kor
         g2d.setColor(Color.BLUE);
@@ -34,19 +37,14 @@ public class GTekton extends JComponent {
         String tektonId = GameModel.gameObjects.getK(this);
         g2d.drawString(tektonId, x, y + RADIUS + 20);
 
-        mushroomBody.paint(g);
-        insect.paint(g);
-        spores.getFirst().paint(g);
-
-
-
-        //spora szam kiiras
-
-        //id kiiras tekton ala
-        //FontMetrics fm = g2d.getFontMetrics();
-        // String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
-        // int tekton1Width = fm.stringWidth(threadLabel);
-        // g2d.drawString(threadLabel, x+(x-x2) - tekton1Width/2, y+(y-y2));
+        if(mushroomBody != null)
+            mushroomBody.paint(g);
+        if(insect != null)
+            insect.paint(g);
+        if(!spores.isEmpty())
+            for(int i = 0; i < 4; i++) {
+                spores.get(i).paint(g);
+            }
     }
 
     @Override
