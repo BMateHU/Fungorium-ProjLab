@@ -22,17 +22,23 @@ public class GTekton extends JComponent {
 
     @Override
     public void paint(Graphics g) {
-        tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
-        mushroomBody = GUI.objects.getV(tekton.getBody());
-        insect = GUI.objects.getV(tekton.getInsect());
+        if(!tekton.getSpores().isEmpty())
+            tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
+        if(tekton.getBody() != null)
+            mushroomBody = GUI.objects.getV(tekton.getBody());
+        if(tekton.getInsect() != null)
+            insect = GUI.objects.getV(tekton.getInsect());
 
         super.paint(g);
 
-        mushroomBody.paint(g);
-        insect.paint(g);
-        for(int i = 0; i < 4; i++) {
-            spores.get(i).paint(g);
-        }
+        if(mushroomBody != null)
+            mushroomBody.paint(g);
+        if(insect != null)
+            insect.paint(g);
+        if(!spores.isEmpty())
+            for(int i = 0; i < 4; i++) {
+                spores.get(i).paint(g);
+            }
     }
 
     @Override
