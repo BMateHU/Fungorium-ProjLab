@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class GUI
 {
-    static BiMap<Object, JComponent> objects;
+    public static BiMap<Object, JComponent> objects;
     private JLabel playerStats;
     private JLabel round;
     private JButton growThreadButton;
@@ -715,125 +715,41 @@ public class GUI
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            for(Tekton t : GameModel.map.tektonList.values()) {
-                objects.getV(t).paint(g2d);
-                int x = ((GTekton)objects.getV(t)).getX();
-                int y = ((GTekton)objects.getV(t)).getY();
+            if(!objects.keySet().isEmpty()) {
+                for (Tekton t : GameModel.map.tektonList.values()) {
+                    objects.getV(t).paint(g2d);
+                    int x = ((GTekton) objects.getV(t)).getX();
+                    int y = ((GTekton) objects.getV(t)).getY();
 
-                Stroke defaultStroke = g2d.getStroke();
+                    Stroke defaultStroke = g2d.getStroke();
 
-                ArrayList<Tekton> neighbourWithoutThread = new ArrayList<>(t.getNeighbors());
-                neighbourWithoutThread.removeAll(t.getNeighborWithThread());
+                    ArrayList<Tekton> neighbourWithoutThread = new ArrayList<>(t.getNeighbors());
+                    neighbourWithoutThread.removeAll(t.getNeighborWithThread());
 
-                for(Tekton t2 : neighbourWithoutThread) {
-                    int x2 = ((GTekton)objects.getV(t2)).getX();
-                    int y2 = ((GTekton)objects.getV(t2)).getY();
+                    for (Tekton t2 : neighbourWithoutThread) {
+                        int x2 = ((GTekton) objects.getV(t2)).getX();
+                        int y2 = ((GTekton) objects.getV(t2)).getY();
 
-                    Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
-                    g2d.setStroke(dashedStroke);
-                    g2d.drawLine(x, y, x2, y2);
-                }
+                        Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
+                        g2d.setStroke(dashedStroke);
+                        g2d.drawLine(x, y, x2, y2);
+                    }
 
-                for(Tekton t2 : t.getNeighborWithThread()) {
-                    int x2 = ((GTekton)objects.getV(t2)).getX();
-                    int y2 = ((GTekton)objects.getV(t2)).getY();
+                    for (Tekton t2 : t.getNeighborWithThread()) {
+                        int x2 = ((GTekton) objects.getV(t2)).getX();
+                        int y2 = ((GTekton) objects.getV(t2)).getY();
 
-                    g2d.setStroke(defaultStroke);
-                    g2d.setColor(Color.BLACK);
-                    g2d.drawLine(x, y, x2, y2);
+                        g2d.setStroke(defaultStroke);
+                        g2d.setColor(Color.BLACK);
+                        g2d.drawLine(x, y, x2, y2);
 
-                    FontMetrics fm = g2d.getFontMetrics();
-                    String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
-                    int tekton1Width = fm.stringWidth(threadLabel);
-                    g2d.drawString(threadLabel, x+(x-x2) - tekton1Width/2, y+(y-y2));
+                        FontMetrics fm = g2d.getFontMetrics();
+                        String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
+                        int tekton1Width = fm.stringWidth(threadLabel);
+                        g2d.drawString(threadLabel, x + (x - x2) - tekton1Width / 2, y + (y - y2));
+                    }
                 }
             }
-
-            // EZT ITT HAGYOM MERT A G* HOZ KELLENI FOG, A G*-BAN KENE MEGVALOSITANI A SZOVEG IRAST, ARRA FIGYELJETEK PLS
-
-            int panelWidth = getWidth();
-            int panelHeight = getHeight();
-
-            int circleRadius = 20;
-            int circleDiameter = circleRadius * 2;
-            int triangleBase = panelWidth / 30;
-            int triangleHeight = panelHeight / 40;
-
-            int c1x = 300;
-            int c1y = 40;
-            Point center1 = new Point(c1x + circleRadius, c1y + circleRadius);
-
-            int c2x = c1x - triangleBase / 2 - circleRadius;
-            int c2y = c1y + triangleHeight / 2 - circleRadius;
-            Point center2 = new Point(c2x + circleRadius, c2y + circleRadius);
-
-            int c3x = c1x + triangleBase / 2 - circleRadius;
-            int c3y = c1y + triangleHeight / 2 - circleRadius;
-            Point center3 = new Point(c3x + circleRadius, c3y + circleRadius);
-
-            g2d.setColor(Color.BLUE);
-            g2d.setStroke(new BasicStroke(2));
-            g2d.drawOval(c1x, c1y, circleDiameter, circleDiameter);
-            g2d.drawOval(c2x, c2y, circleDiameter, circleDiameter);
-            g2d.drawOval(c3x, c3y, circleDiameter, circleDiameter);
-
-            int squareSize = 8;
-            int squareX = center3.x - squareSize / 2;
-            int squareY = center3.y - squareSize / 2;
-            g2d.setColor(new Color(139, 69, 19));
-            g2d.fillRect(squareX, squareY, squareSize, squareSize);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(squareX, squareY, squareSize, squareSize);
-
-
-            int triangleShapeSize = 10;
-            Path2D triangleShape = new Path2D.Double();
-            triangleShape.moveTo(center2.x, center2.y - triangleShapeSize / 1.5);
-            triangleShape.lineTo(center2.x - triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0);
-            triangleShape.lineTo(center2.x + triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0);
-            triangleShape.closePath();
-
-            g2d.setColor(Color.YELLOW);
-            g2d.fill(triangleShape);
-            g2d.setColor(Color.BLACK);
-            g2d.draw(triangleShape);
-
-            int smallCircleRadius = 3;
-            int smallCircleDiameter = smallCircleRadius * 2;
-            g2d.setColor(Color.GREEN);
-            int offset = circleRadius / 3;
-            g2d.fillOval(center1.x - smallCircleRadius, center1.y - offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
-            g2d.fillOval(center1.x - offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
-            g2d.fillOval(center1.x + offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
-
-
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Arial", Font.BOLD, 12));
-
-            int labelOffset = circleRadius + 15;
-            int shapeLabelOffset = 15;
-
-            FontMetrics fm = g2d.getFontMetrics();
-
-            String tekton1Label = "Tekton1";
-            int tekton1Width = fm.stringWidth(tekton1Label);
-            g2d.drawString(tekton1Label, center1.x - tekton1Width / 2, center1.y + labelOffset);
-
-            String tekton2Label = "Tekton2";
-            int tekton2Width = fm.stringWidth(tekton2Label);
-            g2d.drawString(tekton2Label, center2.x - tekton2Width / 2, center2.y + labelOffset);
-
-            String tekton3Label = "Tekton3";
-            int tekton3Width = fm.stringWidth(tekton3Label);
-            g2d.drawString(tekton3Label, center3.x - tekton3Width / 2, center3.y + labelOffset);
-
-            String gombaLabel = "Gomba1";
-            int gombaWidth = fm.stringWidth(gombaLabel);
-            g2d.drawString(gombaLabel, center2.x - gombaWidth / 2, (int)(center2.y + triangleShapeSize / 3.0) + shapeLabelOffset + 5);
-
-            String rovarLabel = "Rovar1";
-            int rovarWidth = fm.stringWidth(rovarLabel);
-            g2d.drawString(rovarLabel, center3.x - rovarWidth / 2, squareY + squareSize + shapeLabelOffset);
         }
     }
 }
