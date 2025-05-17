@@ -2,26 +2,24 @@ package com.beingchilling.gui;
 
 import com.beingchilling.Main;
 import com.beingchilling.controller.ControllerComponent;
+import com.beingchilling.game.BiMap;
 import com.beingchilling.game.GameModel;
-import com.beingchilling.model.*;
+import com.beingchilling.model.Tekton;
 import com.beingchilling.view.ViewComponent;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Path2D;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class GUI
 {
-    private HashMap<Object, JComponent> objects;
+    static BiMap<Object, JComponent> objects;
     private JLabel playerStats;
     private JLabel round;
     private JButton growThreadButton;
@@ -72,15 +70,8 @@ public class GUI
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null); // Center the window
         mushroomPanel = new JPanel();
-        objects = new HashMap<>();
-
-        try {
-            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
-            assert url != null;
-            cc.load(url);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        insectPanel = new JPanel();
+        objects = new BiMap<>();
 
         init();
 
@@ -697,7 +688,9 @@ public class GUI
                         JViewport viewport = (JViewport) getParent();
                         int newX = viewStartPoint.x - dx;
                         int newY = viewStartPoint.y - dy;
-                        viewport.setViewPosition(new Point(newX, newY));
+                        if(newX > 0 && newY > 0) {
+                            viewport.setViewPosition(new Point(newX, newY));
+                        }
                     }
                 }
 
@@ -722,24 +715,60 @@ public class GUI
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+            for(Tekton t : GameModel.map.tektonList.values()) {
+                objects.getV(t).paint(g2d);
+                int x = ((GTekton)objects.getV(t)).getX();
+                int y = ((GTekton)objects.getV(t)).getY();
+
+                Stroke defaultStroke = g2d.getStroke();
+
+                ArrayList<Tekton> neighbourWithoutThread = new ArrayList<>(t.getNeighbors());
+                neighbourWithoutThread.removeAll(t.getNeighborWithThread());
+
+                for(Tekton t2 : neighbourWithoutThread) {
+                    int x2 = ((GTekton)objects.getV(t2)).getX();
+                    int y2 = ((GTekton)objects.getV(t2)).getY();
+
+                    Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
+                    g2d.setStroke(dashedStroke);
+                    g2d.drawLine(x, y, x2, y2);
+                }
+
+                for(Tekton t2 : t.getNeighborWithThread()) {
+                    int x2 = ((GTekton)objects.getV(t2)).getX();
+                    int y2 = ((GTekton)objects.getV(t2)).getY();
+
+                    g2d.setStroke(defaultStroke);
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawLine(x, y, x2, y2);
+
+                    FontMetrics fm = g2d.getFontMetrics();
+                    String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
+                    int tekton1Width = fm.stringWidth(threadLabel);
+                    g2d.drawString(threadLabel, x+(x-x2) - tekton1Width/2, y+(y-y2));
+                }
+            }
+
+            // EZT ITT HAGYOM MERT A G* HOZ KELLENI FOG, A G*-BAN KENE MEGVALOSITANI A SZOVEG IRAST, ARRA FIGYELJETEK PLS
+
             int panelWidth = getWidth();
             int panelHeight = getHeight();
 
-            int circleRadius = 50;
+            int circleRadius = 20;
             int circleDiameter = circleRadius * 2;
-            int triangleBase = panelWidth / 3;
-            int triangleHeight = panelHeight / 4;
+            int triangleBase = panelWidth / 30;
+            int triangleHeight = panelHeight / 40;
 
-            int c1x = panelWidth / 2 - circleRadius;
-            int c1y = panelHeight / 2 - triangleHeight / 2 - circleRadius;
+            int c1x = 300;
+            int c1y = 40;
             Point center1 = new Point(c1x + circleRadius, c1y + circleRadius);
 
-            int c2x = panelWidth / 2 - triangleBase / 2 - circleRadius;
-            int c2y = panelHeight / 2 + triangleHeight / 2 - circleRadius;
+            int c2x = c1x - triangleBase / 2 - circleRadius;
+            int c2y = c1y + triangleHeight / 2 - circleRadius;
             Point center2 = new Point(c2x + circleRadius, c2y + circleRadius);
 
-            int c3x = panelWidth / 2 + triangleBase / 2 - circleRadius;
-            int c3y = panelHeight / 2 + triangleHeight / 2 - circleRadius;
+            int c3x = c1x + triangleBase / 2 - circleRadius;
+            int c3y = c1y + triangleHeight / 2 - circleRadius;
             Point center3 = new Point(c3x + circleRadius, c3y + circleRadius);
 
             g2d.setColor(Color.BLUE);
@@ -748,18 +777,7 @@ public class GUI
             g2d.drawOval(c2x, c2y, circleDiameter, circleDiameter);
             g2d.drawOval(c3x, c3y, circleDiameter, circleDiameter);
 
-            Stroke defaultStroke = g2d.getStroke();
-
-            g2d.setColor(Color.BLACK);
-            g2d.drawLine(center1.x, center1.y, center2.x, center2.y);
-
-            Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
-            g2d.setStroke(dashedStroke);
-            g2d.drawLine(center1.x, center1.y, center3.x, center3.y);
-
-            g2d.setStroke(defaultStroke);
-
-            int squareSize = 20;
+            int squareSize = 8;
             int squareX = center3.x - squareSize / 2;
             int squareY = center3.y - squareSize / 2;
             g2d.setColor(new Color(139, 69, 19));
@@ -768,7 +786,7 @@ public class GUI
             g2d.drawRect(squareX, squareY, squareSize, squareSize);
 
 
-            int triangleShapeSize = 25;
+            int triangleShapeSize = 10;
             Path2D triangleShape = new Path2D.Double();
             triangleShape.moveTo(center2.x, center2.y - triangleShapeSize / 1.5);
             triangleShape.lineTo(center2.x - triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0);
@@ -780,7 +798,7 @@ public class GUI
             g2d.setColor(Color.BLACK);
             g2d.draw(triangleShape);
 
-            int smallCircleRadius = 8;
+            int smallCircleRadius = 3;
             int smallCircleDiameter = smallCircleRadius * 2;
             g2d.setColor(Color.GREEN);
             int offset = circleRadius / 3;
