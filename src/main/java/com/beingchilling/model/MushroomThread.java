@@ -50,6 +50,14 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         lifeSupport = false;
     }
 
+    public List<MushroomThread> getThreads() {
+        ArrayList<MushroomThread> threads = new ArrayList<>();
+        for (MushroomThread thread : nextGrowed) {
+            threads.addAll(thread.getThreads());
+        }
+        return threads;
+    }
+
 
     /**
      * A listához hozzáadja az adott fonalat.
