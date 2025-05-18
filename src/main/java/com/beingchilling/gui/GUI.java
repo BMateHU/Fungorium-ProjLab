@@ -261,23 +261,8 @@ public class GUI
         skipButton.addActionListener(e -> {
             Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
             Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
-            if(cc.getWhichPlayer() >= GameModel.gombasz.size()) { // if its insect turn
-                if(cc.getWhichPlayer() == GameModel.gombasz.size())
-                    switchPanels();
-                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
-                    cc.setWhichPuppet(1);//go to 1 puppet of next player
-                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
-                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size()) { // if no next player,set to 1
-                        cc.setRound(cc.getRound()+1);
-                        cc.setWhichPlayer(1);
-                        cc.setWhichPuppet(1);
-                        round.setText("round " + cc.getRound());
-                        return;
-                    }
-                }
-                else
-                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
-                playerStats.setText("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size() - 1) + ": Insect " + cc.getWhichPuppet());
+            if(cc.getWhichPlayer() >= MushroomSpeciesSet.size()) { // if its insect turn
+                playerStats.setText("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
 
                 //Ezzel az a baj, hogy 1.-re nem frissul u need to fix this for example (vagy lehet de idk hol)
                 //------------------------------------------------------------------------------
@@ -295,15 +280,24 @@ public class GUI
                 for(Tekton t2 : i2.getLocation().getNeighborWithThread())
                     moveParam1.addItem(GameModel.gameObjects.getK(t2));
                 //------------------------------------------------------------------------------
-            }
-            else {//if it mushroom turn
-                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+
+                if(cc.getWhichPlayer() == GameModel.gombasz.size())
+                    switchPanels();
+                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
                     cc.setWhichPuppet(1);//go to 1 puppet of next player
-                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
-                    //PROBABLY BECUASE OF THIS (READ BELOW)
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
+                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size()) { // if no next player,set to 1
+                        cc.setRound(cc.getRound()+1);
+                        cc.setWhichPlayer(1);
+                        cc.setWhichPuppet(1);
+                        round.setText("round " + cc.getRound());
+                        return;
+                    }
                 }
                 else
                     cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+            else {//if it mushroom turn
                 playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Gomba " + cc.getWhichPuppet());
 
                 //------------------------------------------------------------------------------
@@ -332,6 +326,13 @@ public class GUI
                         absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
                 }
                 //------------------------------------------------------------------------------
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                    //PROBABLY BECUASE OF THIS (READ BELOW)
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
             }
 
             reDrawAll();
@@ -357,7 +358,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size() - 1) + ": Insect " + cc.getWhichPuppet());
+        playerStats = new JLabel("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
@@ -421,23 +422,8 @@ public class GUI
         skipButton.addActionListener(e -> {
             Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
             Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
-            if(cc.getWhichPlayer() >= GameModel.gombasz.size()) { // if its insect turn
-                if(cc.getWhichPlayer() == GameModel.gombasz.size())
-                    switchPanels();
-                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
-                    cc.setWhichPuppet(1);//go to 1 puppet of next player
-                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
-                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size() - 1) { // if no next player,set to 1
-                        cc.setRound(cc.getRound()+1);
-                        cc.setWhichPlayer(1);
-                        cc.setWhichPuppet(1);
-                        round.setText("round " + cc.getRound());
-                        return;
-                    }
-                }
-                else
-                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
-                playerStats.setText("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size() -1) + ": Insect " + cc.getWhichPuppet());
+            if(cc.getWhichPlayer() >= MushroomSpeciesSet.size()) { // if its insect turn
+                playerStats.setText("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
 
                 //Ezzel az a baj, hogy 1.-re nem frissul u need to fix this for example (vagy lehet de idk hol)
                 //------------------------------------------------------------------------------
@@ -455,15 +441,60 @@ public class GUI
                 for(Tekton t2 : i2.getLocation().getNeighborWithThread())
                     moveParam1.addItem(GameModel.gameObjects.getK(t2));
                 //------------------------------------------------------------------------------
-            }
-            else {//if it mushroom turn
-                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+
+                if(cc.getWhichPlayer() == GameModel.gombasz.size())
+                    switchPanels();
+                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
                     cc.setWhichPuppet(1);//go to 1 puppet of next player
-                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
+                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size() - 1) { // if no next player,set to 1
+                        cc.setRound(cc.getRound()+1);
+                        cc.setWhichPlayer(1);
+                        cc.setWhichPuppet(1);
+                        round.setText("round " + cc.getRound());
+                        reDrawAll();
+                        return;
+                    }
                 }
                 else
                     cc.setWhichPuppet(cc.getWhichPuppet()+1);
-                playerStats.setText("Player " + cc.getWhichPlayer() + ": Gomba " + cc.getWhichPuppet());
+            }
+            else {//if it mushroom turn
+                playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Gomba " + cc.getWhichPuppet());
+
+                //------------------------------------------------------------------------------
+                growMushParam1.removeAllItems();
+                MushroomBody mb4 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID()); //here class com.beingchilling.model.Insect cannot be cast to class com.beingchilling.model.MushroomBody (com.beingchilling.model.Insect and com.beingchilling.model.MushroomBody are in unnamed module of loader 'app')
+                for(MushroomThread mt : mb4.getLocation().getThreads())
+                    for(MushroomThread mt2 : mt.getThreads()) {
+                        if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
+                            growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
+                    }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                spreadSporeParam1.removeAllItems();
+                MushroomBody mb5 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(Tekton t : mb5.getLocation().getNeighbors()) {
+                    spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+                }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                absorbInsectParam1.removeAllItems();
+                MushroomBody mb6 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(MushroomThread mt : mb6.getLocation().getThreads()) {
+                    if(mt.getLocation().getBody() == null && mt.getLocation().getInsect() != null)
+                        absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
+                }
+                //------------------------------------------------------------------------------
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                    //PROBABLY BECUASE OF THIS (READ BELOW)
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
             }
 
             reDrawAll();
