@@ -21,7 +21,7 @@ public class GMushroomBody extends JComponent {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g);
         int coordX = GUI.objects.getV(mushroom.getLocation()).getX();
-        int coordY = GUI.objects.getV(mushroom.getLocation()).getY() + 10;
+        int coordY = GUI.objects.getV(mushroom.getLocation()).getY() + 15;
         int triangleShapeSize = 25; // Size of the yellow triangle shape
         Path2D triangleShape = new Path2D.Double();
         // Define vertices relative to the center of circle 2

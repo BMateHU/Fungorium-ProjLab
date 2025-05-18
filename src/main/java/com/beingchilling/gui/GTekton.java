@@ -1,12 +1,15 @@
 package com.beingchilling.gui;
 
 import com.beingchilling.game.GameModel;
+import com.beingchilling.model.Spore;
 import com.beingchilling.model.Tekton;
+import com.beingchilling.view.SporeView;
 import com.beingchilling.view.TektonView;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+
 
 public class GTekton extends JComponent {
     TektonView tekton;
@@ -24,8 +27,12 @@ public class GTekton extends JComponent {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        if(!tekton.getSpores().isEmpty())
-            tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
+        if(!tekton.getSpores().isEmpty()) {
+            List<Spore> sp = tekton.getSpores();
+            for(int i = 0 ; i < sp.size() ; i++) {
+                spores.add(GUI.objects.getV(sp.get(i)));
+            }
+        }
         if(tekton.getBody() != null)
             mushroomBody = GUI.objects.getV(tekton.getBody());
         if(tekton.getInsect() != null)
@@ -33,7 +40,7 @@ public class GTekton extends JComponent {
         g2d.setColor(Color.BLUE);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawOval(x- RADIUS, y- RADIUS, RADIUS * 2, RADIUS * 2);
-        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.setColor(Color.WHITE);
         g2d.fillOval(x- RADIUS + 1, y- RADIUS + 1, RADIUS * 2 - 1, RADIUS * 2 - 1);
         g2d.setColor(Color.BLUE);
         FontMetrics fm = g2d.getFontMetrics();
@@ -46,12 +53,13 @@ public class GTekton extends JComponent {
             mushroomBody.paint(g);
         if(insect != null)
             insect.paint(g);
-        if(!spores.isEmpty())
-            for(int i = 0; i < 4; i++) {
-                spores.get(i).paint(g);
-            }
-
-
+        if(!spores.isEmpty()) {
+//            for (int i = 0; i < 4; i++) {
+//                spores.get(i).paint(g);
+//            }
+            //spores.add(new GSpore((SporeView) new Spore(5), tekton));
+            spores.get(spores.size() -1 ).paint(g);
+        }
 
         //spora szam kiiras
 
