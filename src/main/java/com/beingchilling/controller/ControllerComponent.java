@@ -162,7 +162,8 @@ public class ControllerComponent implements IFactory {
                     }
                     GameModel.gameObjects.put(words[2], spore);
                     tekton.addSpore(spore);
-                    onCreationSpore(spore,tekton);
+                    if(GUI.objects != null)
+                        onCreationSpore(spore,tekton);
                     break;
                 case "/addthread":
                     MushroomThread newThread2 = new MushroomThread();
