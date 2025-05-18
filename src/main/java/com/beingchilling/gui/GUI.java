@@ -56,7 +56,7 @@ public class GUI
     public GUI() {
         vc.setControllerComponent(cc);
         mushroomPanel = new JPanel();
-        insectPanel = new JPanel();
+        insectPanel = null;
         objects = new BiMap<>();
 
         frame = new JFrame();
@@ -79,13 +79,6 @@ public class GUI
 
         frame.setVisible(true);
 
-        try {
-            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
-            assert url != null;
-            cc.load(url);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private final JPanel topPanel = createTopPanel();
