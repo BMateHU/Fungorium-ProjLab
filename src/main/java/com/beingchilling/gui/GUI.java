@@ -174,6 +174,8 @@ public class GUI
         });
 
         //------------------------------------------------------------
+        growThreadParam2.removeAllItems();
+        growThreadParam1.removeAllItems();
         Set<Tekton> tektons = new HashSet<>();
         for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
             growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
@@ -205,6 +207,7 @@ public class GUI
         });
 
         //------------------------------------------------------------------------------
+        growMushParam1.removeAllItems();
         MushroomBody mb = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
         for(MushroomThread mt : mb.getLocation().getThreads())
             for(MushroomThread mt2 : mt.getThreads()) {
@@ -281,7 +284,8 @@ public class GUI
 
                 //Ezzel az a baj, hogy 1.-re nem frissul u need to fix this for example (vagy lehet de idk hol)
                 //------------------------------------------------------------------------------
-                cutParam1.removeAllItems();
+                if(cutParam1 != null)
+                    cutParam1.removeAllItems();
                 Insect i = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
                 Tekton t = i.getLocation();
                 for(MushroomThread thread : t.getThreads()) {
@@ -291,23 +295,9 @@ public class GUI
                 }
                 //------------------------------------------------------------------------------
 
-                //------------------------------------------------------------
-                Set<Tekton> tektons2 = new HashSet<>();
-                for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
-                    growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
-                    for(Tekton t5 : mt5.getLocation().getNeighbors()) {
-                        if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
-                            tektons2.add(t5);
-                        }
-                    }
-                }
-                for(Tekton t5 : tektons2) {
-                    growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
-                }
-                //-------------------------------------------------------------
-
                 //------------------------------------------------------------------------------
-                moveParam1.removeAllItems();
+                if(moveParam1 != null)
+                    moveParam1.removeAllItems();
                 Insect i2 = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
                 for(Tekton t2 : i2.getLocation().getNeighborWithThread())
                     moveParam1.addItem(GameModel.gameObjects.getK(t2));
@@ -341,6 +331,23 @@ public class GUI
                             growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
                     }
                 //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------
+                growThreadParam2.removeAllItems();
+                growThreadParam1.removeAllItems();
+                Set<Tekton> tektons2 = new HashSet<>();
+                for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
+                    growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
+                    for(Tekton t5 : mt5.getLocation().getNeighbors()) {
+                        if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
+                            tektons2.add(t5);
+                        }
+                    }
+                }
+                for(Tekton t5 : tektons2) {
+                    growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
+                }
+                //-------------------------------------------------------------
 
                 //------------------------------------------------------------------------------
                 spreadSporeParam1.removeAllItems();
@@ -516,6 +523,23 @@ public class GUI
                     spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
                 }
                 //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------
+                growThreadParam2.removeAllItems();
+                growThreadParam1.removeAllItems();
+                Set<Tekton> tektons2 = new HashSet<>();
+                for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
+                    growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
+                    for(Tekton t5 : mt5.getLocation().getNeighbors()) {
+                        if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
+                            tektons2.add(t5);
+                        }
+                    }
+                }
+                for(Tekton t5 : tektons2) {
+                    growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
+                }
+                //-------------------------------------------------------------
 
                 //------------------------------------------------------------------------------
                 absorbInsectParam1.removeAllItems();
