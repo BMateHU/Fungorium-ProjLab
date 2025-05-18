@@ -341,7 +341,6 @@ public class GUI
                         cc.setRound(cc.getRound()+1);
                         cc.setWhichPlayer(1);
                         cc.setWhichPuppet(1);
-                        //round.setText("round " + cc.getRound());
                         topPanel.remove(0);
                         round = new JLabel("round " + cc.getRound());
                         round.setFont(round.getFont().deriveFont(Font.BOLD, 14f));
@@ -354,6 +353,16 @@ public class GUI
                     cc.setWhichPuppet(cc.getWhichPuppet()+1);
             }
             else {//if it mushroom turn
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                    if(cc.getWhichPlayer() == MushroomSpeciesSet.size()) {
+                        switchPanels();
+                        return;
+                    }
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
 
                 playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Mushroom " + cc.getWhichPuppet());
 
@@ -400,15 +409,6 @@ public class GUI
                         absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
                 }
                 //------------------------------------------------------------------------------
-                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
-                    cc.setWhichPuppet(1);//go to 1 puppet of next player
-                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
-                    //PROBABLY BECUASE OF THIS (READ BELOW)
-                }
-                else
-                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
-                if(cc.getWhichPlayer() == 1)
-                    switchPanels();
             }
 
             reDrawAll();
