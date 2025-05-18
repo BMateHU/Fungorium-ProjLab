@@ -29,10 +29,10 @@ public class GSpore extends JComponent {
         g2d.setColor(Color.GREEN);
         // Position them in a small triangle pattern inside Circle
         int offsetY = 10;
-        g2d.fillOval(coordX + GTekton.RADIUS + 10, coordY + offsetY, smallCircleDiameter, smallCircleDiameter); // Top small circle
+        g2d.fillOval(coordX + GTekton.RADIUS + 10, coordY - offsetY, smallCircleDiameter, smallCircleDiameter); // Top small circle
         FontMetrics fm = g2d.getFontMetrics();
         //this add the spore number next to the object
-        g2d.drawString(Integer.toString(spore), coordX + GTekton.RADIUS + 15, coordY + offsetY);
+        g2d.drawString(Integer.toString(spore), coordX + GTekton.RADIUS + 15, coordY - offsetY);
         g2d.setColor(Color.BLUE);
     }
 }

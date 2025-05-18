@@ -22,6 +22,7 @@ public class GTekton extends JComponent {
 
     @Override
     public void paint(Graphics g) {
+        super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
         if(!tekton.getSpores().isEmpty())
             tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
@@ -29,15 +30,18 @@ public class GTekton extends JComponent {
             mushroomBody = GUI.objects.getV(tekton.getBody());
         if(tekton.getInsect() != null)
             insect = GUI.objects.getV(tekton.getInsect());
-        super.paint(g);
         g2d.setColor(Color.BLUE);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawOval(x- RADIUS, y- RADIUS, RADIUS * 2, RADIUS * 2);
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillOval(x- RADIUS + 1, y- RADIUS + 1, RADIUS * 2 - 1, RADIUS * 2 - 1);
+        g2d.setColor(Color.BLUE);
         FontMetrics fm = g2d.getFontMetrics();
+        g2d.setFont(new Font("Arial", Font.BOLD, 12));
         String tektonId = GameModel.gameObjects.getK((Tekton)tekton);
-
-        g2d.drawString(tektonId, x, y + RADIUS + 20);
-
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(tektonId, x - 5, y + RADIUS + 20);
+        g2d.setColor(Color.BLUE);
         if(mushroomBody != null)
             mushroomBody.paint(g);
         if(insect != null)

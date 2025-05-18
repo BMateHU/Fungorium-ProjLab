@@ -365,13 +365,12 @@ public class GUI
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
-
+            g2d.setColor(Color.BLUE);
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             if(!objects.keySet().isEmpty()) {
                 for (Tekton t : GameModel.map.tektonList.values()) {
-                    objects.getV(t).paint(g2d);
                     int x = ((GTekton) objects.getV(t)).getX();
                     int y = ((GTekton) objects.getV(t)).getY();
 
@@ -402,6 +401,11 @@ public class GUI
                         int tekton1Width = fm.stringWidth(threadLabel);
                         g2d.drawString(threadLabel, x + (x - x2) - tekton1Width / 2, y + (y - y2));
                     }
+                }
+            }
+            if(!objects.keySet().isEmpty()) {
+                for (Tekton t : GameModel.map.tektonList.values()) {
+                    objects.getV(t).paint(g2d);
                 }
             }
         }
