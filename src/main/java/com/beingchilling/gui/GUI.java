@@ -2,23 +2,24 @@ package com.beingchilling.gui;
 
 import com.beingchilling.Main;
 import com.beingchilling.controller.ControllerComponent;
-import com.beingchilling.game.GameModel;
 import com.beingchilling.model.*;
+import com.beingchilling.game.BiMap;
+import com.beingchilling.game.GameModel;
 import com.beingchilling.view.ViewComponent;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.io.InputStream;
 import java.util.*;
 
 public class GUI
 {
-    private HashMap<Object, JComponent> objects;
+    public static BiMap<Object, JComponent> objects;
     private JLabel playerStats;
     private JLabel round;
     private JButton growThreadButton;
@@ -54,6 +55,9 @@ public class GUI
 
     public GUI() {
         vc.setControllerComponent(cc);
+        mushroomPanel = new JPanel();
+        insectPanel = new JPanel();
+        objects = new BiMap<>();
 
         frame = new JFrame();
         frame.setTitle("Fungorium");
@@ -74,6 +78,14 @@ public class GUI
         init();
 
         frame.setVisible(true);
+
+        try {
+            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
+            assert url != null;
+            cc.load(url);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private final JPanel topPanel = createTopPanel();
@@ -657,151 +669,116 @@ public class GUI
 
     // Helper method to create the main content panel with drawing
     private JPanel createContentPanel() {
-        JPanel contentPanel = new JPanel(new BorderLayout()); // Use BorderLayout
-        contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Padding
-        contentPanel.setBackground(Color.WHITE); // Set background for the main container
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setBackground(Color.WHITE);
 
-        // Create and add the custom drawing panel
         DrawingPanel drawingPanel = new DrawingPanel();
-        contentPanel.add(drawingPanel, BorderLayout.CENTER); // Add drawing panel to the center
+        JScrollPane scrollPane = new JScrollPane(drawingPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
         return contentPanel;
     }
 
     // Inner class for custom drawing
     private class DrawingPanel extends JPanel {
+        private static final int VIRTUAL_WIDTH = 5000;
+        private static final int VIRTUAL_HEIGHT = 5000;
+
+        private Point panStartPoint;
+        private Point viewStartPoint;
+
+        public DrawingPanel() {
+            setPreferredSize(new Dimension(VIRTUAL_WIDTH, VIRTUAL_HEIGHT));
+            setBackground(Color.LIGHT_GRAY);
+
+            MouseAdapter mouseAdapter = new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        panStartPoint = e.getPoint();
+                        JViewport viewport = (JViewport) getParent();
+                        viewStartPoint = viewport.getViewPosition();
+                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                    }
+                }
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e) && panStartPoint != null && viewStartPoint != null) {
+                        Point currentPoint = e.getPoint();
+                        int dx = currentPoint.x - panStartPoint.x;
+                        int dy = currentPoint.y - panStartPoint.y;
+                        JViewport viewport = (JViewport) getParent();
+                        int newX = viewStartPoint.x - dx;
+                        int newY = viewStartPoint.y - dy;
+                        if(newX > 0 && newY > 0) {
+                            viewport.setViewPosition(new Point(newX, newY));
+                        }
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        panStartPoint = null;
+                        viewStartPoint = null;
+                        setCursor(Cursor.getDefaultCursor());
+                    }
+                }
+            };
+            addMouseListener(mouseAdapter);
+            addMouseMotionListener(mouseAdapter);
+        }
+
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g); // Always call superclass method first
-            Graphics2D g2d = (Graphics2D) g; // Cast to Graphics2D for more features
-
-            // Enable anti-aliasing for smoother shapes and text
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(Color.BLUE);
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+            if(!objects.keySet().isEmpty()) {
+                for (Tekton t : GameModel.map.tektonList.values()) {
+                    int x = ((GTekton) objects.getV(t)).getX();
+                    int y = ((GTekton) objects.getV(t)).getY();
 
-            // Get panel dimensions for positioning
-            int panelWidth = getWidth();
-            int panelHeight = getHeight();
+                    Stroke defaultStroke = g2d.getStroke();
 
-            // Define circle properties
-            int circleRadius = 50;
-            int circleDiameter = circleRadius * 2;
-            int triangleBase = panelWidth / 3; // Base width of the triangle formed by centers
-            int triangleHeight = panelHeight / 4; // Height of the triangle
+                    ArrayList<Tekton> neighbourWithoutThread = new ArrayList<>(t.getNeighbors());
+                    neighbourWithoutThread.removeAll(t.getNeighborWithThread());
 
-            // Calculate positions for a triangle layout
+                    for (Tekton t2 : neighbourWithoutThread) {
+                        int x2 = ((GTekton) objects.getV(t2)).getX();
+                        int y2 = ((GTekton) objects.getV(t2)).getY();
 
-            // Circle 1 (Top vertex) - Centered horizontally, higher up
-            int c1x = panelWidth / 2 - circleRadius;
-            int c1y = panelHeight / 2 - triangleHeight / 2 - circleRadius; // Move up
-            Point center1 = new Point(c1x + circleRadius, c1y + circleRadius);
+                        Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
+                        g2d.setStroke(dashedStroke);
+                        g2d.drawLine(x, y, x2, y2);
+                    }
 
-            // Circle 2 (Bottom-left vertex)
-            int c2x = panelWidth / 2 - triangleBase / 2 - circleRadius; // Move left from center
-            int c2y = panelHeight / 2 + triangleHeight / 2 - circleRadius; // Move down
-            Point center2 = new Point(c2x + circleRadius, c2y + circleRadius);
+                    for (Tekton t2 : t.getNeighborWithThread()) {
+                        int x2 = ((GTekton) objects.getV(t2)).getX();
+                        int y2 = ((GTekton) objects.getV(t2)).getY();
 
-            // Circle 3 (Bottom-right vertex)
-            int c3x = panelWidth / 2 + triangleBase / 2 - circleRadius; // Move right from center
-            int c3y = panelHeight / 2 + triangleHeight / 2 - circleRadius; // Move down (same y as c2)
-            Point center3 = new Point(c3x + circleRadius, c3y + circleRadius);
+                        g2d.setStroke(defaultStroke);
+                        g2d.setColor(Color.BLACK);
+                        g2d.drawLine(x, y, x2, y2);
 
-
-            // --- Draw Circles ---
-            g2d.setColor(Color.BLUE); // Example color
-            g2d.setStroke(new BasicStroke(2)); // Make circle lines slightly thicker
-            g2d.drawOval(c1x, c1y, circleDiameter, circleDiameter); // Circle 1 (Top)
-            g2d.drawOval(c2x, c2y, circleDiameter, circleDiameter); // Circle 2 (Bottom-left)
-            g2d.drawOval(c3x, c3y, circleDiameter, circleDiameter); // Circle 3 (Bottom-right)
-
-            // --- Draw Connecting Lines ---
-            Stroke defaultStroke = g2d.getStroke(); // Save default stroke (which is now BasicStroke(2))
-
-            // Line 1: Straight line (Top to Bottom-Left)
-            g2d.setColor(Color.BLACK);
-            g2d.drawLine(center1.x, center1.y, center2.x, center2.y);
-
-            // Line 2: Dashed line (Top to Bottom-Right)
-            // Define a dashed stroke: {dash length, space length}
-            Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
-            g2d.setStroke(dashedStroke);
-            g2d.drawLine(center1.x, center1.y, center3.x, center3.y);
-
-            g2d.setStroke(defaultStroke); // Restore default stroke (solid, thickness 2)
-
-            // --- Draw Shapes on Circles ---
-
-            // Brown Square on Circle 3 (Bottom-Right)
-            int squareSize = 20;
-            int squareX = center3.x - squareSize / 2; // Center the square on Circle 3
-            int squareY = center3.y - squareSize / 2;
-            g2d.setColor(new Color(139, 69, 19)); // Brown color
-            g2d.fillRect(squareX, squareY, squareSize, squareSize);
-            g2d.setColor(Color.BLACK); // Outline for visibility
-            g2d.drawRect(squareX, squareY, squareSize, squareSize);
-
-
-            // Yellow Triangle on Circle 2 (Bottom-Left)
-            int triangleShapeSize = 25; // Size of the yellow triangle shape
-            Path2D triangleShape = new Path2D.Double();
-            // Define vertices relative to the center of circle 2
-            triangleShape.moveTo(center2.x, center2.y - triangleShapeSize / 1.5); // Top point
-            triangleShape.lineTo(center2.x - triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0); // Bottom left
-            triangleShape.lineTo(center2.x + triangleShapeSize / 2.0, center2.y + triangleShapeSize / 3.0); // Bottom right
-            triangleShape.closePath();
-
-            g2d.setColor(Color.YELLOW);
-            g2d.fill(triangleShape);
-            g2d.setColor(Color.BLACK); // Outline for visibility
-            g2d.draw(triangleShape);
-
-            // *** NEW: Draw 3 small green circles inside Circle 1 (Top) ***
-            int smallCircleRadius = 8;
-            int smallCircleDiameter = smallCircleRadius * 2;
-            g2d.setColor(Color.GREEN);
-            // Position them in a small triangle pattern inside Circle 1
-            int offset = circleRadius / 3;
-            g2d.fillOval(center1.x - smallCircleRadius, center1.y - offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter); // Top small circle
-            g2d.fillOval(center1.x - offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter); // Bottom-left small circle
-            g2d.fillOval(center1.x + offset - smallCircleRadius, center1.y + offset - smallCircleRadius, smallCircleDiameter, smallCircleDiameter); // Bottom-right small circle
-
-
-            // *** NEW: Draw Labels ***
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Arial", Font.BOLD, 12)); // Set font for labels
-
-            // Label positioning offsets
-            int labelOffset = circleRadius + 15; // Distance below the circle center for Tekton labels
-            int shapeLabelOffset = 15; // Distance below the shape for Gomba/Rovar labels
-
-            // --- Tekton Labels ---
-            // Center the text horizontally below the circle centers
-            FontMetrics fm = g2d.getFontMetrics(); // Get font metrics for text centering
-
-            String tekton1Label = "Tekton1";
-            int tekton1Width = fm.stringWidth(tekton1Label);
-            g2d.drawString(tekton1Label, center1.x - tekton1Width / 2, center1.y + labelOffset);
-
-            String tekton2Label = "Tekton2";
-            int tekton2Width = fm.stringWidth(tekton2Label);
-            g2d.drawString(tekton2Label, center2.x - tekton2Width / 2, center2.y + labelOffset);
-
-            String tekton3Label = "Tekton3";
-            int tekton3Width = fm.stringWidth(tekton3Label);
-            g2d.drawString(tekton3Label, center3.x - tekton3Width / 2, center3.y + labelOffset);
-
-            // --- Shape Labels ---
-            String gombaLabel = "Gomba1";
-            int gombaWidth = fm.stringWidth(gombaLabel);
-            // Position below the triangle on Circle 2
-            g2d.drawString(gombaLabel, center2.x - gombaWidth / 2, (int)(center2.y + triangleShapeSize / 3.0) + shapeLabelOffset + 5); // Adjusted y-pos based on triangle bottom
-
-            String rovarLabel = "Rovar1";
-            int rovarWidth = fm.stringWidth(rovarLabel);
-            // Position below the square on Circle 3
-            g2d.drawString(rovarLabel, center3.x - rovarWidth / 2, squareY + squareSize + shapeLabelOffset); // Adjusted y-pos based on square bottom
-
+                        FontMetrics fm = g2d.getFontMetrics();
+                        String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
+                        int tekton1Width = fm.stringWidth(threadLabel);
+                        g2d.drawString(threadLabel, x + (x - x2) - tekton1Width / 2, y + (y - y2));
+                    }
+                }
+            }
+            if(!objects.keySet().isEmpty()) {
+                for (Tekton t : GameModel.map.tektonList.values()) {
+                    objects.getV(t).paint(g2d);
+                }
+            }
         }
     }
 }

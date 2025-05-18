@@ -137,5 +137,6 @@
 /addplayer r2 R
 /addmush g1 g1m1 g1m1f0 t42
 /addmush g2 g2m1 g2m1f0 t46
+/addmush g1 g1m1 g1m1f0 t41
 /addinsect r1 r1i1 t41
 /addinsect r2 r2i1 t47

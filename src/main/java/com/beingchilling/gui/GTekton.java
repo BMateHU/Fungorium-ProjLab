@@ -1,19 +1,68 @@
 package com.beingchilling.gui;
 
+import com.beingchilling.game.GameModel;
+import com.beingchilling.model.Tekton;
 import com.beingchilling.view.TektonView;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class GTekton extends JComponent {
-
     TektonView tekton;
-
-    private int x, y;
+    ArrayList<JComponent> spores = new ArrayList<>();
+    JComponent mushroomBody;
+    JComponent insect;
+    public static final int RADIUS = 50;
+    private int x, y; //this should mark center point of the circle, (as I saw the normal X and Y is the left upper corner of the circle (so just - radius)
 
     public GTekton(TektonView tekton) {
         this.tekton = tekton;
     }
 
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        Graphics2D g2d = (Graphics2D) g;
+        if(!tekton.getSpores().isEmpty())
+            tekton.getSpores().forEach(spore -> spores.add(GUI.objects.getV(spore)));
+        if(tekton.getBody() != null)
+            mushroomBody = GUI.objects.getV(tekton.getBody());
+        if(tekton.getInsect() != null)
+            insect = GUI.objects.getV(tekton.getInsect());
+        g2d.setColor(Color.BLUE);
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawOval(x- RADIUS, y- RADIUS, RADIUS * 2, RADIUS * 2);
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillOval(x- RADIUS + 1, y- RADIUS + 1, RADIUS * 2 - 1, RADIUS * 2 - 1);
+        g2d.setColor(Color.BLUE);
+        FontMetrics fm = g2d.getFontMetrics();
+        g2d.setFont(new Font("Arial", Font.BOLD, 12));
+        String tektonId = GameModel.gameObjects.getK((Tekton)tekton);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(tektonId, x - 5, y + RADIUS + 20);
+        g2d.setColor(Color.BLUE);
+        if(mushroomBody != null)
+            mushroomBody.paint(g);
+        if(insect != null)
+            insect.paint(g);
+        if(!spores.isEmpty())
+            for(int i = 0; i < 4; i++) {
+                spores.get(i).paint(g);
+            }
+
+
+
+        //spora szam kiiras
+
+        //id kiiras tekton ala
+        //FontMetrics fm = g2d.getFontMetrics();
+        // String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
+        // int tekton1Width = fm.stringWidth(threadLabel);
+        // g2d.drawString(threadLabel, x+(x-x2) - tekton1Width/2, y+(y-y2));
+    }
+
+    @Override
     public int getX() {
         return x;
     }
@@ -22,6 +71,7 @@ public class GTekton extends JComponent {
         this.x = x;
     }
 
+    @Override
     public int getY() {
         return y;
     }

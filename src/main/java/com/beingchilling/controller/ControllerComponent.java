@@ -1,9 +1,13 @@
 package com.beingchilling.controller;
 
+import com.beingchilling.Main;
 import com.beingchilling.game.GameModel;
+import com.beingchilling.gui.*;
 import com.beingchilling.model.*;
+import com.beingchilling.view.TektonView;
 import com.beingchilling.view.ViewComponent;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +17,7 @@ import java.util.Objects;
 
 
 /// Kontroller részét valósítja meg a modellnek
-public class ControllerComponent {
+public class ControllerComponent implements IFactory {
 
     /// A kontroller hozzáfér a viewhoz
     private final ViewComponent viewComponent;
@@ -46,7 +50,7 @@ public class ControllerComponent {
                     }
                     break;
                 case "/addtekton":
-                    Tekton t;
+                    Tekton t = null;
                     if(words.length == 2) {
                         t = new Tekton();
                         GameModel.map.tektonList.put(words[1], t);
@@ -81,6 +85,8 @@ public class ControllerComponent {
                                 break;
                         }
                     }
+                    if(GUI.objects != null && t != null)
+                        onCreationTekton(t);
                     break;
                 case "/addinsect":
                     Insect newInsect = new Insect();
@@ -111,6 +117,8 @@ public class ControllerComponent {
                     ((Tekton)GameModel.gameObjects.getV(words[3])).addInsect(newInsect);
                     newInsect.setLocation((Tekton)GameModel.gameObjects.getV(words[3]));
                     GameModel.rovarasz.put(newInsect,s);
+                    onCreationInsect(newInsect);
+
                     break;
                 case "/addmush":
                     MushroomBody newMushroom = new MushroomBody(GameModel.map.tektonList.get(words[4]));
@@ -132,6 +140,8 @@ public class ControllerComponent {
                     newThread.setLifeSupport(true);
                     GameModel.gameObjects.put(words[3], newThread);
                     GameModel.map.tektonList.get(words[4]).addThread(newThread);
+                    onCreationMushroomBody(newMushroom);
+
                     break;
                 case "/addspore":
                     int nutrient = 5;
@@ -273,6 +283,8 @@ public class ControllerComponent {
         if(target.growMushroomBody(ms)) {
             GameModel.gameObjects.put(id, ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1));
             GameModel.gombasz.put(ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1), ms);
+            if(GUI.objects != null)
+                onCreationMushroomBody(ms.checkMushroomBody().get(ms.checkMushroomBody().size()-1));
         }
         else {
             System.out.println("Nem sikerült");
@@ -313,8 +325,9 @@ public class ControllerComponent {
         if(!source.spreadSpore((Tekton)target, sp)) {
             GameModel.gameObjects.removeByV(sp);
             System.out.println("Spóraszórás sikertelen.");
-            
         }
+        if(GUI.objects != null)
+            onCreationSpore(sp, target.toView());
     }
 
     /**
@@ -328,10 +341,11 @@ public class ControllerComponent {
             GameModel.gameObjects.put(newMushroom, mb);
             GameModel.gombasz.put(mb, GameModel.gombasz.get(source.checkOwner()));
             GameModel.gombasz.get(source.checkOwner()).addMushroomBody(mb);
+            if(GUI.objects != null)
+                onCreationMushroomBody(mb);
         }
         catch (NullPointerException npe) {
             System.out.println(npe.getMessage());
-            
         }
     }
 
@@ -349,6 +363,8 @@ public class ControllerComponent {
                 GameModel.gameObjects.removeByV(mt);
             GameModel.map.tektonList.put(tektonID, newTekton);
             GameModel.gameObjects.put(tektonID, newTekton);
+            if(GUI.objects != null)
+                onCreationTekton(newTekton);
         }
     }
 
@@ -360,7 +376,6 @@ public class ControllerComponent {
     public void cut(InsectController insect, MushroomThreadController target) {
         if(!insect.insectCut((MushroomThread) target)) {
             System.out.println("Sikertelen vagas!");
-            
         }
     }
 
@@ -370,7 +385,6 @@ public class ControllerComponent {
      */
     public void eat(InsectController insect) {
         if(insect.toView().getLocation().getSpores().isEmpty()) {
-            
             return;
         }
         Spore s = insect.toView().getLocation().getSpores().get(insect.toView().getLocation().getSpores().size()-1);
@@ -378,17 +392,20 @@ public class ControllerComponent {
             insect.insectEat();
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             System.out.println("Nem tud enni!");
-            
             return;
         }
         GameModel.gameObjects.removeByV(s);
+        if(GUI.objects != null)
+            GUI.objects.removeByK(s);
         for(Tekton t : insect.toView().getLocation().getNeighbors())
         {
-            if(!GameModel.rovarasz.containsKey(t.getInsect()))
+            if(!GameModel.rovarasz.containsKey(t.getInsect()) && !GameModel.gameObjects.containsV(t.getInsect()))
             {
                 GameModel.gameObjects.put(GameModel.gameObjects.getK(insect)+".clone",t.getInsect());
                 GameModel.rovarasz.put(t.getInsect(),GameModel.rovarasz.get(insect));
                 GameModel.rovarasz.get(insect).addInsect(t.getInsect());
+                if(GUI.objects != null)
+                    onCreationInsect(t.getInsect());
             }
         }
     }
@@ -401,7 +418,6 @@ public class ControllerComponent {
     public void move(InsectController insect, TektonController target) {
         if(!insect.insectMove((Tekton) target)) {
             System.out.println("Sikertelen mozgas!");
-            
         }
     }
 
@@ -451,5 +467,50 @@ public class ControllerComponent {
 
     public void nextPuppet() {
         whichPuppet++;
+    }
+
+    @Override
+    public void onCreationTekton(Tekton t) {
+        GUI.objects.put(t, new GTekton(t));
+
+        Random rnd = new Random();
+        int x = rnd.nextInt(100, 4900);
+        int y = rnd.nextInt(100, 4900);
+
+        Point p = randomPoint(x, y);
+
+        ((GTekton)GUI.objects.getV(t)).setX(p.x);
+        ((GTekton)GUI.objects.getV(t)).setY(p.y);
+        //Main.frame.reDrawAll();
+    }
+
+    private Point randomPoint(int x, int y) {
+        Random rnd = new Random();
+        for(Tekton t2 : GameModel.map.tektonList.values()) {
+            if(x - 20 <= GUI.objects.getV(t2).getX() && x + 20 >= GUI.objects.getV(t2).getX() && y - 20 <= GUI.objects.getV(t2).getY() && y + 20 >= GUI.objects.getV(t2).getY()) {
+                x = rnd.nextInt(100, 4900);
+                y = rnd.nextInt(100, 4900);
+                randomPoint(x, y);
+            }
+        }
+        return new Point(x, y);
+    }
+
+    @Override
+    public void onCreationMushroomBody(MushroomBody mb) {
+        GUI.objects.put(mb, new GMushroomBody(mb));
+        //Main.frame.reDrawAll();
+    }
+
+    @Override
+    public void onCreationSpore(Spore sp, TektonView t) {
+        GUI.objects.put(sp, new GSpore(sp, t));
+        //Main.frame.reDrawAll();
+    }
+
+    @Override
+    public void onCreationInsect(Insect ins) {
+        GUI.objects.put(ins, new GInsect(ins));
+        //Main.frame.reDrawAll();
     }
 }
