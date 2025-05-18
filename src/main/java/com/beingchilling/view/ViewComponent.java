@@ -207,7 +207,7 @@ public class ViewComponent {
         Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
         if(controllerComponent.getWhichPlayer() >= MushroomSpeciesSet.size()) {
             //Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
-            InsectSpecies is = (InsectSpecies)InsectSpeciesSet.toArray()[controllerComponent.getWhichPlayer()-GameModel.gombasz.size()-1];
+            InsectSpecies is = (InsectSpecies)InsectSpeciesSet.toArray()[controllerComponent.getWhichPlayer()-GameModel.gombasz.size()];
             return GameModel.gameObjects.getK(is);
         }
         else {
