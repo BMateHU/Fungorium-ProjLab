@@ -509,6 +509,12 @@ public class GUI
                         cutParam1.addItem(GameModel.gameObjects.getK(thread));
                     }
                 }
+                if(cutParam1.getSelectedItem() == null) {
+                    cutButton.setEnabled(false);
+                }
+                else {
+                    cutButton.setEnabled(true);
+                }
                 //------------------------------------------------------------------------------
 
                 //------------------------------------------------------------------------------
@@ -517,6 +523,13 @@ public class GUI
                 Insect i2 = (Insect) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
                 for (Tekton t2 : i2.getLocation().getNeighborWithThread())
                     moveParam1.addItem(GameModel.gameObjects.getK(t2));
+
+                if(moveParam1.getSelectedItem() == null) {
+                    moveButton.setEnabled(false);
+                }
+                else {
+                    moveButton.setEnabled(true);
+                }
                 //------------------------------------------------------------------------------
 
             }
@@ -541,6 +554,13 @@ public class GUI
                         if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
                             growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
                     }
+
+                if(growMushParam1.getSelectedItem() == null) {
+                    growMushButton.setEnabled(false);
+                }
+                else {
+                    growMushButton.setEnabled(true);
+                }
                 //------------------------------------------------------------------------------
 
                 //------------------------------------------------------------------------------
@@ -548,6 +568,13 @@ public class GUI
                 MushroomBody mb5 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
                 for(Tekton t : mb5.getLocation().getNeighbors()) {
                     spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+                }
+
+                if(spreadSporeParam1.getSelectedItem() == null || spreadSporeParam2.getSelectedItem() == null) {
+                    spreadSporeButton.setEnabled(false);
+                }
+                else {
+                    spreadSporeButton.setEnabled(true);
                 }
                 //------------------------------------------------------------------------------
 
@@ -566,6 +593,13 @@ public class GUI
                 for(Tekton t5 : tektons2) {
                     growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
                 }
+
+                if(growThreadParam1.getSelectedItem() == null || growThreadParam2.getSelectedItem() == null) {
+                    growThreadButton.setEnabled(false);
+                }
+                else {
+                    growThreadButton.setEnabled(true);
+                }
                 //-------------------------------------------------------------
 
                 //------------------------------------------------------------------------------
@@ -574,6 +608,13 @@ public class GUI
                 for(MushroomThread mt : mb6.getLocation().getThreads()) {
                     if(mt.getLocation().getBody() == null && mt.getLocation().getInsect() != null)
                         absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
+                }
+
+                if(absorbInsectParam1.getSelectedItem() == null) {
+                    absorbInsectButton.setEnabled(false);
+                }
+                else {
+                    absorbInsectButton.setEnabled(true);
                 }
                 //------------------------------------------------------------------------------
             }
