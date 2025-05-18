@@ -139,3 +139,7 @@
 /addmush g2 g2m1 g2m1f0 t46
 /addinsect r1 r1i1 t41
 /addinsect r2 r2i1 t47
+/addspore t47 s1
+/addspore t47 s2
+/addspore t47 s3
+/addmush g1 g1m2 g1m1f1 t47
