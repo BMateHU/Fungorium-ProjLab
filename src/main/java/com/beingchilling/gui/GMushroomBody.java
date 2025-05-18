@@ -21,7 +21,7 @@ public class GMushroomBody extends JComponent {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g);
         int coordX = GUI.objects.getV(mushroom.getLocation()).getX();
-        int coordY = GUI.objects.getV(mushroom.getLocation()).getY();
+        int coordY = GUI.objects.getV(mushroom.getLocation()).getY() + 10;
         int triangleShapeSize = 25; // Size of the yellow triangle shape
         Path2D triangleShape = new Path2D.Double();
         // Define vertices relative to the center of circle 2
@@ -37,7 +37,7 @@ public class GMushroomBody extends JComponent {
         FontMetrics fm = g2d.getFontMetrics();
         String mushroomId = GameModel.gameObjects.getK((MushroomBody)mushroom);
         //this add the Id next to the object
-        g2d.drawString(mushroomId, coordX + 10, coordY);
+        g2d.drawString(mushroomId, coordX + 15, coordY);
         g2d.setColor(Color.BLUE);
     }
 }
