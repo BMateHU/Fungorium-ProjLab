@@ -272,6 +272,7 @@ public class GUI
                         cc.setWhichPlayer(1);
                         cc.setWhichPuppet(1);
                         round.setText("round " + cc.getRound());
+                        return;
                     }
                 }
                 else
