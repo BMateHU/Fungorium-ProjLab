@@ -54,20 +54,8 @@ public class GTekton extends JComponent {
         if(insect != null)
             insect.paint(g);
         if(!spores.isEmpty()) {
-//            for (int i = 0; i < 4; i++) {
-//                spores.get(i).paint(g);
-//            }
-            //spores.add(new GSpore((SporeView) new Spore(5), tekton));
             spores.get(spores.size() -1 ).paint(g);
         }
-
-        //spora szam kiiras
-
-        //id kiiras tekton ala
-        //FontMetrics fm = g2d.getFontMetrics();
-        // String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
-        // int tekton1Width = fm.stringWidth(threadLabel);
-        // g2d.drawString(threadLabel, x+(x-x2) - tekton1Width/2, y+(y-y2));
     }
 
     @Override
