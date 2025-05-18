@@ -164,7 +164,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player " + (cc.getWhichPlayer()-1) + ": Mushroom " + cc.getWhichPuppet());
+        playerStats = new JLabel("Player " + (cc.getWhichPlayer()-1) + ": Mushroom " + (cc.getWhichPuppet() - 1));
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
@@ -343,11 +343,11 @@ public class GUI
             }
             else {//if it mushroom turn
 
-                playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Gomba " + cc.getWhichPuppet());
+                playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Mushroom " + cc.getWhichPuppet());
 
                 //------------------------------------------------------------------------------
                 growMushParam1.removeAllItems();
-                MushroomBody mb4 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID()); //here class com.beingchilling.model.Insect cannot be cast to class com.beingchilling.model.MushroomBody (com.beingchilling.model.Insect and com.beingchilling.model.MushroomBody are in unnamed module of loader 'app')
+                MushroomBody mb4 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
                 for(MushroomThread mt : mb4.getLocation().getThreads())
                     for(MushroomThread mt2 : mt.getThreads()) {
                         if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
@@ -439,7 +439,7 @@ public class GUI
         placeholder1.setLayout(new BoxLayout(placeholder1, BoxLayout.Y_AXIS));
         placeholder1.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         moveButton = new JButton("Move");
-        moveParam1 = new JComboBox<>(new String[]{"Tekton 1"});
+        moveParam1 = new JComboBox<>();
         moveButton.addActionListener(e -> {
             cc.ArgumentManagement("/move " + vc.getCurrentPuppetID() + " " + moveParam1.getSelectedItem());
             reDrawAll();
