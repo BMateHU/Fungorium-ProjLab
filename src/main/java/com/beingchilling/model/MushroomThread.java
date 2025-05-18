@@ -52,6 +52,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
 
     public List<MushroomThread> getThreads() {
         ArrayList<MushroomThread> threads = new ArrayList<>();
+        threads.add(this);
         for (MushroomThread thread : nextGrowed) {
             threads.addAll(thread.getThreads());
         }
