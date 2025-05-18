@@ -2,9 +2,9 @@ package com.beingchilling.gui;
 
 import com.beingchilling.Main;
 import com.beingchilling.controller.ControllerComponent;
+import com.beingchilling.model.*;
 import com.beingchilling.game.BiMap;
 import com.beingchilling.game.GameModel;
-import com.beingchilling.model.Tekton;
 import com.beingchilling.view.ViewComponent;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.*;
 
 public class GUI
 {
@@ -64,6 +64,16 @@ public class GUI
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT); // Set fixed size
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null); // Center the window
+        mushroomPanel = new JPanel();
+        objects = new BiMap<>();
+
+        try {
+            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
+            assert url != null;
+            cc.load(url);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
 
         init();
 
@@ -78,6 +88,9 @@ public class GUI
         }
     }
 
+    private final JPanel topPanel = createTopPanel();
+    private final JPanel contentPanel = createContentPanel();
+
     public void init() {
         mushroomPanel.setLayout(new BorderLayout(0, 0));
         JPanel topPanel = createTopPanel();
@@ -91,34 +104,54 @@ public class GUI
         mushroomPanel.add(splitPaneMushroom, BorderLayout.CENTER);
 
         frame.add(mushroomPanel);
-
-        insectPanel.setLayout(new BorderLayout(0, 0));
-        JPanel sidebarPanelInsect = createSidebarPanelForInsect();
-        contentPanel = createContentPanel();
-        JSplitPane splitPaneInsect = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebarPanelInsect, contentPanel);
-        splitPaneInsect.setDividerLocation(SIDEBAR_WIDTH);
-        splitPaneInsect.setEnabled(false);
-
-        insectPanel.add(topPanel, BorderLayout.NORTH);
-        insectPanel.add(splitPaneInsect, BorderLayout.CENTER);
     }
 
     public void switchPanels() {
         if(isCurrentPanelMushroom) {
             frame.remove(mushroomPanel);
+            if(insectPanel == null) {
+                insectPanel = new JPanel();
+                insectPanel.setLayout(new BorderLayout(0, 0));
+                JPanel sidebarPanelInsect = createSidebarPanelForInsect();
+                JSplitPane splitPaneInsect = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebarPanelInsect, contentPanel);
+                splitPaneInsect.setDividerLocation(SIDEBAR_WIDTH);
+                splitPaneInsect.setEnabled(false);
+
+                insectPanel.add(topPanel, BorderLayout.NORTH);
+                insectPanel.add(splitPaneInsect, BorderLayout.CENTER);
+            }
+            mushroomPanel = null;
             frame.add(insectPanel);
+            isCurrentPanelMushroom = false;
         }
         else {
             frame.remove(insectPanel);
+            insectPanel = null;
+            if(mushroomPanel == null) {
+                mushroomPanel = new JPanel();
+                mushroomPanel.setLayout(new BorderLayout(0, 0));
+                JPanel topPanel = createTopPanel();
+                JPanel sidebarPanelMushroom = createSidebarPanelForMushroom();
+                JPanel contentPanel = createContentPanel();
+                JSplitPane splitPaneMushroom = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebarPanelMushroom, contentPanel);
+                splitPaneMushroom.setDividerLocation(SIDEBAR_WIDTH);
+                splitPaneMushroom.setEnabled(false);
+
+                mushroomPanel.add(topPanel, BorderLayout.NORTH);
+                mushroomPanel.add(splitPaneMushroom, BorderLayout.CENTER);
+            }
             frame.add(mushroomPanel);
+            isCurrentPanelMushroom = true;
         }
         reDrawAll();
     }
 
     public void reDrawAll() {
         frame.revalidate();
-        insectPanel.revalidate();
-        mushroomPanel.revalidate();
+        if(insectPanel != null)
+            insectPanel.revalidate();
+        if(mushroomPanel != null)
+            mushroomPanel.revalidate();
     }
 
     private JPanel createTopPanel() {
@@ -143,7 +176,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player " + cc.getWhichPlayer() + ": Gomba " + cc.getWhichPuppet());
+        playerStats = new JLabel("Player " + (cc.getWhichPlayer()-1) + ": Mushroom " + (cc.getWhichPuppet()));
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
@@ -165,8 +198,27 @@ public class GUI
         growThreadParam2 = new JComboBox<>(new String[]{"Tekton 1"});
 
         growThreadButton.addActionListener(e -> {
-            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " + growThreadParam2.getSelectedItem());
+            String lastThreadID = growThreadParam1.getItemAt(growThreadParam1.getItemCount()-1);
+            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " + growThreadParam2.getSelectedItem() + " " + lastThreadID.substring(0, lastThreadID.length() - 1) + growThreadParam1.getItemCount());
+            reDrawAll();
         });
+
+        //------------------------------------------------------------
+        growThreadParam2.removeAllItems();
+        growThreadParam1.removeAllItems();
+        Set<Tekton> tektons = new HashSet<>();
+        for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
+            growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
+            for(Tekton t5 : mt5.getLocation().getNeighbors()) {
+                if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
+                    tektons.add(t5);
+                }
+            }
+        }
+        for(Tekton t5 : tektons) {
+            growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
+        }
+        //-------------------------------------------------------------
 
         configurePlaceholderComponents(placeholder1, growThreadButton, growThreadParam1, growThreadParam2);
 
@@ -175,7 +227,25 @@ public class GUI
         placeholder2.setLayout(new BoxLayout(placeholder2, BoxLayout.Y_AXIS));
         placeholder2.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         growMushButton = new JButton("Grow Mushroom");
-        growMushParam1 = new JComboBox<>(new String[]{"Tekton 1"});
+        growMushParam1 = new JComboBox<>();
+
+        growMushButton.addActionListener(e -> {
+            MushroomSpecies s = (MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID());
+            String lastMushroomID = GameModel.gameObjects.getK(s.checkMushroomBody().get(s.checkMushroomBody().size()-1));
+            cc.ArgumentManagement("/growmush " + vc.getCurrentPlayerID() + " "+ lastMushroomID.substring(0, lastMushroomID.length() - 1)+s.checkMushroomBody().size() + " " + growMushParam1.getSelectedItem());
+            reDrawAll();
+        });
+
+        //------------------------------------------------------------------------------
+        growMushParam1.removeAllItems();
+        MushroomBody mb = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(MushroomThread mt : mb.getLocation().getThreads())
+            for(MushroomThread mt2 : mt.getThreads()) {
+                if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
+                    growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
+            }
+        //------------------------------------------------------------------------------
+
         configurePlaceholderComponents(placeholder2, growMushButton, growMushParam1);
 
         // Placeholder 3: Spread Spore
@@ -183,8 +253,22 @@ public class GUI
         placeholder3.setLayout(new BoxLayout(placeholder3, BoxLayout.Y_AXIS));
         placeholder3.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         spreadSporeButton = new JButton("Spread Spore");
-        spreadSporeParam1 = new JComboBox<>(new String[]{"Tekton 1"});
-        spreadSporeParam2 = new JComboBox<>(new String[]{"Haste"});
+        spreadSporeParam1 = new JComboBox<>();
+        spreadSporeParam2 = new JComboBox<>(new String[]{"Haste","Slow","Mute","Para","Clone","Normal"});
+
+        spreadSporeButton.addActionListener(e -> {
+            cc.ArgumentManagement("/spreadspore " + vc.getCurrentPuppetID() + " " + spreadSporeParam1.getSelectedItem() + " " + ((String)spreadSporeParam2.getSelectedItem()).charAt(0));
+            reDrawAll();
+        });
+
+        //------------------------------------------------------------------------------
+        spreadSporeParam1.removeAllItems();
+        MushroomBody mb2 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(Tekton t : mb2.getLocation().getNeighbors()) {
+            spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+        }
+        //------------------------------------------------------------------------------
+
         configurePlaceholderComponents(placeholder3, spreadSporeButton, spreadSporeParam1, spreadSporeParam2);
 
         // Placeholder 4: Absorb Insect
@@ -193,6 +277,22 @@ public class GUI
         placeholder4.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         absorbInsectButton = new JButton("Absorb Insect");
         absorbInsectParam1 = new JComboBox<>(new String[]{"Thread 1"});
+        absorbInsectButton.addActionListener(e -> {
+            MushroomSpecies s = (MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID());
+            String lastMushroomID = GameModel.gameObjects.getK(s.checkMushroomBody().get(s.checkMushroomBody().size()-1));
+            cc.ArgumentManagement("/absorbinsect " + absorbInsectParam1.getSelectedItem() + " " + lastMushroomID.substring(0, lastMushroomID.length() - 1)+s.checkMushroomBody().size());
+            reDrawAll();
+        });
+
+        //------------------------------------------------------------------------------
+        absorbInsectParam1.removeAllItems();
+        MushroomBody mb3 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+        for(MushroomThread mt : mb3.getLocation().getThreads()) {
+            if(mt.getLocation().getBody() == null && mt.getLocation().getInsect() != null)
+                absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
+        }
+        //------------------------------------------------------------------------------
+
         configurePlaceholderComponents(placeholder4, absorbInsectButton, absorbInsectParam1);
 
         // Add placeholders to the grid layout panel
@@ -206,7 +306,117 @@ public class GUI
         // --- Bottom Buttons (South) ---
         JPanel bottomButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         skipButton = new JButton("skip");
+        skipButton.addActionListener(e -> {
+            Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
+            Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+            if(cc.getWhichPlayer() >= MushroomSpeciesSet.size()) { // if its insect turn
+                playerStats.setText("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
+
+                //------------------------------------------------------------------------------
+                if(cutParam1 != null)
+                    cutParam1.removeAllItems();
+                Insect i = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                Tekton t = i.getLocation();
+                for(MushroomThread thread : t.getThreads()) {
+                    if(i.canCutThread()) {
+                        cutParam1.addItem(GameModel.gameObjects.getK(thread));
+                    }
+                }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                if(moveParam1 != null)
+                    moveParam1.removeAllItems();
+                Insect i2 = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(Tekton t2 : i2.getLocation().getNeighborWithThread())
+                    moveParam1.addItem(GameModel.gameObjects.getK(t2));
+                //------------------------------------------------------------------------------
+
+                if(cc.getWhichPlayer() == GameModel.gombasz.size())
+                    switchPanels();
+                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
+                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size() - 1) { // if no next player,set to 1
+                        cc.setRound(cc.getRound()+1);
+                        cc.setWhichPlayer(1);
+                        cc.setWhichPuppet(1);
+                        //round.setText("round " + cc.getRound());
+                        topPanel.remove(0);
+                        round = new JLabel("round " + cc.getRound());
+                        round.setFont(round.getFont().deriveFont(Font.BOLD, 14f));
+                        topPanel.add(round);
+                        reDrawAll();
+                        return;
+                    }
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+            else {//if it mushroom turn
+
+                playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Mushroom " + cc.getWhichPuppet());
+
+                //------------------------------------------------------------------------------
+                growMushParam1.removeAllItems();
+                MushroomBody mb4 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(MushroomThread mt : mb4.getLocation().getThreads())
+                    for(MushroomThread mt2 : mt.getThreads()) {
+                        if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
+                            growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
+                    }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                spreadSporeParam1.removeAllItems();
+                MushroomBody mb5 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(Tekton t : mb5.getLocation().getNeighbors()) {
+                    spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+                }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------
+                growThreadParam2.removeAllItems();
+                growThreadParam1.removeAllItems();
+                Set<Tekton> tektons2 = new HashSet<>();
+                for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
+                    growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
+                    for(Tekton t5 : mt5.getLocation().getNeighbors()) {
+                        if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
+                            tektons2.add(t5);
+                        }
+                    }
+                }
+                for(Tekton t5 : tektons2) {
+                    growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
+                }
+                //-------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                absorbInsectParam1.removeAllItems();
+                MushroomBody mb6 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(MushroomThread mt : mb6.getLocation().getThreads()) {
+                    if(mt.getLocation().getBody() == null && mt.getLocation().getInsect() != null)
+                        absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
+                }
+                //------------------------------------------------------------------------------
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                    //PROBABLY BECUASE OF THIS (READ BELOW)
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+                if(cc.getWhichPlayer() == 1)
+                    switchPanels();
+            }
+
+            reDrawAll();
+        });
         endGameButton = new JButton("end game");
+        endGameButton.addActionListener(e -> {
+            System.exit(0);
+        });
         bottomButtonsPanel.add(skipButton);
         bottomButtonsPanel.add(endGameButton);
         sidebarPanel.add(bottomButtonsPanel, BorderLayout.SOUTH);
@@ -224,7 +434,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player 1: Insect 1");
+        playerStats = new JLabel("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
@@ -237,29 +447,39 @@ public class GUI
         Border placeholderBorder = BorderFactory.createLineBorder(Color.DARK_GRAY);
         EmptyBorder innerPadding = new EmptyBorder(5, 5, 5, 5); // Inner padding for placeholders
 
-        // Placeholder 1: Grow Thread
         JPanel placeholder1 = new JPanel();
         placeholder1.setLayout(new BoxLayout(placeholder1, BoxLayout.Y_AXIS));
         placeholder1.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         moveButton = new JButton("Move");
-        moveParam1 = new JComboBox<>(new String[]{"Tekton 1"});
-
+        moveParam1 = new JComboBox<>();
+        moveButton.addActionListener(e -> {
+            cc.ArgumentManagement("/move " + vc.getCurrentPuppetID() + " " + moveParam1.getSelectedItem());
+            reDrawAll();
+        });
 
         configurePlaceholderComponents(placeholder1, moveButton, moveParam1);
 
-        // Placeholder 2: Grow Mushroom
         JPanel placeholder2 = new JPanel();
         placeholder2.setLayout(new BoxLayout(placeholder2, BoxLayout.Y_AXIS));
         placeholder2.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         eatButton = new JButton("Eat");
+
+        eatButton.addActionListener(e -> {
+            cc.ArgumentManagement("/eat " + vc.getCurrentPuppetID());
+            reDrawAll();
+        });
         configurePlaceholderComponents(placeholder2, eatButton);
 
-        // Placeholder 3: Spread Spore
         JPanel placeholder3 = new JPanel();
         placeholder3.setLayout(new BoxLayout(placeholder3, BoxLayout.Y_AXIS));
         placeholder3.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         cutButton = new JButton("Cut");
-        cutParam1 = new JComboBox<>(new String[]{"Thread 1"});
+        cutParam1 = new JComboBox<>();
+
+        cutButton.addActionListener(e -> {
+            cc.ArgumentManagement("/cut " + vc.getCurrentPuppetID() + " " + cutParam1.getSelectedItem());
+            reDrawAll();
+        });
         configurePlaceholderComponents(placeholder3, cutButton, cutParam1);
 
 
@@ -270,10 +490,161 @@ public class GUI
 
         sidebarPanel.add(middlePlaceholdersPanel, BorderLayout.CENTER);
 
+
+        //Ez a skip gomb elegge furan mukodik, fixeld pls (eloszor jol lep, majd utana csak 1esevel lep, furan nagyon)
         // --- Bottom Buttons (South) ---
         JPanel bottomButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         skipButton = new JButton("skip");
+        skipButton.addActionListener(e -> {
+            Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
+            Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+            if(cc.getWhichPlayer() >= MushroomSpeciesSet.size()) { // if its insect turn
+                playerStats.setText("Player " + (cc.getWhichPlayer() - GameModel.gombasz.size()) + ": Insect " + cc.getWhichPuppet());
+
+                //------------------------------------------------------------------------------
+                cutParam1.removeAllItems();
+                Insect i = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                Tekton t = i.getLocation();
+                for(MushroomThread thread : t.getThreads()) {
+                    if(i.canCutThread()) {
+                        cutParam1.addItem(GameModel.gameObjects.getK(thread));
+                    }
+                }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                moveParam1.removeAllItems();
+                Insect i2 = (Insect)GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(Tekton t2 : i2.getLocation().getNeighborWithThread())
+                    moveParam1.addItem(GameModel.gameObjects.getK(t2));
+                //------------------------------------------------------------------------------
+
+                if(cc.getWhichPlayer() == GameModel.gombasz.size())
+                    switchPanels();
+                if(cc.getWhichPuppet() >= ((InsectSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).getInsects().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);
+                    if(cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size() - 1) { // if no next player,set to 1
+                        if(cc.getRound() >= 20) {
+                            String winnerMessage = "Game Over! Maximum " + 20 + " rounds reached.\n\n--- Scores ---\n";
+
+                            int maxNutrients = -1;
+                            String insectWinnerInfo = "No insect players or scores.";
+                            for (InsectSpecies is : GameModel.rovarasz.values().stream().distinct().toList()) {
+                                String playerID = GameModel.gameObjects.getK(is);
+                                int totalNutrients = 0;
+                                for (Insect i7 : is.getInsects()) {
+                                    totalNutrients += i7.getCurrentNutrient();
+                                }
+                                if (totalNutrients > maxNutrients) {
+                                    maxNutrients = totalNutrients;
+                                    insectWinnerInfo = "Insect Player " + playerID + ": " + totalNutrients + " nutrients.";
+                                } else if (totalNutrients == maxNutrients && maxNutrients != -1) {
+                                    insectWinnerInfo += "\nInsect Player " + playerID + ": " + totalNutrients + " nutrients (Tie).";
+                                } else if (playerID != null && insectWinnerInfo.equals("No insect players or scores.")){
+                                    insectWinnerInfo = "Insect Player " + playerID + ": " + totalNutrients + " nutrients.";
+                                }
+                            }
+
+                            int maxMushroomScore = -1; // e.g. total count of mushrooms
+                            String mushroomWinnerInfo = "No mushroom players or scores.";
+                            for (MushroomSpecies ms : GameModel.gombasz.values().stream().distinct().toList()) {
+                                String playerID = GameModel.gameObjects.getK(ms);
+                                int score = ms.checkMushroomBody().size();
+                                if (score > maxMushroomScore) {
+                                    maxMushroomScore = score;
+                                    mushroomWinnerInfo = "Mushroom Player " + playerID + ": " + score + " mushrooms.";
+                                } else if (score == maxMushroomScore && maxMushroomScore != -1) {
+                                    mushroomWinnerInfo += "\nMushroom Player " + playerID + ": " + score + " mushrooms (Tie).";
+                                } else if (playerID != null && mushroomWinnerInfo.equals("No mushroom players or scores.")) {
+                                    mushroomWinnerInfo = "Mushroom Player " + playerID + ": " + score + " mushrooms.";
+                                }
+                            }
+
+                            winnerMessage += insectWinnerInfo + "\n" + mushroomWinnerInfo;
+
+                            JOptionPane.showMessageDialog(frame, winnerMessage, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+                            System.exit(0);
+                        }
+                        cc.setRound(cc.getRound()+1);
+                        cc.setWhichPlayer(1);
+                        cc.setWhichPuppet(1);
+                        //round.setText("round " + cc.getRound());
+                        topPanel.remove(0);
+                        round = new JLabel("round " + cc.getRound());
+                        round.setFont(round.getFont().deriveFont(Font.BOLD, 14f));
+                        topPanel.add(round);
+                        reDrawAll();
+                        return;
+                    }
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+            else {//if it mushroom turn
+                if(cc.getWhichPlayer() == 1)
+                    switchPanels();
+
+                playerStats.setText("Player " + (cc.getWhichPlayer() - 1) + ": Gomba " + cc.getWhichPuppet());
+
+                //------------------------------------------------------------------------------
+                growMushParam1.removeAllItems();
+                MushroomBody mb4 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID()); //here class com.beingchilling.model.Insect cannot be cast to class com.beingchilling.model.MushroomBody (com.beingchilling.model.Insect and com.beingchilling.model.MushroomBody are in unnamed module of loader 'app')
+                for(MushroomThread mt : mb4.getLocation().getThreads())
+                    for(MushroomThread mt2 : mt.getThreads()) {
+                        if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
+                            growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
+                    }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                spreadSporeParam1.removeAllItems();
+                MushroomBody mb5 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(Tekton t : mb5.getLocation().getNeighbors()) {
+                    spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+                }
+                //------------------------------------------------------------------------------
+
+                //------------------------------------------------------------
+                growThreadParam2.removeAllItems();
+                growThreadParam1.removeAllItems();
+                Set<Tekton> tektons2 = new HashSet<>();
+                for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
+                    growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
+                    for(Tekton t5 : mt5.getLocation().getNeighbors()) {
+                        if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
+                            tektons2.add(t5);
+                        }
+                    }
+                }
+                for(Tekton t5 : tektons2) {
+                    growThreadParam2.addItem(GameModel.gameObjects.getK(t5));
+                }
+                //-------------------------------------------------------------
+
+                //------------------------------------------------------------------------------
+                absorbInsectParam1.removeAllItems();
+                MushroomBody mb6 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
+                for(MushroomThread mt : mb6.getLocation().getThreads()) {
+                    if(mt.getLocation().getBody() == null && mt.getLocation().getInsect() != null)
+                        absorbInsectParam1.addItem(GameModel.gameObjects.getK(mt));
+                }
+                //------------------------------------------------------------------------------
+                if(cc.getWhichPuppet() >= ((MushroomSpecies)GameModel.gameObjects.getV(vc.getCurrentPlayerID())).checkMushroomBody().size()) {// if the current puppet is the last thing the player own
+                    cc.setWhichPuppet(1);//go to 1 puppet of next player
+                    cc.setWhichPlayer(cc.getWhichPlayer()+1);//since for sure there is a insect behind no need boudary check
+                    //PROBABLY BECUASE OF THIS (READ BELOW)
+                }
+                else
+                    cc.setWhichPuppet(cc.getWhichPuppet()+1);
+            }
+
+            reDrawAll();
+        });
         endGameButton = new JButton("end game");
+        endGameButton.addActionListener(e -> {
+            System.exit(0);
+        });
         bottomButtonsPanel.add(skipButton);
         bottomButtonsPanel.add(endGameButton);
         sidebarPanel.add(bottomButtonsPanel, BorderLayout.SOUTH);

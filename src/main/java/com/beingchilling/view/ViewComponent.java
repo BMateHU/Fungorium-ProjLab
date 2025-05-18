@@ -2,8 +2,14 @@ package com.beingchilling.view;
 
 import com.beingchilling.controller.ControllerComponent;
 import com.beingchilling.game.GameModel;
+import com.beingchilling.model.Insect;
+import com.beingchilling.model.InsectSpecies;
+import com.beingchilling.model.MushroomBody;
+import com.beingchilling.model.MushroomSpecies;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 //otherwise this is just command calls, easy to implement
 public class ViewComponent {
@@ -184,5 +190,33 @@ public class ViewComponent {
      */
     public void unsuccessfulCommand() {
         System.out.println("Nincs ilyen parancs!");
+    }
+
+    public String getCurrentPlayerID(){
+        Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
+        Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+        if(controllerComponent.getWhichPlayer() >= MushroomSpeciesSet.size()) {
+            //Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
+            InsectSpecies is = (InsectSpecies)InsectSpeciesSet.toArray()[controllerComponent.getWhichPlayer()-GameModel.gombasz.size()];
+            return GameModel.gameObjects.getK(is);
+        }
+        else {
+            //Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+            MushroomSpecies ms = (MushroomSpecies) MushroomSpeciesSet.toArray()[controllerComponent.getWhichPlayer()-1];
+            return GameModel.gameObjects.getK(ms);
+        }
+    }
+
+    public String getCurrentPuppetID()
+    {
+        Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
+        if(controllerComponent.getWhichPlayer() >= MushroomSpeciesSet.size()) {
+            Insect i = ((InsectSpecies) GameModel.gameObjects.getV(getCurrentPlayerID())).getInsects().get(controllerComponent.getWhichPuppet() - 1);
+            return GameModel.gameObjects.getK(i);
+        }
+        else {
+            MushroomBody m = ((MushroomSpecies)GameModel.gameObjects.getV(getCurrentPlayerID())).checkMushroomBody().get(controllerComponent.getWhichPuppet() - 1);
+            return GameModel.gameObjects.getK(m);
+        }
     }
 }

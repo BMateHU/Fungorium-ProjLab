@@ -7,6 +7,6 @@ public class Main {
     public static GUI frame = new GUI();
 
     public static void main(String[] args) {
-        frame.switchPanels();
+        GUI frame = new GUI();
     }
 }
