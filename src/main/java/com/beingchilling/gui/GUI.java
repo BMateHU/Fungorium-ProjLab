@@ -164,7 +164,7 @@ public class GUI
         sidebarPanel.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0)); // Set preferred width
 
         // --- Player Info (North) ---
-        playerStats = new JLabel("Player " + (cc.getWhichPlayer()-1) + ": Mushroom " + (cc.getWhichPuppet() - 1));
+        playerStats = new JLabel("Player " + (cc.getWhichPlayer()-1) + ": Mushroom " + (cc.getWhichPuppet()));
         playerStats.setFont(playerStats.getFont().deriveFont(Font.PLAIN, 14f));
         playerStats.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY), // Border around label area
