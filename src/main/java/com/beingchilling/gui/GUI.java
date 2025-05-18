@@ -65,7 +65,7 @@ public class GUI
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null); // Center the window
         mushroomPanel = new JPanel();
-        objects = new HashMap<>();
+        objects = new BiMap<>();
 
         try {
             InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
