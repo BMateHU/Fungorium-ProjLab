@@ -64,6 +64,16 @@ public class GUI
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT); // Set fixed size
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null); // Center the window
+        mushroomPanel = new JPanel();
+        objects = new BiMap<>();
+
+        try {
+            InputStream url = Main.class.getClassLoader().getResourceAsStream("start.txt");
+            assert url != null;
+            cc.load(url);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
 
         init();
 
