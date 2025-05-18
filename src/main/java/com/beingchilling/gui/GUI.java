@@ -194,7 +194,7 @@ public class GUI
 
         growThreadButton.addActionListener(e -> {
             String lastThreadID = growThreadParam1.getItemAt(growThreadParam1.getItemCount()-1);
-            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " + growThreadParam2.getSelectedItem() + " " + lastThreadID.substring(0, lastThreadID.length() - 1) + growThreadParam1.getItemCount());
+            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " "  + lastThreadID.substring(0, lastThreadID.length() - 1) + growThreadParam1.getItemCount()+" "+ growThreadParam2.getSelectedItem());
             reDrawAll();
         });
 
