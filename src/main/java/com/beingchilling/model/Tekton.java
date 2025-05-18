@@ -149,11 +149,15 @@ public class Tekton implements TektonController, TektonView {
         for(Tekton t : neighbors){
             for(MushroomThread mt : mushroomThread) {
                 for(MushroomThread mt2 : mt.getNextGrowed()) {
-                    if(mt2.getLocation() == t) {
+                    if(mt2.getLocation().equals(t)) {
                         temp.add(t);
                     }
                 }
             }
+        }
+        for(MushroomThread mt : mushroomThread) {
+            if(mt.getPrevGrowed() != null && mt.getPrevGrowed().getLocation().checkNeighbor(this))
+                temp.add(mt.getPrevGrowed().getLocation());
         }
         return temp;
     }
