@@ -35,8 +35,12 @@ public class GTekton extends JComponent {
         }
         if(tekton.getBody() != null)
             mushroomBody = GUI.objects.getV(tekton.getBody());
+        else
+            mushroomBody = null;
         if(tekton.getInsect() != null)
             insect = GUI.objects.getV(tekton.getInsect());
+        else
+            insect = null;
         g2d.setColor(Color.BLUE);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawOval(x- RADIUS, y- RADIUS, RADIUS * 2, RADIUS * 2);

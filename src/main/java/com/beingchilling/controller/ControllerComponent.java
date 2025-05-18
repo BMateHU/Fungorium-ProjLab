@@ -7,6 +7,7 @@ import com.beingchilling.model.*;
 import com.beingchilling.view.TektonView;
 import com.beingchilling.view.ViewComponent;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -139,8 +140,9 @@ public class ControllerComponent implements IFactory {
                     GameModel.map.tektonList.get(words[4]).addMushroom(newMushroom);
                     MushroomThread newThread = new MushroomThread();
                     newThread.setLifeSupport(true);
-                    GameModel.gameObjects.put(words[3], newThread);
                     GameModel.map.tektonList.get(words[4]).addThread(newThread);
+                    newThread.setLocation(GameModel.map.tektonList.get(words[4]));
+                    GameModel.gameObjects.put(words[3], newThread);
                     if(GUI.objects != null)
                         onCreationMushroomBody(newMushroom);
                     break;
@@ -254,11 +256,13 @@ public class ControllerComponent implements IFactory {
      * @param newThread Az új thread ID-ja
      */
     public void growThread(MushroomThreadController mtC, TektonController target, String newThread) {
-        if(mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target))
-            GameModel.gameObjects.put(newThread, target.toView().getThreads().get(target.toView().getThreads().size()-1));
+        if(mtC.toView().checkOwner().growThread((MushroomThread)mtC, (Tekton)target)) {
+            GameModel.gameObjects.put(newThread, target.toView().getThreads().get(target.toView().getThreads().size() - 1));
+            GUI.growThreadButton.setEnabled(false);
+        }
         else {
-            System.out.println("Nem sikerült a fonal novesztes!");
-            
+            JOptionPane.showConfirmDialog(null, "Fonalnovesztes nem sikerult!",
+                    "Confirmation", JOptionPane.DEFAULT_OPTION);
         }
         for(Tekton t : ((Tekton) target).getNeighbors())
         {
