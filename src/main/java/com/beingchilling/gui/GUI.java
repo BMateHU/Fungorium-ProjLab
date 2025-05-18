@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 public class GUI
 {
+
     public static BiMap<Object, JComponent> objects;
     private JLabel playerStats;
     private JLabel round;
@@ -45,6 +46,7 @@ public class GUI
     private static final int FRAME_WIDTH = 1200;
     private static final int FRAME_HEIGHT = 800;
     private static final int SIDEBAR_WIDTH = 250;
+    private static final int MAX_ROUNDS = 20;
 
     private boolean isCurrentPanelMushroom = true; //just for testing u can delete it anytime u want
 
@@ -480,6 +482,11 @@ public class GUI
                     cc.setWhichPlayer(cc.getWhichPlayer() + 1);
                     if (cc.getWhichPlayer() > MushroomSpeciesSet.size() + InsectSpeciesSet.size()) { // if no next player,set to 1
                         cc.setRound(cc.getRound() + 1);
+                        if(cc.getRound() == MAX_ROUNDS+1) {
+                            showWinnerPanel();
+                            System.exit(0);
+                            return;
+                        }
                         cc.setWhichPlayer(1);
                         topPanel.remove(0);
                         round = new JLabel("round " + cc.getRound());
@@ -610,6 +617,48 @@ public class GUI
 
         contentPanel.add(scrollPane, BorderLayout.CENTER);
         return contentPanel;
+    }
+
+    private void showWinnerPanel() {
+        String winnerMessage = "Game Over! Maximum " + MAX_ROUNDS + " rounds reached.\n\n--- Scores ---\n";
+
+        int maxNutrients = -1;
+        String insectWinnerInfo = "No insect players or scores.";
+        for (InsectSpecies is : GameModel.rovarasz.values().stream().distinct().toList()) {
+            String playerID = GameModel.gameObjects.getK(is);
+            int totalNutrients = 0;
+            for (Insect i : is.getInsects()) {
+                totalNutrients += i.getCurrentNutrient();
+            }
+            if (totalNutrients > maxNutrients) {
+                maxNutrients = totalNutrients;
+                insectWinnerInfo = "Insect Player " + playerID + ": " + totalNutrients + " nutrients.";
+            } else if (totalNutrients == maxNutrients && maxNutrients != -1) {
+                insectWinnerInfo += "\nInsect Player " + playerID + ": " + totalNutrients + " nutrients (Tie).";
+            } else if (playerID != null && insectWinnerInfo.equals("No insect players or scores.")){
+                insectWinnerInfo = "Insect Player " + playerID + ": " + totalNutrients + " nutrients.";
+            }
+        }
+
+        int maxMushroomScore = -1; // e.g. total count of mushrooms
+        String mushroomWinnerInfo = "No mushroom players or scores.";
+        for (MushroomSpecies ms : GameModel.gombasz.values().stream().distinct().toList()) {
+            String playerID = GameModel.gameObjects.getK(ms);
+            int score = ms.checkMushroomBody().size();
+            if (score > maxMushroomScore) {
+                maxMushroomScore = score;
+                mushroomWinnerInfo = "Mushroom Player " + playerID + ": " + score + " mushrooms.";
+            } else if (score == maxMushroomScore && maxMushroomScore != -1) {
+                mushroomWinnerInfo += "\nMushroom Player " + playerID + ": " + score + " mushrooms (Tie).";
+            } else if (playerID != null && mushroomWinnerInfo.equals("No mushroom players or scores.")) {
+                mushroomWinnerInfo = "Mushroom Player " + playerID + ": " + score + " mushrooms.";
+            }
+        }
+
+        winnerMessage += insectWinnerInfo + "\n" + mushroomWinnerInfo;
+
+        JOptionPane.showMessageDialog(frame, winnerMessage, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        //disableGameControls();
     }
 
     // Inner class for custom drawing
