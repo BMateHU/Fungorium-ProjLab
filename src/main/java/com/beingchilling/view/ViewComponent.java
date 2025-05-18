@@ -205,9 +205,9 @@ public class ViewComponent {
     public String getCurrentPlayerID(){
         Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
         Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
-        if(controllerComponent.getWhichPlayer() >= MushroomSpeciesSet.size()) {
+        if(controllerComponent.getWhichPlayer() > MushroomSpeciesSet.size()) {
             //Set<InsectSpecies> InsectSpeciesSet = new HashSet<>(GameModel.rovarasz.values());
-            InsectSpecies is = (InsectSpecies)InsectSpeciesSet.toArray()[controllerComponent.getWhichPlayer()-GameModel.gombasz.size()];
+            InsectSpecies is = (InsectSpecies)InsectSpeciesSet.toArray()[controllerComponent.getWhichPlayer()-GameModel.gombasz.size()-1];
             return GameModel.gameObjects.getK(is);
         }
         else {
@@ -220,9 +220,9 @@ public class ViewComponent {
     public String getCurrentPuppetID()
     {
         Set<MushroomSpecies> MushroomSpeciesSet = new HashSet<>(GameModel.gombasz.values());
-        if(controllerComponent.getWhichPlayer() >= MushroomSpeciesSet.size()) {
+        if(controllerComponent.getWhichPlayer() > MushroomSpeciesSet.size()) {
             Insect i = ((InsectSpecies) GameModel.gameObjects.getV(getCurrentPlayerID())).getInsects().get(controllerComponent.getWhichPuppet() - 1);
-            return  GameModel.gameObjects.getK(i);
+            return GameModel.gameObjects.getK(i);
         }
         else {
             MushroomBody m = ((MushroomSpecies)GameModel.gameObjects.getV(getCurrentPlayerID())).checkMushroomBody().get(controllerComponent.getWhichPuppet() - 1);
