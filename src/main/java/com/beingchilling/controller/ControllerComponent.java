@@ -117,7 +117,8 @@ public class ControllerComponent implements IFactory {
                     ((Tekton)GameModel.gameObjects.getV(words[3])).addInsect(newInsect);
                     newInsect.setLocation((Tekton)GameModel.gameObjects.getV(words[3]));
                     GameModel.rovarasz.put(newInsect,s);
-                    onCreationInsect(newInsect);
+                    if(GUI.objects != null)
+                        onCreationInsect(newInsect);
 
                     break;
                 case "/addmush":
@@ -140,8 +141,8 @@ public class ControllerComponent implements IFactory {
                     newThread.setLifeSupport(true);
                     GameModel.gameObjects.put(words[3], newThread);
                     GameModel.map.tektonList.get(words[4]).addThread(newThread);
-                    onCreationMushroomBody(newMushroom);
-
+                    if(GUI.objects != null)
+                        onCreationMushroomBody(newMushroom);
                     break;
                 case "/addspore":
                     int nutrient = 5;
