@@ -24,7 +24,7 @@ public class GUI
     public static BiMap<Object, JComponent> objects;
     private JLabel playerStats;
     private JLabel round;
-    private JButton growThreadButton;
+    public static JButton growThreadButton;
     private JButton growMushButton;
     private JButton spreadSporeButton;
     private JButton absorbInsectButton;
@@ -54,7 +54,7 @@ public class GUI
     ViewComponent vc = new ViewComponent();
     ControllerComponent cc = new ControllerComponent(vc);
 
-    private JFrame frame;
+    public static JFrame frame;
 
     public GUI() {
         vc.setControllerComponent(cc);
@@ -171,14 +171,13 @@ public class GUI
         placeholder1.setLayout(new BoxLayout(placeholder1, BoxLayout.Y_AXIS));
         placeholder1.setBorder(BorderFactory.createCompoundBorder(placeholderBorder, innerPadding));
         growThreadButton = new JButton("Grow Thread");
-        growThreadParam1 = new JComboBox<>(new String[]{"Thread 1"});
-        growThreadParam2 = new JComboBox<>(new String[]{"Tekton 1"});
+        growThreadParam1 = new JComboBox<>();
+        growThreadParam2 = new JComboBox<>();
 
         growThreadButton.addActionListener(e -> {
-            String lastThreadID = growThreadParam1.getItemAt(growThreadParam1.getItemCount()-1);
-            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " "  + lastThreadID.substring(0, lastThreadID.length() - 1) + growThreadParam1.getItemCount()+" "+ growThreadParam2.getSelectedItem());
+            String lastThreadID = growThreadParam1.getItemAt(0);
+            cc.ArgumentManagement("/growthread " + growThreadParam1.getSelectedItem() + " " +  lastThreadID.substring(0, lastThreadID.length() - 1) + growThreadParam1.getItemCount() + " " + growThreadParam2.getSelectedItem());
             reDrawAll();
-            growThreadButton.setEnabled(false);
         });
 
         //------------------------------------------------------------
@@ -188,7 +187,7 @@ public class GUI
         for(MushroomThread mt5 : ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation().getThreads().get(0).getThreads()) {
             growThreadParam1.addItem(GameModel.gameObjects.getK(mt5));
             for(Tekton t5 : mt5.getLocation().getNeighbors()) {
-                if(!mt5.getLocation().getNeighborWithThread().contains(t5)) {
+                if(!mt5.getLocation().getNeighborWithThread().contains(t5) && t5 != ((MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID())).getLocation() && t5 != mt5.getLocation() && t5.getThreads().isEmpty()) {
                     tektons.add(t5);
                 }
             }
@@ -226,7 +225,7 @@ public class GUI
         MushroomBody mb = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
         for(MushroomThread mt : mb.getLocation().getThreads())
             for(MushroomThread mt2 : mt.getThreads()) {
-                if(mt2.getLocation().getSpores().size() > 3 && mt2.getLocation().getBody() == null)
+                if(mt2.getLocation().getSpores().size() >= 3 && mt2.getLocation().getBody() == null)
                     growMushParam1.addItem(GameModel.gameObjects.getK(mt2.getLocation()));
             }
         if(growMushParam1.getSelectedItem() == null) {
@@ -255,9 +254,10 @@ public class GUI
         //------------------------------------------------------------------------------
         spreadSporeParam1.removeAllItems();
         MushroomBody mb2 = (MushroomBody) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
-        for(Tekton t : mb2.getLocation().getNeighbors()) {
-            spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
-        }
+        if(mb2.getSporeNumber() > 0)
+            for(Tekton t : mb2.getLocation().getNeighbors()) {
+                spreadSporeParam1.addItem(GameModel.gameObjects.getK(t));
+            }
         if(spreadSporeParam1.getSelectedItem() == null) {
             spreadSporeButton.setEnabled(false);
         }
@@ -349,9 +349,11 @@ public class GUI
                     cutParam1.removeAllItems();
                 Insect i = (Insect) GameModel.gameObjects.getV(vc.getCurrentPuppetID());
                 Tekton t = i.getLocation();
-                for (MushroomThread thread : t.getThreads()) {
-                    if (i.canCutThread()) {
-                        cutParam1.addItem(GameModel.gameObjects.getK(thread));
+                for (Tekton t2 : t.getNeighborWithThread()) {
+                    for(MushroomThread thread : t2.getThreads()) {
+                        if (i.canCutThread() && t2.getThreads().get(0).equals(thread)) {
+                            cutParam1.addItem(GameModel.gameObjects.getK(thread));
+                        }
                     }
                 }
                 if(cutParam1.getSelectedItem() == null) {
@@ -884,7 +886,7 @@ public class GUI
                     int x = ((GTekton) objects.getV(t)).getX();
                     int y = ((GTekton) objects.getV(t)).getY();
 
-                    Stroke defaultStroke = g2d.getStroke();
+                    Stroke defaultStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);;
 
                     ArrayList<Tekton> neighbourWithoutThread = new ArrayList<>(t.getNeighbors());
                     neighbourWithoutThread.removeAll(t.getNeighborWithThread());
@@ -895,7 +897,9 @@ public class GUI
                         if(!wasTekton.contains(t2)) {
                             Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9, 5}, 0);
                             g2d.setStroke(dashedStroke);
+                            g2d.setColor(Color.BLACK);
                             g2d.drawLine(x, y, x2, y2);
+                            g2d.setColor(Color.BLUE);
                         }
                     }
 
@@ -903,14 +907,14 @@ public class GUI
                         int x2 = ((GTekton) objects.getV(t2)).getX();
                         int y2 = ((GTekton) objects.getV(t2)).getY();
 
-                        if(!wasTekton.contains(t2)) {
-                            g2d.setStroke(defaultStroke);
-                            g2d.setColor(Color.BLACK);
-                            g2d.drawLine(x, y, x2, y2);
-                            FontMetrics fm = g2d.getFontMetrics();
+                        g2d.setStroke(defaultStroke);
+                        g2d.setColor(Color.BLACK);
+                        g2d.drawLine(x, y, x2, y2);
+                        FontMetrics fm = g2d.getFontMetrics();
+                        g2d.setColor(Color.BLUE);
+                        if(!t2.getThreads().isEmpty()) {
                             String threadLabel = GameModel.gameObjects.getK(t2.getThreads().get(0));
-                            int tekton1Width = fm.stringWidth(threadLabel);
-                            g2d.drawString(threadLabel, x + (x - x2) - tekton1Width / 2, y + (y - y2));
+                            g2d.drawString(threadLabel, (x+x2)/2, (y+y2)/2);
                         }
                     }
                 }

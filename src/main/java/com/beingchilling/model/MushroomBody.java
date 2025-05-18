@@ -58,7 +58,6 @@ public class MushroomBody implements MushroomBodyController, MushroomBodyView {
         if (tekton.checkNeighbor(mushroomThread.getLocation())) {
             //ennel beadja a threadet
             if (mushroomThread.growThread(tekton)) {
-
                 if (!tekton.getSpores().isEmpty() && GameModel.randomSwitch) {
                     Random random = new Random();
                     // osszes neighbourt kikeresi

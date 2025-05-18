@@ -50,15 +50,26 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
         lifeSupport = false;
     }
 
+
     public List<MushroomThread> getThreads() {
         ArrayList<MushroomThread> threads = new ArrayList<>();
+        MushroomThread temp = this;
+
+        while (temp.prevGrowed != null)
+            temp = temp.prevGrowed;
+
+        return bfs(temp);
+    }
+
+    private List<MushroomThread> bfs(MushroomThread temp) {
+        ArrayList<MushroomThread> threads = new ArrayList<>();
         threads.add(this);
-        for (MushroomThread thread : nextGrowed) {
-            threads.addAll(thread.getThreads());
+
+        for (MushroomThread thread : temp.nextGrowed) {
+            threads.addAll(thread.bfs(thread));
         }
         return threads;
     }
-
 
     /**
      * A listához hozzáadja az adott fonalat.
@@ -74,7 +85,7 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
     public boolean growThread(Tekton target) {
 
         MushroomThread MT2 = new MushroomThread();
-        if(target.addThread(MT2) && (prevGrowed==null || target != prevGrowed.location)){
+        if(target.addThread(MT2) && (prevGrowed != null || target != this.location)){
             this.addThread(MT2);
             return true;
         }
@@ -87,6 +98,8 @@ public class MushroomThread implements MushroomThreadController, MushroomThreadV
      */
     public MushroomBody checkOwner(){
         MushroomThread findowner = this;
+        if(findowner.location.getBody() != null)
+            return findowner.location.getBody();
         while(findowner.prevGrowed != null){
             findowner = findowner.prevGrowed;
         }

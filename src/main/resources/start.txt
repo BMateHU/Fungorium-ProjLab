@@ -14,23 +14,23 @@
 /addtekton t27
 /addtekton t31
 /addtekton t32
-/addtekton t33
-/addtekton t34
-/addtekton t35
+/addtekton t33 MT
+/addtekton t34 MT
+/addtekton t35 MT
 /addtekton t36
 /addtekton t37
 /addtekton t41
-/addtekton t42
-/addtekton t43
-/addtekton t44
-/addtekton t45
-/addtekton t46
+/addtekton t42 MT
+/addtekton t43 MT
+/addtekton t44 MT
+/addtekton t45 MT
+/addtekton t46 MT
 /addtekton t47
 /addtekton t51
 /addtekton t52
-/addtekton t53
-/addtekton t54
-/addtekton t55
+/addtekton t53 MT
+/addtekton t54 MT
+/addtekton t55 MT
 /addtekton t56
 /addtekton t57
 /addtekton t61
@@ -131,11 +131,44 @@
 /setneighbour t65 t75
 /setneighbour t66 t76
 /setneighbour t67 t77
+/addthread t33 nt_A1
+/addthread t23 nt_A2
+/connectthread nt_A1 nt_A2
+/addthread t13 nt_A3
+/connectthread nt_A2 nt_A3
+/addthread t35 nt_B1
+/addthread t45 nt_B2
+/connectthread nt_B1 nt_B2
+/addthread t55 nt_B3
+/connectthread nt_B2 nt_B3
+/addthread t53 nt_C1
+/addthread t52 nt_C2
+/connectthread nt_C1 nt_C2
+/addthread t51 nt_C3
+/connectthread nt_C2 nt_C3
+/addthread t22 nt_D1
+/addthread t32 nt_D2
+/connectthread nt_D1 nt_D2
+/addthread t65 nt_E1
+/addthread t55 nt_E2
+/connectthread nt_E1 nt_E2
 /addplayer g1 G
 /addplayer g2 G
 /addplayer r1 R
 /addplayer r2 R
 /addmush g1 g1m1 g1m1f0 t42
 /addmush g2 g2m1 g2m1f0 t46
+/addthread t41 g1m1_t41
+/connectthread g1m1f0 g1m1_t41
+/addthread t43 g1m1_t43
+/connectthread g1m1f0 g1m1_t43
+/addthread t31 g1m1_t31
+/connectthread g1m1_t41 g1m1_t31
+/addthread t45 g2m1_t45
+/connectthread g2m1f0 g2m1_t45
+/addthread t47 g2m1_t47
+/connectthread g2m1f0 g2m1_t47
+/addthread t44 g2m1_t44
+/connectthread g2m1_t45 g2m1_t44
 /addinsect r1 r1i1 t41
 /addinsect r2 r2i1 t47
