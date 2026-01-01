@@ -6,6 +6,11 @@ import com.beingchilling.game.BiMap;
 import com.beingchilling.game.GameModel;
 import com.beingchilling.model.Tekton;
 import com.beingchilling.view.ViewComponent;
+import com.beingchilling.model.MushroomThread;
+import com.beingchilling.model.MushroomBody;
+import com.beingchilling.model.MushroomSpecies;
+import com.beingchilling.model.Insect;
+import com.beingchilling.model.InsectSpecies;
 
 import javax.swing.*;
 import javax.swing.border.Border;
